@@ -13,33 +13,67 @@ const properties = [
     id: 1,
     title: "Modern Luxury Apartment",
     location: "Downtown, New York",
-    price: "₹2,500/month",
-    rating: 4.8,
-    image: "../public/Properties_image/flate3.jpg",
+    price: "2,500",
+    rating: 4,
+    image: "../Properties_image/iflat4.jpg",
+    beds:2,
+    baths:2,
+    sqft:25000
   },
   {
     id: 2,
     title: "Cozy Studio Apartment",
     location: "Los Angeles, CA",
-    price: "₹1,800/month",
+    price: "1,800",
     rating: 4.5,
-    image: "../public/Properties_image/flate3.jpg",
+    image: "../Properties_image/flat5.jpg",
+    beds:3,
+    baths:2,
+    sqft:45000
   },
   {
     id: 3,
     title: "Spacious Family Home",
     location: "Chicago, IL",
-    price: "₹3,200/month",
-    rating: 4.9,
-    image: "../public/Properties_image/flate3.jpg",
+    price: "3,200",
+    rating: 2,
+    image: "../Properties_image/villa3.jpg",
+    beds:2,
+    baths:2,
+    sqft:25000
   },
   {
-    id: 3,
+    id: 4,
     title: "Spacious Family Home",
     location: "Chicago, IL",
-    price: "₹3,200/month",
-    rating: 4.9,
-    image: "../public/Properties_image/flate3.jpg",
+    price: "3,200",
+    rating: 3.5,
+    image: "../Properties_image/iflat6.jpg",
+    beds:2,
+    baths:2,
+    sqft:25000
+  },
+  {
+    id: 5,
+    title: "Spacious Family Home",
+    location: "Chicago, IL",
+    price: "3,200",
+    rating: 2,
+    image: "../Properties_image/i flat7.jpg",
+    beds:2,
+    baths:2,
+    sqft:25000
+  },
+  {
+    id: 6,
+    title: "Cozy Studio Apartment",
+    location: "Los Angeles, CA",
+    price: "1,800",
+    rating: 4.5,
+    image: "../Properties_image/iflat1.jpg",
+    beds:3,
+    baths:2,
+    sqft:45000
   },
 ];
 
@@ -108,14 +142,68 @@ export default function HomePage() {
       </div>
       </div>
       {/* Featured Properties */}
-      <div className="max-w-6xl mx-auto mt-10 mb-20">
-        <h2 className="text-2xl font-semibold ml-5">Featured Properties</h2>
+      <div className="bg-gray-100 py-2 mt-13">
+      <div className="max-w-6xl mx-auto mt-10 mb-10">
+        <h2 className="text-3xl font-semibold ml-5">Featured Properties</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 mr-5 ml-5">
           {properties.map((property) => (
             <PropertyCard key={property.id} {...property} />
           ))}
         </div>
       </div>
+     </div> 
+
+      {/* About Section */}
+<div className="max-w-6xl mx-auto mt-13 flex flex-col md:flex-row items-center px-5 gap-7">
+  <div className="md:w-1/2">
+    <h2 className="text-3xl font-bold mb-4">About StayAtEase</h2>
+    <p className="text-gray-600 leading-relaxed tracking-wide mx-auto">
+     StayAtEase is a hassle-free platform for finding the perfect home or listing your property for rent. 
+      Whether you're a tenant looking for a cozy place or an owner wanting to rent out your space, 
+      we provide a smooth and secure experience.
+    </p>
+    <button className="mt-6 px-6 py-2 bg-blue-600 !text-white rounded-lg shadow-md">
+  Explore Listings
+</button>  </div>
+  <div className="md:w-1/2 mt-6 md:mt-0">
+    <img src="../public/Properties_image/iflat3.jpg" alt="About Us" className="rounded-lg shadow-lg" />
+  </div>
+</div>
+
+{/* Why Choose Us Section */}
+<div className="bg-gray-100 py-10 mt-13">
+  <div className="max-w-6xl mx-auto text-center px-6">
+    <h2 className="text-3xl font-bold">Why Choose StayAtEase?</h2>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-10">
+      {/* Feature Cards */}
+      <div className="bg-white p-6 shadow-md rounded-lg">
+        <h3 className="text-lg font-semibold">✅ Verified Listings</h3><br />
+        <p className="text-gray-500 mt-2">Ensuring only genuine properties are listed.</p>
+      </div>
+      <div className="bg-white p-6 shadow-md rounded-lg">
+        <h3 className="text-lg font-semibold">💬 Secure Communication</h3><br />
+        <p className="text-gray-500 mt-2">Chat directly with property owners.</p>
+      </div>
+      <div className="bg-white p-6 shadow-md rounded-lg">
+        <h3 className="text-lg font-semibold">🔎 Easy Search & Filters</h3><br />
+        <p className="text-gray-500 mt-2">Find your ideal home in seconds.</p>
+      </div>
+      <div className="bg-white p-6 shadow-md rounded-lg">
+        <h3 className="text-lg font-semibold">❤️ Wishlist Feature</h3><br />
+        <p className="text-gray-500 mt-2">Save properties for later.</p>
+      </div>
+      <div className="bg-white p-6 shadow-md rounded-lg">
+        <h3 className="text-lg font-semibold">⭐ Reviews & Ratings</h3><br />
+        <p className="text-gray-500 mt-2">Honest feedback from previous tenants.</p>
+      </div>
+      <div className="bg-white p-6 shadow-md rounded-lg">
+        <h3 className="text-lg font-semibold">🔒 Secure Platform</h3><br />
+        <p className="text-gray-500 mt-2">Your safety is our priority.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
     </div>
     <div>
       <Footer/>
