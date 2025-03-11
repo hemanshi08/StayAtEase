@@ -3,6 +3,7 @@ import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import PropertyCard from "./Components/Property_card";
 import HomePage from "./rental/home";
+import PropertyListing from "./rental/Propertys";
 
 function App() {
   return (
@@ -10,7 +11,8 @@ function App() {
       {/* <Navbar/>
       <PropertyCard/>
       <Footer/> */}
-      <HomePage/>
+      {/* <HomePage/> */}
+      <PropertyListing/>
     </Router>
   );
 }
