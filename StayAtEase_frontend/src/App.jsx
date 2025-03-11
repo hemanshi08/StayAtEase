@@ -21,11 +21,11 @@ function App() {
         <Route path="/property/:id" element={<PropertyDetails />} />
       </Routes> */}
       {/* <PropertyPage/> */}
-      {/* <WishlistPage/> */}
+      <WishlistPage/>
 
-      <Routes>
+      {/* <Routes>
         <Route path="/home" element={<HomePage/>} />
-      </Routes>
+      </Routes> */}
     </Router>
   );
 }

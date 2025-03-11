@@ -44,9 +44,10 @@ import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
-const PropertyCard = ({ id, image, title, location, beds, baths, sqft, rating, price, showDetailsButton = false }) => {
-  const [liked, setLiked] = useState(false);
+const PropertyCard = ({ id, image, title, location, beds, baths, sqft, rating, price, showDetailsButton = false , defaultLiked = false  }) => {
+  const [liked, setLiked] = useState(defaultLiked);
   const navigate = useNavigate();
+  
 
   const handleViewDetails = () => {
     navigate(`/property/${id}`, { state: { image, title, location, beds, baths, sqft, rating, price } });

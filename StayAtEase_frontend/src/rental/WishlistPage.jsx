@@ -81,8 +81,8 @@ const WishlistPage = () => {
       <h2 className="text-2xl font-bold">My Wishlist</h2>
       <p className="text-gray-500 mb-8">Your saved properties</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8 mr-5 ml-5">
-        {wishlistProperties.map((property) => (
-          <PropertyCard key={property.id} {...property} showDetailsButton={true} />
+      {wishlistProperties.map((property) => (
+          <PropertyCard key={property.id} {...property} showDetailsButton defaultLiked={true} />
         ))}
       </div>
     </div>
