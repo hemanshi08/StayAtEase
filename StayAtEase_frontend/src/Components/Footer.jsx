@@ -9,7 +9,7 @@ export default function Footer() {
           {/* Branding */}
           <div>
             <h2 className="text-xl font-bold">StayAtEase</h2>
-            <p className="text-gray-400 mt-2">
+            <p className="text-gray-400 mt-2 leading-relaxed tracking-wide ">
               StayAtEase is your go-to rental platform, connecting tenants and property owners with ease.
             </p>
           </div>
@@ -17,7 +17,7 @@ export default function Footer() {
           {/* Quick Links */}
           <div>
             <h3 className="text-lg font-semibold">Quick Links</h3>
-            <ul className="mt-2 space-y-2">
+            <ul className="mt-2 space-y-2 leading-relaxed tracking-wide">
               <li><a href="#" className="text-gray-400 hover:text-white">Home</a></li>
               <li><a href="#" className="text-gray-400 hover:text-white">Listings</a></li>
               <li><a href="#" className="text-gray-400 hover:text-white">Wishlist</a></li>
@@ -27,7 +27,7 @@ export default function Footer() {
           {/* Support & Policies */}
           <div>
             <h3 className="text-lg font-semibold">Support & Policies</h3>
-            <ul className="mt-2 space-y-2">
+            <ul className="mt-2 space-y-2 leading-relaxed tracking-wide">
               <li><a href="#" className="text-gray-400 hover:text-white">FAQs</a></li>
               <li><a href="#" className="text-gray-400 hover:text-white">Privacy Policy</a></li>
               <li><a href="#" className="text-gray-400 hover:text-white">Terms & Conditions</a></li>
@@ -37,7 +37,7 @@ export default function Footer() {
           {/* Social Media */}
           <div>
             <h3 className="text-lg font-semibold">Follow Us</h3>
-            <div className="flex space-x-4 mt-2">
+            <div className="flex space-x-4 mt-2 leading-relaxed tracking-wide">
             <a href="#"><FacebookOutlined className="text-gray-400 hover:text-white text-2xl" /></a>
 <a href="#"><TwitterOutlined className="text-gray-400 hover:text-white text-2xl" /></a>
 <a href="#"><InstagramOutlined className="text-gray-400 hover:text-white text-2xl" /></a>

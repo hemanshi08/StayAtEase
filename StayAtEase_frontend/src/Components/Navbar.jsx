@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,8 +17,7 @@ export default function Navbar() {
         {/* Desktop Menu */}
         <div className="flex items-center space-x-6">
           <div className="hidden md:flex space-x-6">
-            <a href="#" className="hover:text-blue-500 font-medium">Home</a>
-            <a href="#" className="hover:text-blue-500 font-medium">Properties</a>
+          <Link to="/home" className="hover:text-blue-500 font-medium">Home</Link>            <a href="#" className="hover:text-blue-500 font-medium">Properties</a>
             <a href="#" className="hover:text-blue-500 font-medium">Wishlist</a>
           </div>
         {/* Login Button */}
@@ -33,8 +33,8 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden flex flex-col items-center space-y-4 mt-4">
-         <a href="#" className="hover:text-blue-500 font-medium">Home</a>
-          <a href="#" className="hover:text-blue-500 font-medium">Properties</a>
+         <a href="../rental/home.jsx" className="hover:text-blue-500 font-medium">Home</a>
+          <a href="" className="hover:text-blue-500 font-medium">Properties</a>
           <a href="#" className="hover:text-blue-500 font-medium">Wishlist</a>
           
             <a href="#" className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-md">Login</a>

@@ -147,7 +147,7 @@ export default function HomePage() {
         <h2 className="text-3xl font-semibold ml-5">Featured Properties</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 mr-5 ml-5">
           {properties.map((property) => (
-            <PropertyCard key={property.id} {...property} />
+            <PropertyCard key={property.id} {...property} showDetailsButton={false}/>
           ))}
         </div>
       </div>
