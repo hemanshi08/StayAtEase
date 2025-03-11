@@ -14,7 +14,7 @@ function App() {
       {/* <Navbar/>
       <PropertyCard/>
       <Footer/> */}
-      {/* <HomePage/> */}
+      <HomePage/>
       {/* <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/properties" element={<PropertyPage />} />
