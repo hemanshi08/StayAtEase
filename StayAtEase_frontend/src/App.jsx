@@ -5,6 +5,8 @@ import PropertyCard from "./Components/Property_card";
 import HomePage from "./rental/home";
 import PropertyListing from "./rental/Propertylist";
 import Wishlist from "./rental/wishlist";
+import PropertyDetails from "./rental/propertyDetails";
+import Dashboard from "./Admin/dashboard";
 
 function App() {
   return (
@@ -13,8 +15,10 @@ function App() {
       <PropertyCard/>
       <Footer/> */}
       {/* <HomePage/> */}
-      <PropertyListing/>
+      {/* <PropertyListing/> */}
       {/* <Wishlist/> */}
+      {/* <PropertyDetails/> */}
+      <Dashboard/>
     </Router>
   );
 }
