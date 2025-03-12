@@ -4,6 +4,7 @@ import Footer from "./Components/Footer";
 import PropertyCard from "./Components/Property_card";
 import HomePage from "./rental/home";
 import PropertyListing from "./rental/Propertylist";
+import Wishlist from "./rental/wishlist";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Footer/> */}
       {/* <HomePage/> */}
       <PropertyListing/>
+      {/* <Wishlist/> */}
     </Router>
   );
 }
