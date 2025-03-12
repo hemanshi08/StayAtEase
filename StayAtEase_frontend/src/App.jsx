@@ -3,7 +3,7 @@ import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import PropertyCard from "./Components/Property_card";
 import HomePage from "./rental/home";
-import PropertyListing from "./rental/Propertys";
+import PropertyListing from "./rental/Propertylist";
 
 function App() {
   return (
