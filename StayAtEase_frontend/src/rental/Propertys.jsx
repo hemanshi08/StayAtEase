@@ -109,11 +109,12 @@ export default function HomePage() {
 
   return (
    <div>    
-     <Navbar/>
+   
       {/* Featured Properties */}
-      <div className="bg-gray-100 py-2 mt-13">
+      <div className="bg-gray-100 py-2 ">
+      <Navbar/>
       <div className="max-w-6xl mx-auto mt-10 mb-10">
-        <h2 className="text-3xl font-semibold ml-5"> Find Your Perfect Home</h2>
+        <h2 className="text-3xl font-semibold "> Find Your Perfect Home</h2>
         <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-4 sm:mt-6 w-full max-w-2xl px-2">
         <Dropdown overlay={locationsMenu}>
           <Button className="w-full sm:w-40 flex justify-between items-center">{selectedLocation} <DownOutlined /></Button> 
