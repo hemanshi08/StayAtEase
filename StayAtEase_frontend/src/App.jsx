@@ -5,15 +5,15 @@ import PropertyCard from "./Components/Property_card";
 import HomePage from "./rental/home";
 import PropertyListing from "./rental/Propertylist";
 import Wishlist from "./rental/wishlist";
-import PropertyDetails from "./rental/propertyDetails";
+
 import Dashboard from "./Admin/dashboard";
 
 function App() {
   return (
     <Router>
-      {/* <Navbar/>
-      <PropertyCard/>
-      <Footer/> */}
+       {/* <Navbar/> */}
+      {/* <PropertyCard/>
+      <Footer/>  */}
       {/* <HomePage/> */}
       {/* <PropertyListing/> */}
       {/* <Wishlist/> */}
