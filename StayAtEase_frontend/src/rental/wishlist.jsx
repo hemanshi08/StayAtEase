@@ -15,7 +15,7 @@ const properties = [
 ];
 
 export default function Wishlist() {
-  // State to track liked properties (Optional)
+ 
   const [, setLikedProperties] = useState({});
 
   // Toggle like function (Optional)

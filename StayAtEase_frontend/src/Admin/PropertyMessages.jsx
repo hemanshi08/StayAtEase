@@ -4,7 +4,7 @@ import Footer from "../Components/Footer";
 import Header from "./component/header";
 
 const PropertyMessages = () => {
-  // Sample data
+ 
   const messagesData = [
     { id: 1, name: "Sarah Johnson", propertyId: "P.307", email: "sarahjohnson@gmail.com", contact: "1236547890", message: "Are there any restrictions on lease agreements?" },
     { id: 2, name: "Michael Brown", propertyId: "P.309", email: "michaelbrown@gmail.com", contact: "9874563210", message: "Are there any restrictions on lease agreements?" },
@@ -20,7 +20,7 @@ const PropertyMessages = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Filter messages based on search
+ 
   const filteredMessages = messagesData.filter((msg) =>
     msg.name.toLowerCase().includes(searchTerm.toLowerCase())
   );

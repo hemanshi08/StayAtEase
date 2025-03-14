@@ -71,7 +71,6 @@ function PropertyListings() {
       <div className="container mt-4">
         <h3 className="fw-bold">My Listings</h3>
 
-        {/* Statistics Cards */}
         <div className="row mt-3">
           <StatCard icon={faHome} title="Total Properties" count={6} />
           <StatCard icon={faChartBar} title="Active Listings" count={4} />

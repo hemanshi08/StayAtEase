@@ -38,7 +38,7 @@ const PropertyReviews = () => {
         <h2 className="fw-bold">Property Reviews</h2>
         <p className="text-muted">Sunset Heights Apartments</p>
 
-        {/* Search Bar - Full Width */}
+ 
         <div className="position-relative mb-3">
           <FontAwesomeIcon
             icon={faSearch}
@@ -54,7 +54,7 @@ const PropertyReviews = () => {
           />
         </div>
 
-        {/* Reviews Table */}
+       
         <div className="table-responsive">
           <table className="table review-table bg-white rounded shadow">
             <thead>

@@ -75,7 +75,7 @@ const PropertyForm = () => {
             />
           </div>
 
-          {/* Price & Square Footage */}
+         
           <div className="row g-3">
             <div className="col-md-6">
               <label className="form-label">Price</label>

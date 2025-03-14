@@ -78,7 +78,7 @@ const PropertyDetails = () => {
     <div>
         <Navbar/>
     <div className="container mt-4">
-    {/* Property Images - Arranged in Grid */}
+   
     <div className="row">
       {/* Main Image - Large */}
       <div className="col-md-8">
