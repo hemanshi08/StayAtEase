@@ -206,8 +206,9 @@ const PropertyForm = () => {
           </div>
         </form>
       </div>
-      <Footer/>
+    
     </div>
+    <Footer/>
     </div>
   );
 };

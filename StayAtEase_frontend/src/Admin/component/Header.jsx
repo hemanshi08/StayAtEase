@@ -6,8 +6,8 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-white shadow-md p-4">
-      <div className="container mx-auto flex justify-between items-center">
+    <nav className="bg-white shadow-md p-4 w-full">
+      <div className="container-fluid flex justify-between items-center px-0">
         {/* Logo */}
         <a href="#" className="flex items-center space-x-2 no-underline">
           <img src="../public/logo/StayAtEase.png" alt="StayAtEase" className="h-8" />
