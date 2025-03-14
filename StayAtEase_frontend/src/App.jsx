@@ -15,19 +15,7 @@ import PropertyDetails from "./rental/propertydetails";
 function App() {
   return (
     <Router>
-       {/* <Navbar/> */}
-      {/* <PropertyCard/>
-      <Footer/>  */}
-      {/* <HomePage/> */}
-      {/* <PropertyListing/> */}
-      {/* <Wishlist/> */}
-      {/* <PropertyDetails/> */}
-      {/* <Dashboard/> */}
-      {/* <PropertyForm/> */}
-      {/* <PropertyListings/> */}
-      {/* <PropertyReviews/>
-      
-      <PropertyMessages/> */}
+     
       <PropertyDetails/>
     </Router>
   );
