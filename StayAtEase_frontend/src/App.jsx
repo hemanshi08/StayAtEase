@@ -10,6 +10,7 @@ import PropertyReviews from "./Admin/propertyreview";
 import Dashboard from "./Admin/dashboard";
 import PropertyListings from "./Admin/propertylisting";
 import PropertyMessages from "./Admin/PropertyMessages";
+import PropertyDetails from "./rental/propertydetails";
 
 function App() {
   return (
@@ -24,8 +25,10 @@ function App() {
       {/* <Dashboard/> */}
       {/* <PropertyForm/> */}
       {/* <PropertyListings/> */}
-      {/* <PropertyReviews/> */}
-      <PropertyMessages/>
+      {/* <PropertyReviews/>
+      
+      <PropertyMessages/> */}
+      <PropertyDetails/>
     </Router>
   );
 }

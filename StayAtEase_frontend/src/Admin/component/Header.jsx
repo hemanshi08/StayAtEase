@@ -44,7 +44,7 @@ export default function Header() {
           <a href="#" className="hover:text-blue-500 font-medium no-underline text-decoration-none">My Listing</a>
           <a href="#" className="hover:text-blue-500 font-medium no-underline text-decoration-none">Reviews</a>
           <div className="d-flex align-items-center">
-            <img src="https://via.placeholder.com/40" className="rounded-circle me-2" alt="User" />
+            <img src="../profile.png" className="rounded-circle me-2" alt="User" />
             <a href="#" className="text-danger no-underline text-decoration-none">
               <i className="fas fa-sign-out-alt fa-lg"></i>
             </a>

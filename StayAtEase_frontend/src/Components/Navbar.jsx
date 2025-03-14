@@ -5,10 +5,9 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-white shadow-md p-4 ">
-      <div className="container mx-auto flex justify-between items-center">
-        {/* Logo */}
-        <a href="#" className="flex items-center space-x-2">
+    <nav className="bg-white shadow-md p-4 w-full">
+      <div className="container-fluid flex justify-between items-center px-0">
+        <a href="#" className="flex items-center space-x-2 no-underline text-decoration-none">
           <img src="../public/logo/StayAtEase.png" alt="StayAtEase" className="h-8" />
           <span className="text-xl font-bold">StayAtEase</span>
         </a>
@@ -16,9 +15,9 @@ export default function Navbar() {
         {/* Desktop Menu */}
         <div className="flex items-center space-x-6">
           <div className="hidden md:flex space-x-6">
-            <a href="#" className="hover:text-blue-500 font-medium">Home</a>
-            <a href="#" className="hover:text-blue-500 font-medium">Properties</a>
-            <a href="#" className="hover:text-blue-500 font-medium">Wishlist</a>
+            <a href="#" className="hover:text-blue-500 font-medium no-underline text-decoration-none">Home</a>
+            <a href="#" className="hover:text-blue-500 font-medium no-underline text-decoration-none">Properties</a>
+            <a href="#" className="hover:text-blue-500 font-medium no-underline text-decoration-none">Wishlist</a>
           </div>
         {/* Login Button */}
         <a href="#" className="hidden md:block px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-md">Login</a>
@@ -33,9 +32,9 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden flex flex-col items-center space-y-4 mt-4">
-         <a href="#" className="hover:text-blue-500 font-medium">Home</a>
-          <a href="#" className="hover:text-blue-500 font-medium">Properties</a>
-          <a href="#" className="hover:text-blue-500 font-medium">Wishlist</a>
+         <a href="#" className="hover:text-blue-500 font-medium no-underline text-decoration-none">Home</a>
+          <a href="#" className="hover:text-blue-500 font-medium no-underline text-decoration-none">Properties</a>
+          <a href="#" className="hover:text-blue-500 font-medium no-underline text-decoration-none">Wishlist</a>
           
             <a href="#" className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-md">Login</a>
           
