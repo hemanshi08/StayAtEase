@@ -6,8 +6,9 @@ import HomePage from "./rental/home";
 import PropertyListing from "./rental/Propertylist";
 import Wishlist from "./rental/wishlist";
 import PropertyForm from "./Admin/Propertyform";
-
+import PropertyReviews from "./Admin/propertyreview";
 import Dashboard from "./Admin/dashboard";
+import PropertyListings from "./Admin/propertylisting";
 
 function App() {
   return (
@@ -20,7 +21,9 @@ function App() {
       {/* <Wishlist/> */}
       {/* <PropertyDetails/> */}
       {/* <Dashboard/> */}
-      <PropertyForm/>
+      {/* <PropertyForm/> */}
+      {/* <PropertyListings/> */}
+      <PropertyReviews/>
     </Router>
   );
 }

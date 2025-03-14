@@ -26,6 +26,7 @@ const PropertyForm = () => {
     { name: "Smart TV", icon: "bi-tv" },
     { name: "Security", icon: "bi-shield-lock" },
     { name: "Kitchen", icon: "bi-house-door" },
+    { name: "Laundry", icon: "bi bi-badge-wc-fill" },
   ];
 
   const handleChange = (e) => {
