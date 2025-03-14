@@ -5,6 +5,7 @@ import PropertyCard from "./Components/Property_card";
 import HomePage from "./rental/home";
 import PropertyListing from "./rental/Propertylist";
 import Wishlist from "./rental/wishlist";
+import PropertyForm from "./Admin/Propertyform";
 
 import Dashboard from "./Admin/dashboard";
 
@@ -18,7 +19,8 @@ function App() {
       {/* <PropertyListing/> */}
       {/* <Wishlist/> */}
       {/* <PropertyDetails/> */}
-      <Dashboard/>
+      {/* <Dashboard/> */}
+      <PropertyForm/>
     </Router>
   );
 }
