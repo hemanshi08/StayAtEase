@@ -9,6 +9,7 @@ import PropertyForm from "./Admin/Propertyform";
 import PropertyReviews from "./Admin/propertyreview";
 import Dashboard from "./Admin/dashboard";
 import PropertyListings from "./Admin/propertylisting";
+import PropertyMessages from "./Admin/PropertyMessages";
 
 function App() {
   return (
@@ -23,7 +24,8 @@ function App() {
       {/* <Dashboard/> */}
       {/* <PropertyForm/> */}
       {/* <PropertyListings/> */}
-      <PropertyReviews/>
+      {/* <PropertyReviews/> */}
+      <PropertyMessages/>
     </Router>
   );
 }
