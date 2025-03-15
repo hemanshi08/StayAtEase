@@ -19,7 +19,6 @@ const ProfileDetails = () => {
     confirmPassword: "",
   });
 
-  // Handle Profile Picture Change
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
