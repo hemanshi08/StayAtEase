@@ -1,103 +1,104 @@
-import React, { useState } from "react";
+import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Footer from "../Components/Footer";
-import Header from "./component/header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 
+const users = [
+  {
+    id: 1,
+    name: "Admin",
+    email: "admin@example.com",
+    mobile: "+1 888 888 8888",
+    lastActivity: "2 mins ago",
+    created: "30 Sep 2023",
+    status: "Active",
+    image: "https://via.placeholder.com/40",
+  },
+  {
+    id: 2,
+    name: "John Smith",
+    email: "johnsmith@example.com",
+    mobile: "518-837-9258",
+    lastActivity: "10 mins ago",
+    created: "27 Sep 2023",
+    status: "Active",
+    image: "https://via.placeholder.com/40",
+  },
+  {
+    id: 3,
+    name: "Robert",
+    email: "robert@example.com",
+    mobile: "302-372-7812",
+    lastActivity: "Online",
+    created: "25 Sep 2023",
+    status: "Active",
+    image: "https://via.placeholder.com/40",
+  },
+];
 
-const AllPropertyMessages = () => {
- 
-  const messagesData = [
-    { id: 1, name: "Sarah Johnson", propertyId: "P.307", email: "sarahjohnson@gmail.com", contact: "1236547890", message: "Are there any restrictions on lease agreements?" },
-    { id: 2, name: "Michael Brown", propertyId: "P.309", email: "michaelbrown@gmail.com", contact: "9874563210", message: "Are there any restrictions on lease agreements?" },
-    { id: 3, name: "Emma Davis", propertyId: "P.310", email: "emmadavis@gmail.com", contact: "7410258963", message: "What documents are required for booking?" },
-    { id: 4, name: "Michael Brown", propertyId: "P.305", email: "michaelbrown@gmail.com", contact: "9874563210", message: "Are there any restrictions on lease agreements?" },
-    { id: 5, name: "Sarah Johnson", propertyId: "P.301", email: "sarahjohnson@gmail.com", contact: "1236547890", message: "Are there any restrictions on lease agreements?" },
-    { id: 6, name: "Michael Brown", propertyId: "P.302", email: "michaelbrown@gmail.com", contact: "9874563210", message: "Are there any restrictions on lease agreements?" },
-    { id: 7, name: "Emma Davis", propertyId: "P.303", email: "emmadavis@gmail.com", contact: "7410258963", message: "What documents are required for booking?" },
-    { id: 8, name: "Michael Brown", propertyId: "P.305", email: "michaelbrown@gmail.com", contact: "9874563210", message: "Are there any restrictions on lease agreements?" },
-    { id: 9, name: "Sarah Johnson", propertyId: "P.301", email: "sarahjohnson@gmail.com", contact: "1236547890", message: "Are there any restrictions on lease agreements?" },
-    { id: 10, name: "Michael Brown", propertyId: "P.302", email: "michaelbrown@gmail.com", contact: "9874563210", message: "Are there any restrictions on lease agreements?" },
-  ];
-
-  const [searchTerm, setSearchTerm] = useState("");
-
- 
-  const filteredMessages = messagesData.filter((msg) =>
-    msg.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+const UserTable = () => {
   return (
-    <div>
-        <Header/>
-    <div className="container mt-6">
-    <h3 className="fw-bold my-4 py-2">All Property Messages</h3>
-
-
-      {/* Search Bar */}
-      <div className="mb-4 position-relative">
-  <FontAwesomeIcon icon={faSearch} className="position-absolute text-muted" style={{ left: "15px", top: "50%", transform: "translateY(-50%)" }} />
-  <input
-    type="text"
-    className="form-control ps-5"
-    placeholder="Search messages..."
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-  />
-</div>
-
-
-
-      {/* Table */}
+    <div className="container mt-4">
+      <h2 className="fw-bold">Total Users</h2>
       <div className="table-responsive">
-        <table className="table table-striped align-middle">
-          <thead>
+        <table className="table table-borderless align-middle shadow-sm">
+          <thead className="bg-light">
             <tr>
-              <th>Guest Name</th>
-              <th>Property Id</th>
-              <th>Email Address</th>
-              <th>Contact No</th>
-              <th>Message</th>
+              <th>#</th>
+              <th>Name</th>
+              <th>Mobile</th>
+              <th>Last Activity</th>
+              <th>Created</th>
+              <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {filteredMessages.length > 0 ? (
-              filteredMessages.map((msg) => (
-                <tr key={msg.id}>
-                  <td>{msg.name}</td>
-                  <td>{msg.propertyId}</td>
-                  <td>{msg.email}</td>
-                  <td>{msg.contact}</td>
-                  <td>{msg.message}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5" className="text-center text-muted">
-                  No messages found.
+            {users.map((user, index) => (
+              <tr key={user.id} className="border-bottom">
+                <td>{index + 1}</td>
+                <td>
+                  <div className="d-flex align-items-center">
+                    <img
+                      src={user.image}
+                      alt="Profile"
+                      className="rounded-circle me-2"
+                      width="40"
+                      height="40"
+                    />
+                    <div>
+                      <div className="fw-bold">{user.name}</div>
+                      <div className="text-muted small">{user.email}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>{user.mobile}</td>
+                <td>{user.lastActivity}</td>
+                <td>{user.created}</td>
+                <td>
+                  <span className="badge text-success" style={{ backgroundColor: "#d4f8d4" }}>
+                    {user.status}
+                  </span>
+                </td>
+                <td>
+                  <FontAwesomeIcon
+                    icon={faEdit}
+                    className="text-primary me-3 cursor-pointer"
+                    style={{ cursor: "pointer" }}
+                  />
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    className="text-danger cursor-pointer"
+                    style={{ cursor: "pointer" }}
+                  />
                 </td>
               </tr>
-            )}
+            ))}
           </tbody>
         </table>
       </div>
-
-      {/* Pagination */}
-      <div className="d-flex justify-content-between align-items-center mt-3 py-6">
-        <p className="text-muted">Showing {filteredMessages.length} of {messagesData.length} messages</p>
-        <nav>
-          <ul className="pagination mb-0">
-            <li className="page-item disabled"><a className="page-link">Previous</a></li>
-            <li className="page-item active"><a className="page-link" href="#">1</a></li>
-            <li className="page-item"><a className="page-link" href="#">Next</a></li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-    <Footer/>
     </div>
   );
 };
 
-export default AllPropertyMessages;
+export default UserTable;
