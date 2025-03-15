@@ -1,5 +1,6 @@
 import { BrowserRouter as Router } from "react-router-dom";
 import AllpropertyReviews from "./super Admin/AllPropertyReview";
+import AllPropertyMessages from "./super Admin/AllPropertyMassges";
 function App() {
   return (
     <Router>
@@ -7,7 +8,7 @@ function App() {
       {/* <PropertyDetails/> */}
       {/* <AdminPropertyDetails/> */}
       {/* <ProfileDetails/> */}
-      <AllpropertyReviews/>
+      <AllPropertyMessages/>
     </Router>
   );
 }
