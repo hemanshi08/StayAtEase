@@ -11,12 +11,16 @@ import Dashboard from "./Admin/dashboard";
 import PropertyListings from "./Admin/propertylisting";
 import PropertyMessages from "./Admin/PropertyMessages";
 import PropertyDetails from "./rental/propertydetails";
+import AdminPropertyDetails from "./Admin/propertydetails";
+import ProfileDetails from "./Admin/profiledetails";
 
 function App() {
   return (
     <Router>
      
-      <PropertyDetails/>
+      {/* <PropertyDetails/> */}
+      {/* <AdminPropertyDetails/> */}
+      <ProfileDetails/>
     </Router>
   );
 }
