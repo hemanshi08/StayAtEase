@@ -5,13 +5,13 @@ import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
-const PropertyCard = ({ id, image, title, location, beds, baths, sqft, rating, price, showDetailsButton = false , defaultLiked = false  }) => {
+const PropertyCard = ({ id, image, title, location, beds, baths, sqft, rating, price,reviews, showDetailsButton = false , defaultLiked = false  }) => {
   const [liked, setLiked] = useState(defaultLiked);
   const navigate = useNavigate();
   
 
   const handleViewDetails = () => {
-    navigate(`/property/${id}`, { state: { image, title, location, beds, baths, sqft, rating, price } });
+    navigate(`/property/${id}`, { state: { image, title, location, beds, baths, sqft, rating, price,reviews} });
   };
 
   return (
@@ -23,7 +23,11 @@ const PropertyCard = ({ id, image, title, location, beds, baths, sqft, rating, p
         <img alt={title} src={image} className="h-48 w-full object-cover" />
         {/* Heart Icon positioned correctly on top-right without affecting the image */}
         <div 
-  onClick={() => setLiked(!liked)} 
+
+  onClick={(e) => {
+    e.stopPropagation(); // Prevents click from propagating to the Card
+    setLiked(!liked);
+  }} 
   className="absolute top-2 right-2 cursor-pointer bg-white w-10 h-10 rounded-full shadow-md flex items-center justify-center text-xl"
 >
   {liked ? <HeartFilled className="text-red-500" style={{color:"red"}} /> : <HeartOutlined />}
