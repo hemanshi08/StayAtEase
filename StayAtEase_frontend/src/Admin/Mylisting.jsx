@@ -64,7 +64,7 @@ const PropertyRow = ({ property }) => (
   </tr>
 );
 
-function PropertyListings() {
+function MyListing () {
   return (
     <div>
       <Header />
@@ -112,4 +112,4 @@ function PropertyListings() {
   );
 };
 
-export default PropertyListings;
+export default MyListing;

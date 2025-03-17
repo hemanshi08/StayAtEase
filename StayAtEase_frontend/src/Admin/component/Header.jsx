@@ -24,7 +24,7 @@ export default function Header() {
             <Link to="/PropertyReviews" className="hover:text-blue-500 font-medium no-underline text-decoration-none">Reviews</Link>
             <div className="d-flex align-items-center">
               <img src="/profile.png" className="rounded-circle me-2" alt="User" width="50" height="50" />
-              <Link to="/HomePage" className="text-danger no-underline">
+              <Link to="/homepage" className="text-danger no-underline">
                 <i className="fas fa-sign-out-alt fa-lg"></i>
               </Link>
             </div>
@@ -46,7 +46,7 @@ export default function Header() {
           <Link to="/reviews" className="hover:text-blue-500 font-medium no-underline text-decoration-none">Reviews</Link>
           <div className="d-flex align-items-center">
             <img src="/profile.png" className="rounded-circle me-2" alt="User" />
-            <Link to="/home" className="text-danger no-underline">
+            <Link to="/homepage" className="text-danger no-underline">
               <i className="fas fa-sign-out-alt fa-lg"></i>
             </Link>
           </div>
