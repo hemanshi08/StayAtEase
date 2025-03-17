@@ -59,8 +59,14 @@ const properties = [
     baths:2,
     sqft:45000,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4, comment: "Amazing place to stay!" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 5, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 3, comment: "Amazing place to stay!" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 2, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 3.5, comment: "Amazing place to stay!" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.5, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 3, comment: "Amazing place to stay!" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 3.8, comment: "Loved the experience." },
     ],
   },
   {
