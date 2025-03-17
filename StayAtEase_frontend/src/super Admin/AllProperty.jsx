@@ -15,7 +15,7 @@ const propertiesData = [
     addedBy: "Robert",
     addedById: "1",
     status: "Available",
-    image: "../property1.jpg",
+    image: "../Properties_image/iflat4.jpg",
     type: "Apartment"
   },
   {
@@ -27,7 +27,7 @@ const propertiesData = [
     addedBy: "Sharonda",
     addedById: "2",
     status: "Unavailable",
-    image: "../property2.jpg",
+    image: "../Properties_image/iflat1.jpg",
     type: "Villa"
   },
   {
@@ -39,7 +39,7 @@ const propertiesData = [
     addedBy: "Robert",
     addedById: "1",
     status: "Unavailable",
-    image: "../property3.jpg",
+    image: "../Properties_image/iflat3.jpg",
     type: "Penthouse"
   },
 ];
