@@ -1,10 +1,11 @@
 import { BrowserRouter as Router } from "react-router-dom";
-import HomePage from "./rental/home";
+
+import AdminPropertyDetails from "./Admin/propertydetails";
+import ApartmentListing from "./Admin/propertydetails";
 function App() {
   return (
     <Router>
-     
-  <HomePage/>
+    <ApartmentListing/>
     </Router>
   );
 }
