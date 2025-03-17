@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./Admin/component/header";
 import Dashboard from "./Admin/dashboard";
-import PropertyReviews from "./Admin/propertyreview";
-import PropertyForm from "./Admin/Propertyform";
-import PropertyListings from "./Admin/propertylisting";
+import PropertyReviews from "./Admin/Reviews";
+import PropertyForm from "./Admin/AddProperty";
+import PropertyListings from "./Admin/Mylisting";
 import Footer from "./Components/Footer";
 import HomePage from "./rental/home";
 
