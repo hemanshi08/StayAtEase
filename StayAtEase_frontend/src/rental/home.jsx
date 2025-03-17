@@ -18,7 +18,11 @@ const properties = [
     image: "../Properties_image/iflat4.jpg",
     beds:2,
     baths:2,
-    sqft:25000
+    sqft:25000,
+    reviews: [
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+    ],
   },
   {
     id: 2,
@@ -29,7 +33,11 @@ const properties = [
     image: "../Properties_image/flat5.jpg",
     beds:3,
     baths:2,
-    sqft:45000
+    sqft:45000,
+    reviews: [
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+    ],
   },
   {
     id: 3,
@@ -40,7 +48,11 @@ const properties = [
     image: "../Properties_image/villa3.jpg",
     beds:2,
     baths:2,
-    sqft:25000
+    sqft:25000 ,
+    reviews: [
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+    ],
   },
   {
     id: 4,
@@ -51,7 +63,11 @@ const properties = [
     image: "../Properties_image/iflat6.jpg",
     beds:2,
     baths:2,
-    sqft:25000
+    sqft:25000,
+    reviews: [
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+    ],
   },
   {
     id: 5,
@@ -62,7 +78,11 @@ const properties = [
     image: "../Properties_image/i flat7.jpg",
     beds:2,
     baths:2,
-    sqft:25000
+    sqft:25000,
+    reviews: [
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+    ],
   },
   {
     id: 6,
@@ -73,7 +93,11 @@ const properties = [
     image: "../Properties_image/iflat1.jpg",
     beds:3,
     baths:2,
-    sqft:45000
+    sqft:45000,
+    reviews: [
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+    ],
   },
 ];
 
@@ -147,7 +171,7 @@ export default function HomePage() {
         <h2 className="text-3xl font-semibold ml-5">Featured Properties</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 mr-5 ml-5">
           {properties.map((property) => (
-            <PropertyCard key={property.id} {...property} />
+            <PropertyCard key={property.id} {...property} showDetailsButton={false}/>
           ))}
         </div>
       </div>
