@@ -74,16 +74,17 @@ const PropertyDetails = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-6">
         {/* Left Section - Property Details */}
         <div className="md:col-span-2">
-          <h1 className="text-2xl font-bold">{title}</h1>
-          <p className="text-gray-500">{propertyLocation}</p>
-          <p className="text-blue-600 text-xl font-bold">₹{price} / month</p>
+          <h1 className="text-3xl font-bold">{title}</h1>
+          <p className="text-gray-500 text-xl">{propertyLocation}</p>
+          <p className="text-blue-600 text-2xl font-bold">₹{price} / month</p>
 
-          <div className="mt-4 text-gray-700">
+          <div className="mt-4 text-gray-700 ">
             <p>🛏️ {beds} beds &nbsp;&nbsp; 🚿 {baths} baths &nbsp;&nbsp; 📏 {sqft} sq ft</p>
           </div>
 
-          <h2 className="mt-6 text-lg font-semibold">Features & Amenities</h2>
-          <div className="grid grid-cols-2 gap-3 text-gray-600 mt-2">
+<div className="mt-8">
+          <h2 className=" text-2xl font-semibold">Features & Amenities</h2>
+          <div className="grid grid-cols-2 gap-3 text-gray-600 mt-5">
             <p>📶 High-speed WiFi</p>
             <p>🚗 Parking Space</p>
             <p>🏊 Swimming Pool</p>
@@ -94,49 +95,32 @@ const PropertyDetails = () => {
             <p>🍽️ Kitchen</p>
             <p>🧺 Laundry</p>
           </div>
-
-          <h2 className="mt-6 text-lg font-semibold">About this property</h2>
-          <p className="text-gray-600">
+          </div>
+          <div className="mt-6">
+          <h2 className=" text-2xl font-semibold">About this property</h2>
+          <p className="text-gray-600 tracking-wider leading-relaxed">
             This stunning apartment offers modern living at its finest. With breathtaking city views, premium amenities,
             and a prime location, it’s perfect for those seeking luxury and convenience.
           </p>
-
-          {/* <h2 className="mt-6 text-lg font-semibold">Reviews</h2>
-          <p className="text-lg font-bold flex items-center">
-            <Rate allowHalf defaultValue={4.8} disabled className="mr-2" /> 4.8 (28 reviews)
-          </p> */}
-
-          {/* <div className="mt-4 space-y-4">
-            
-            <div className="p-4 bg-gray-100 rounded-lg">
-              <p className="font-semibold">Sarah Johnson <span className="text-gray-500 text-sm">December 2023</span></p>
-              <Rate defaultValue={5} disabled className="mt-1" />
-              <p className="text-gray-600 mt-2">Amazing property with great amenities. Very responsive host!</p>
-            </div>
-            
-            <div className="p-4 bg-gray-100 rounded-lg">
-              <p className="font-semibold">Michael Chen <span className="text-gray-500 text-sm">November 2023</span></p>
-              <Rate defaultValue={4.5} disabled className="mt-1" />
-              <p className="text-gray-600 mt-2">Very clean and modern apartment. Great value for money!</p>
-            </div>
-          </div> */}
+          </div>
         </div>
 
         {/* Right Section - Agent Info */}
-        <div className="p-6 bg-gray-100 rounded-lg">
-          <div className="flex items-center">
+        <div className="mt-20">
+          <div className=" p-6 bg-gray-100 rounded-lg">
+          <div className="flex">
             <img
-              src="https://via.placeholder.com/50"
+              src="../profile_image/team-3.jpg"
               alt="Agent"
               className="w-12 h-12 rounded-full mr-3"
             />
-            <div>
-              <p className="font-semibold">Michael Anderson</p>
-              <p className="text-gray-500 text-sm">Senior Property Consultant</p>
+            <div className="flex flex-col">
+              <span className="font-semibold mt-1">Michael Anderson</span>
+              <span className="text-gray-500 text-sm mt-1">Senior Property Consultant</span>
             </div>
           </div>
-
-          <Button type="primary" icon={<PhoneOutlined />} className="w-full mt-4">
+          <div className="flex flex-col gap-2.5 mt-6">
+          <Button type="primary" icon={<PhoneOutlined />} className="w-full">
             Call Agent
           </Button>
           <Button icon={<SendOutlined />} className="w-full mt-2">
@@ -145,12 +129,15 @@ const PropertyDetails = () => {
           <Button type="link" icon={<EditOutlined />} className="w-full mt-2">
             Write Review
           </Button>
-
-          <h2 className="mt-6 flex items-center text-lg font-semibold">
+          </div>
+          <div className="mt-6 flex flex-col gap-2">
+          <h2 className="mt-6 flex  text-lg font-semibold">
             <ClockCircleOutlined className="mr-2" /> Available Hours
           </h2>
-          <p className="text-gray-600">Mon - Fri: 9:00 AM - 6:00 PM</p>
-          <p className="text-gray-600">Sat: 10:00 AM - 4:00 PM</p>
+          <span className="text-gray-600">Mon - Fri: 9:00 AM - 6:00 PM</span>
+          <span className="text-gray-600">Sat: 10:00 AM - 4:00 PM</span>
+          </div>
+          </div>
         </div>
 
         
@@ -159,6 +146,7 @@ const PropertyDetails = () => {
       {/* Reviews Section */}
       <Reviews rating={rating} reviews={reviews} />
     </div>
+    
   );
 };
 

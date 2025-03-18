@@ -5,10 +5,11 @@ const Reviews = ({ reviews = [], rating }) => {
   return (
     <div className="mt-6">
       <h2 className="text-2xl font-semibold">Reviews</h2>
-      <p className="text-2xl font-bold flex items-center">
-        {rating} <Rate allowHalf disabled defaultValue={rating} className="ml-2 text-yellow-500 text-lg" /> 
-        ({reviews.length} reviews)
-      </p>
+      <p className="font-bold flex items-center">
+  <span className="text-3xl mr-1.5">{rating}</span>
+  <Rate allowHalf disabled defaultValue={rating} className="ml-3 text-yellow-500 text-xl" />
+  <span className="ml-3  text-gray-600">({reviews.length} reviews)</span>
+</p>
 
       {/* Scrollable Review Container */}
       <div className="mt-4 max-h-88 overflow-y-auto pr-2">
