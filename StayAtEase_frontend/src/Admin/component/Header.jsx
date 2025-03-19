@@ -42,7 +42,8 @@ export default function Header() {
     className="w-10 h-10 rounded-full border border-gray-300 hover:border-gray-400 transition duration-200" 
     alt="User" 
   />
-</Link>    <Link to="/HomePage" className="text-red-500 hover:text-red-600">
+</Link> 
+   <Link to="/HomePage" className="text-red-500 hover:text-red-600">
       <LogOut size={22} />
     </Link>
   </div>

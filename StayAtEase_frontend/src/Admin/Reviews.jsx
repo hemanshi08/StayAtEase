@@ -3,10 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Footer from "../Components/Footer";
 import Header from "./component/header";
+import ReportModal from "./component/ReportModal"; // Import the modal component
 
 const PropertyReviews = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [, setSelectedReview] = useState(null);
   const reviewsPerPage = 10;
 
   const reviews = [
@@ -16,26 +19,21 @@ const PropertyReviews = () => {
     { id: 4, name: "Sarah Davis", date: "Feb 12, 2024", rating: "⭐⭐⭐⭐⭐", review: "Beautiful property.", image: "../profile.png" },
     { id: 5, name: "David Lee", date: "Feb 11, 2024", rating: "⭐⭐⭐⭐☆", review: "Spacious and modern.", image: "../profile.png" },
     { id: 6, name: "Sophia Miller", date: "Feb 10, 2024", rating: "⭐⭐⭐⭐⭐", review: "Love the neighborhood!", image: "../profile.png" },
-
   ];
 
-  // Filter reviews based on search term
   const filteredReviews = reviews.filter((review) =>
     review.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Calculate total pages for filtered reviews
   const totalPages = Math.ceil(filteredReviews.length / reviewsPerPage);
-
-  // Get reviews for the current page
   const indexOfLastReview = currentPage * reviewsPerPage;
   const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
   const currentReviews = filteredReviews.slice(indexOfFirstReview, indexOfLastReview);
 
   return (
-    <div >
+    <div>
       <Header />
-      <div className="container mx-auto p- 6 px-7 mt-6">
+      <div className="container mx-auto p-6 px-7 mt-6">
         <h2 className="text-2xl font-bold text-gray-800">Property Reviews</h2>
         <p className="text-gray-500">Sunset Heights Apartments</p>
 
@@ -52,7 +50,7 @@ const PropertyReviews = () => {
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
-              setCurrentPage(1); // Reset to page 1 on new search
+              setCurrentPage(1);
             }}
           />
         </div>
@@ -85,12 +83,15 @@ const PropertyReviews = () => {
                     <td className="p-3">{review.rating}</td>
                     <td className="p-3">{review.review}</td>
                     <td className="p-3">
-                    <button className="text-red-500 font-semibold hover:text-red-600 hover:underline !important">
-  🚨 Report
-</button>
-
-
-
+                      <button
+                        className="text-red-500 font-semibold hover:text-red-600 hover:underline"
+                        onClick={() => {
+                          setSelectedReview(review);
+                          setIsModalOpen(true);
+                        }}
+                      >
+                        🚨 Report
+                      </button>
                     </td>
                   </tr>
                 ))
@@ -131,6 +132,14 @@ const PropertyReviews = () => {
           </nav>
         </div>
       </div>
+
+      {/* Report Modal */}
+      <ReportModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={() => setIsModalOpen(false)}
+      />
+
       <Footer />
     </div>
   );

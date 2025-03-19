@@ -20,7 +20,7 @@ function App() {
   <Route path="/propertylistings" element={<PropertyListings />} />
   <Route path="/Massages" element={<PropertyMessages />} />
   <Route path="/MyProfile" element={<ProfileDetails />} />
-  <Route path="/home" element={<HomePage />} />
+  <Route path="/Homepage" element={<HomePage />} />
 </Routes>
    
     </Router>
