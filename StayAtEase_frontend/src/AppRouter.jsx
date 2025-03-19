@@ -7,7 +7,7 @@ import HomePage from "./rental/home";
 import About from "./rental/PropertyPage";
 import PropertyPage from "./rental/PropertyPage";
 import WishlistPage from "./rental/WishlistPage";
-import LoginPage from "./Components/LoginPage";
+// import LoginPage from "./Components/LoginPage";
 import PropertyDetails from "./rental/PropertyDetailsPage";
 
 function AppRouter(){

@@ -2,32 +2,7 @@ import React from "react";
 import PropertyCard from "../Components/Property_card";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
-
-// const PropertyPage = () => {
-//   const properties = [
-//     { id: 1, image: "https://via.placeholder.com/600", title: "Luxury Beachfront Villa", location: "Miami Beach, Florida", beds: 4, baths: 3, sqft: 2800, rating: 3, price: "1,950" }
-//   ];
-
-//   return (
-//     <div>
-//       <Navbar/>
-//     <div className="container mx-auto p-6 grid grid-cols-3 gap-6">
-//       {properties.map((property) => (
-//         <PropertyCard key={property.id} {...property} showDetailsButton={true} />
-//       ))}
-//     </div>
-//     <Footer/>
-//     </div>
-//   );
-// };
-
-// export default PropertyPage;
-
-
-
-
 import { Input, Button, Select, Slider, Card, Rate } from "antd";
-import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 
 const { Search } = Input;
 const { Option } = Select;
