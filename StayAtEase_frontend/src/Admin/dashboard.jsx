@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "@fortawesome/fontawesome-free/css/all.min.css";
 import Footer from "../Components/Footer";
-import Navbar from "../Components/Navbar";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
 import Header from "./component/header";
 
 const Dashboard = () => {
@@ -36,94 +35,82 @@ const Dashboard = () => {
 
     return (
         <div>
-            <Header/>
-        <div className="container mt-4">
-      
-      
-    <div className="row text-center">
-        {[
-            { icon: "fa-building", label: "Total Properties", value: data.totalProperties, color: "text-primary" },
-            { icon: "fa-list", label: "Active Listings", value: data.activeListings, color: "text-primary" },
-            { icon: "fa-envelope", label: "Total Inquiries", value: data.totalInquiries, color: "text-warning" },
-            { icon: "fa-star", label: "Review Rating", value: data.reviewRating, color: "text-warning" }
-        ].map((card, index) => (
-            <div key={index} className="col-md-3">
-                <div className="card p-3 shadow-lg text-center">
-                    <i className={`fas ${card.icon} ${card.color} card-icon`} style={{ fontSize: "30px" }}></i>
-                    <h3>{card.value}</h3>
-                    <p>{card.label}</p>
+            <Header />
+            <div className="bg-gray-100 min-h-screen p-8">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-left">
+                    {[{ icon: "fa-building", label: "Total Properties", value: data.totalProperties },
+                       { icon: "fa-list text-green-500", label: "Active Listings", value: data.activeListings },
+                       { icon: "fa-envelope text-orange-500", label: "Total Inquiries", value: data.totalInquiries },
+                      { icon: "fa-star", label: "Review Rating", value: data.reviewRating }].map((card, index) => (
+                        <div key={index} className="bg-white p-4 shadow-lg rounded-lg">
+                            <i className={`fas ${card.icon} text-blue-500 text-3xl`}></i>
+                            <h3 className="text-xl font-bold mt-2">{card.value}</h3>
+                            <p className="text-gray-600">{card.label}</p>
+                        </div>
+                    ))}
                 </div>
-            </div>
-        ))}
-    </div>
 
-
-
-    <div className="container mt-5">
-    <div className="card shadow-lg">
-    <div className="card-header d-flex justify-content-between align-items-center">
-            <span className="fw-bold fs-4">Latest Messages</span>  {/* Bold + Larger Font */}
-            <div className=" text-decoration-none"><a href="#">View All</a></div>
-        </div>
-                    <div className="table-responsive">
-                        <table className="table table-striped">
+                <div className="mt-8 bg-white shadow-lg p-4 rounded-lg">
+                    <div className="flex justify-between items-center mb-4">
+                        <h4 className="text-xl font-bold">Latest Messages</h4>
+                        <a href="#" className="text-blue-500">View All</a>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
                             <thead>
-                                <tr>
-                                    <th className="fw-normal">Guest Name</th>
-                                    <th className="fw-normal">Property Id</th>
-                                    <th className="fw-normal">Email Address</th>
-                                    <th className="fw-normal">Contact No</th>
-                                    <th className="fw-normal">Message</th>
+                                <tr className="bg-gray-100 text-left">
+                                    <th className="p-3">Guest Name</th>
+                                    <th className="p-3">Property Id</th>
+                                    <th className="p-3">Email Address</th>
+                                    <th className="p-3">Contact No</th>
+                                    <th className="p-3">Message</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {data.messages.map((msg, index) => (
-                                    <tr key={index}>
-                                        <td>{msg.name}</td>
-                                        <td>{msg.propertyId}</td>
-                                        <td>{msg.email}</td>
-                                        <td>{msg.contact}</td>
-                                        <td>{msg.message}</td>
+                                    <tr key={index} className="even:bg-gray-50">
+                                        <td className="p-3">{msg.name}</td>
+                                        <td className="p-3">{msg.propertyId}</td>
+                                        <td className="p-3">{msg.email}</td>
+                                        <td className="p-3">{msg.contact}</td>
+                                        <td className="p-3">{msg.message}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
 
-            <div className="container mt-4">
-            <div className="d-flex justify-content-between align-items-center">
-        <h5 className="fw-bold fs-4">Latest Reviews</h5>  {/* Bold + Larger Font */}
-        <div className="text-decoration-none"><a href="#">View All</a></div>
-    </div>
-                <div className="row">
-                    {data.reviews.map((review, index) => (
-                        <div key={index} className="col-md-4 d-flex">
-                        <div className="review-card card p-3 shadow-lg">
-                    
-                                <div className="review-header d-flex align-items-center">
-                                    <img src={review.img} alt="Profile Pic" className="rounded-circle me-3" width="50" height="50" />
+                <div className="mt-8">
+                    <div className="flex justify-between items-center mb-4">
+                        <h4 className="text-xl font-bold">Latest Reviews</h4>
+                        <a href="#" className="text-blue-500">View All</a>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {data.reviews.map((review, index) => (
+                            <div key={index} className="bg-white p-4 shadow-lg rounded-lg">
+                                <div className="flex items-center mb-2">
+                                    <img src={review.img} alt="Profile" className="w-12 h-12 rounded-full mr-3" />
                                     <div>
-                                        <p><strong>{review.name}</strong></p>
-                                        <small>{review.date}</small>
+                                        <p className="font-bold">{review.name}</p>
+                                        <small className="text-gray-500">{review.date}</small>
                                     </div>
                                 </div>
                                 <p>{'⭐'.repeat(review.rating)}</p>
-                                <p>{review.text}</p>
-                                <p><small>{review.property}</small></p>
+                                <p className="text-gray-700 mt-2">{review.text}</p>
+                                <p className="text-sm text-gray-500">{review.property}</p>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
+                </div>
+
+               <div className="flex justify-center text-white mt-8">
+                    <button className="bg-[#1A237E] text-white px-6 py-3 rounded-lg shadow-md font-semibold flex items-center gap-2">
+                        <i className="fas fa-plus-square "></i> Add New Property
+                    </button>
                 </div>
             </div>
-
-            <div className="text-center mt-4">
-                <button className="btn btn-primary">Add New Property</button>
-            </div>
-            <br />
-        </div>
-        <Footer/>
+            <Footer />
         </div>
     );
 };

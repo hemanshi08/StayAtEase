@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
 import Footer from "../Components/Footer";
 import Header from "./component/header";
+import { FaWifi, FaCar, FaDumbbell, FaSwimmer, FaTv, FaShieldAlt, FaUtensils, FaBuilding ,FaCloudUploadAlt } from "react-icons/fa";
+import { MdLocalLaundryService, MdElevator } from "react-icons/md";
 
 const PropertyForm = () => {
   const [formData, setFormData] = useState({
@@ -18,15 +18,15 @@ const PropertyForm = () => {
   });
 
   const amenitiesList = [
-    { name: "WiFi", icon: "bi-wifi" },
-    { name: "Parking Space", icon: "bi-car-front" },
-    { name: "Fitness Center", icon: "bi-dumbbell" },
-    { name: "Swimming Pool", icon: "bi-water" },
-    { name: "Elevator", icon: "bi-building" },
-    { name: "Smart TV", icon: "bi-tv" },
-    { name: "Security", icon: "bi-shield-lock" },
-    { name: "Kitchen", icon: "bi-house-door" },
-    { name: "Laundry", icon: "bi bi-badge-wc-fill" },
+    { name: "WiFi", icon: <FaWifi /> },
+    { name: "Parking Space", icon: <FaCar /> },
+    { name: "Fitness Center", icon: <FaDumbbell /> },
+    { name: "Swimming Pool", icon: <FaSwimmer /> },
+    { name: "Elevator", icon: <MdElevator /> },
+    { name: "Smart TV", icon: <FaTv /> },
+    { name: "Security", icon: <FaShieldAlt /> },
+    { name: "Kitchen", icon: <FaUtensils /> },
+    { name: "Laundry", icon: <MdLocalLaundryService /> },
   ];
 
   const handleChange = (e) => {
@@ -41,175 +41,162 @@ const PropertyForm = () => {
         : [...prev.amenities, amenity],
     }));
   };
-
-  const handleFileChange = (e) => {
-    if (e.target.files.length + formData.images.length > 8) {
-      alert("You can upload a maximum of 8 images.");
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length + formData.images.length > 8) {
+      alert("You can only upload up to 8 images.");
       return;
     }
-    setFormData({ ...formData, images: [...formData.images, ...e.target.files] });
+    setFormData((prev) => ({
+      ...prev,
+      images: [...prev.images, ...files],
+    }));
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Data Submitted:", formData);
-  };
-
   return (
-    <div >
-        <Header/>
-    <div className="container my-5 px-0">
-      <h2 className="fw-bold">Add New Property</h2>
-      <div className="property-form mt-4 p-4 bg-white shadow-sm rounded">
-        <form onSubmit={handleSubmit}>
-          {/* Property Title */}
-          <div className="mb-3">
-            <label className="form-label">Property Title</label>
-            <input
-              type="text"
-              className="form-control"
-              name="title"
-              placeholder="Enter property title"
-              value={formData.title}
-              onChange={handleChange}
-            />
-          </div>
+    <div className="bg-gray-100 min-h-screen">
+      <Header />
+      <div className="container mx-auto pt-4 p-28 m-5">
+        <h2 className="text-2xl font-bold">Add New Property</h2>
+        <div className="bg-white shadow-md rounded-lg p-6 mt-4">
+          <form>
+            <div className="mb-4">
+              <label className="block font-medium">Property Title</label>
+              <input
+                type="text"
+                name="title"
+                className="w-full p-6 "
+                placeholder="Enter property title"
+                value={formData.title}
+                onChange={handleChange}
+              />
+            </div>
 
-         
-          <div className="row g-3">
-            <div className="col-md-6">
-              <label className="form-label">Price</label>
-              <div className="input-group">
-                <span className="input-group-text">₹</span>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block font-medium">Price</label>
                 <input
                   type="text"
-                  className="form-control"
                   name="price"
+                  className="w-full p-6 "
                   placeholder="Enter price"
                   value={formData.price}
                   onChange={handleChange}
                 />
               </div>
+              <div>
+                <label className="block font-medium">Square Footage</label>
+                <input
+                  type="text"
+                  name="squareFootage"
+                  className="w-full p-6 "
+                  placeholder="Enter square footage"
+                  value={formData.squareFootage}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
-            <div className="col-md-6">
-              <label className="form-label">Square Footage</label>
+
+            <div className="mt-4">
+              <label className="block font-medium">Address</label>
               <input
                 type="text"
-                className="form-control"
-                name="squareFootage"
-                placeholder="Enter square footage"
-                value={formData.squareFootage}
+                name="address"
+                className="w-full p-6 "
+                placeholder="Enter complete address"
+                value={formData.address}
                 onChange={handleChange}
               />
             </div>
-          </div>
 
-          {/* Address */}
-          <div className="mt-3">
-            <label className="form-label">Address</label>
-            <input
-              type="text"
-              className="form-control"
-              name="address"
-              placeholder="Enter complete address"
-              value={formData.address}
-              onChange={handleChange}
-            />
-          </div>
+            <div className="grid grid-cols-3 gap-4 mt-4">
+              <div>
+                <label className="block font-medium">Bedrooms</label>
+                <input
+                  type="number"
+                  name="bedrooms"
+                  className="w-full p-6 "
+                  placeholder="Number of bedrooms"
+                  value={formData.bedrooms}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <label className="block font-medium">Bathrooms</label>
+                <input
+                  type="number"
+                  name="bathrooms"
+                  className="w-full p-6 "
+                  placeholder="Number of bathrooms"
+                  value={formData.bathrooms}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <label className="block font-medium">Property Type</label>
+                <select
+                  name="propertyType"
+                  className="w-full p-6 "
+                  value={formData.propertyType}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Property Type</option>
+                  <option value="Apartment">Apartment</option>
+                  <option value="Villa">Villa</option>
+                  <option value="Condo">Condo</option>
+                </select>
+              </div>
+            </div>
 
-          {/* Bedrooms, Bathrooms, Property Type */}
-          <div className="row g-3 mt-3">
-            <div className="col-md-4">
-              <label className="form-label">Bedrooms</label>
+            <div className="m-4">
+        <label className="block font-medium mb-2">Amenities</label>
+        <div className="grid grid-cols-3 gap-4 p-2">
+          {amenitiesList.map((amenity, index) => (
+            <label key={index} className="flex items-center space-x-4 p-2 ">
               <input
-                type="number"
-                className="form-control"
-                name="bedrooms"
-                placeholder="Number of bedrooms"
-                value={formData.bedrooms}
-                onChange={handleChange}
+                type="checkbox"
+                checked={formData.amenities.includes(amenity.name)}
+                onChange={() => handleAmenityToggle(amenity.name)}
               />
+              <span className="flex items-center space-x-2">{amenity.icon} <span>{amenity.name}</span></span>
+            </label>
+          ))}
+        </div>
+        </div>
+          
+        <h2 className="text-2xl font-bold text-left mb-4 pt-4">Property Images</h2>
+        <div className="flex flex-col items-center  p-6 rounded-lg bg-gray-50">
+          <label htmlFor="imageUpload" className="cursor-pointer flex flex-col items-center">
+            <FaCloudUploadAlt className="text-4xl mb-2 text-gray-500" />
+            <p className="text-sm text-gray-700">Drag & drop images here or click to upload</p>
+            <p className="text-xs text-gray-500">Maximum 8 images allowed</p>
+            <div className="mt-2">
+              <button className="bg-gray-300 px-4 py-2 rounded text-sm">Select Files</button>
             </div>
-            <div className="col-md-4">
-              <label className="form-label">Bathrooms</label>
-              <input
-                type="number"
-                className="form-control"
-                name="bathrooms"
-                placeholder="Number of bathrooms"
-                value={formData.bathrooms}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="col-md-4">
-              <label className="form-label">Property Type</label>
-              <select
-                className="form-select"
-                name="propertyType"
-                value={formData.propertyType}
-                onChange={handleChange}
-              >
-                <option value="">Select Property Type</option>
-                <option value="Apartment">Apartment</option>
-                <option value="Villa">Villa</option>
-                <option value="Condo">Condo</option>
-              </select>
-            </div>
+          </label>
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="hidden"
+            id="imageUpload"
+          />
+          <div className="mt-2">
+            {formData.images.length > 0 && (
+              <p className="text-sm text-gray-600">{formData.images.length} images selected</p>
+            )}
           </div>
+        </div>
 
-          {/* Amenities */}
-          <div className="mt-4">
-            <label className="form-label">Amenities</label>
-            <div className="row g-2">
-              {amenitiesList.map((amenity, index) => (
-                <div className="col-md-3" key={index}>
-                  <input
-                    type="checkbox"
-                    checked={formData.amenities.includes(amenity.name)}
-                    onChange={() => handleAmenityToggle(amenity.name)}
-                  />{" "}
-                  <i className={`bi ${amenity.icon}`}></i> {amenity.name}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Property Images */}
-          <div className="mt-4">
-            <label className="form-label">Property Images</label>
-            <div className="file-upload text-center p-4 border border-dashed rounded bg-light">
-              <i className="bi bi-cloud-arrow-up display-4 text-secondary"></i>
-              <p className="fw-bold">Drag & drop images here or click to upload</p>
-              <p className="small text-muted">Maximum 8 images allowed</p>
-              <input
-                type="file"
-                className="form-control d-none"
-                id="fileInput"
-                multiple
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-              <button
-                className="btn btn-outline-primary"
-                onClick={() => document.getElementById("fileInput").click()}
-                type="button"
-              >
-                Select Files
+            <div className="mt-6 text-center">
+              <button className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
+                Submit Property
               </button>
             </div>
-          </div>
-
-          {/* Submit Button */}
-          <div className="mt-4 text-center">
-            <button type="submit" className="btn btn-primary w-100 p-2 fs-5">
-              Submit Property
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-    
-    </div>
-    <Footer/>
+      <Footer />
     </div>
   );
 };

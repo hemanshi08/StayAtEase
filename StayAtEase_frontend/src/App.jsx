@@ -6,20 +6,22 @@ import PropertyForm from "./Admin/AddProperty";
 import PropertyListings from "./Admin/Mylisting";
 import Footer from "./Components/Footer";
 import HomePage from "./rental/home";
-
+import ProfileDetails from "./Admin/MyProfile";
+import PropertyMessages from "./Admin/Massages";
 
 function App() {
   return (
     <Router>
-  
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/PropertyForm" element={<PropertyForm />} />
-        <Route path="/PropertyListings" element={<PropertyListings />} />
-        <Route path="/PropertyReviews" element={<PropertyReviews />} />
-        <Route path="/HomePage" element={<HomePage />} />
-        
-      </Routes>
+<Routes>
+<Route path="/" element={<PropertyMessages />} />
+  <Route path="/Dashboard" element={<Dashboard />} />
+  <Route path="/PropertyReviews" element={<PropertyReviews />} />
+  <Route path="/propertyform" element={<PropertyForm />} />
+  <Route path="/propertylistings" element={<PropertyListings />} />
+  <Route path="/Massages" element={<PropertyMessages />} />
+  <Route path="/MyProfile" element={<ProfileDetails />} />
+  <Route path="/home" element={<HomePage />} />
+</Routes>
    
     </Router>
   );
