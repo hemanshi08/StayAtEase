@@ -2,9 +2,22 @@ import { Modal, Input, Button } from "antd";
 import { MobileOutlined, LockOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import SignupModal from "./SignupPage";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export default function LoginModal({ isModalOpen, handleCancel }) {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const handleLogin = () => {
+    if (phone === "9080706050" && password === "111") {
+      navigate("/Dashboard"); // Redirect to AdminDashboard
+    } else {
+      alert("Invalid phone number or password");
+    }
+  };
+
   return (
     <>
     <Modal
@@ -29,6 +42,8 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
           placeholder="Enter your phone number"
           prefix={<MobileOutlined />}
           className="mt-2"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
         />
       </div>
 
@@ -39,6 +54,8 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
           placeholder="Enter your password"
           prefix={<LockOutlined />}
           className="mt-2"
+          value={password}
+          onChange={(e)=>setPassword(e.target.value)}
         />
       </div>
 
@@ -46,7 +63,7 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
         Forgot password?
       </div>
 
-      <Button type="primary" className="bg-blue-600 w-full mt-4 ">
+      <Button type="primary" className="bg-blue-600 w-full mt-4" onClick={handleLogin}>
         Log In
       </Button>
 

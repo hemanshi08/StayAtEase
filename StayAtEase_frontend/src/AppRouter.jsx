@@ -9,7 +9,11 @@ import PropertyPage from "./rental/PropertyPage";
 import WishlistPage from "./rental/WishlistPage";
 import LoginPage from "./Components/LoginPage";
 import PropertyDetails from "./rental/PropertyDetailsPage";
-
+import Dashboard from "./Super_Admin/Dashboard";
+import TotalProperties from "./Super_Admin/TotalProperties";
+import TotalUser from "./Super_Admin/TotalUser";
+import TotalRoomOwner from "./Super_Admin/TotalRoomOwner";
+import TotalReviews from "./Super_Admin/TotalReviews";
 function AppRouter(){
   return (
     <Router>
@@ -24,6 +28,16 @@ function AppRouter(){
         <Route path="/properties" element={<PropertyPage />} />
         <Route path="/Wishlist" element={<WishlistPage />} />
         <Route path="/property/:id" element={<PropertyDetails />} />
+
+              {/* Router for superAdmin */}
+
+
+        <Route path="/Dashboard" element={<Dashboard />} /> {/* New Route */}
+        <Route path="/TotalProperties" element={<TotalProperties />} /> {/* New Route */}
+        <Route path="/TotalUser" element={<TotalUser />} /> {/* New Route */}
+        <Route path="/TotalRoomOwner" element={<TotalRoomOwner />} /> {/* New Route */}
+        <Route path="/TotalReviews" element={<TotalReviews />} /> {/* New Route */}
+
       </Routes>
       {/* <PropertyPage/> */}
       {/* <WishlistPage/> */}
@@ -31,6 +45,9 @@ function AppRouter(){
       {/* <Routes>
         <Route path="/home" element={<HomePage/>} />
       </Routes> */}
+
+
+      
     </Router>
   );
 }
