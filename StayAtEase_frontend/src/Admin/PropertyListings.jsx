@@ -1,5 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 import { faHome, faChartBar, faCalendarAlt, faSearch, faFilter, faPlus, faEye } from "@fortawesome/free-solid-svg-icons";
 import Footer from "../Components/Footer";
 import Header from "./component/header";
@@ -54,9 +55,13 @@ const PropertyRow = ({ property }) => (
   </span>
 </td>
 <td>
-      <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-        <FontAwesomeIcon icon={faEye} /> View
-      </button>
+<Link 
+    to="/PropertyDetails" 
+    className="bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2 text-white"
+  >
+    <FontAwesomeIcon icon={faEye} />
+    View
+  </Link>
     </td>
   </tr>
 );
@@ -76,9 +81,13 @@ function PropertyListings() {
         
         <div className="flex justify-between items-center mt-6">
           <SearchBar />
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-            <FontAwesomeIcon icon={faPlus} /> Add Property
-          </button>
+          <Link 
+    to="/propertyform" 
+    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center gap-2"
+  >
+    <FontAwesomeIcon icon={faPlus} />
+    Add Property
+  </Link>
         </div>
         
         <div className="overflow-x-auto mt-6 pt-4">
@@ -114,10 +123,13 @@ function PropertyListings() {
             </span>
           </td>
           <td className="px-6 py-4 text-white">
-            <button className="bg-blue-600  px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2">
-              <FontAwesomeIcon icon={faEye} />
-              View
-            </button>
+          <Link 
+    to="/PropertyDetails" 
+    className="bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2 text-white"
+  >
+    <FontAwesomeIcon icon={faEye} />
+    View
+  </Link>
           </td>
         </tr>
       ))}
