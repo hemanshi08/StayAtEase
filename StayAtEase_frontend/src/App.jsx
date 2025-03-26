@@ -8,7 +8,7 @@ import PropertyForm from "./Admin/AddProperty";
 import Footer from "./Components/Footer";
 import HomePage from "./rental/home";
 import ProfileDetails from "./Admin/profileDetails";
-import AdminPropertyDetails from "./Admin/propertydetails";
+import AdminPropertyDetails from "./Admin/admin-propertydetails";
 
 
 function App() {
