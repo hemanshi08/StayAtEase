@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import Header from './component/header';
 import Footer from '../Components/Footer';
-export default function PropertyDetails() {
+export default function AdminPropertyDetails() {
   const [currentReviews] = useState([
     { id: 1, name: "Sarah Johnson", date: "Jan 15, 2024", rating: "⭐⭐⭐⭐⭐", review: "Absolutely love this property! The amenities are top-notch and the staff is incredibly helpful." },
     { id: 2, name: "Michael Chen", date: "Jan 14, 2024", rating: "⭐⭐⭐⭐", review: "Great location and well-maintained property. The only minor issue was the parking situation during peak hours." },

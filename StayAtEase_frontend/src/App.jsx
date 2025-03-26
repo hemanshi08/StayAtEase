@@ -8,7 +8,7 @@ import PropertyForm from "./Admin/AddProperty";
 import Footer from "./Components/Footer";
 import HomePage from "./rental/home";
 import ProfileDetails from "./Admin/profileDetails";
-import PropertyDetails from "./Admin/propertydetails";
+import AdminPropertyDetails from "./Admin/propertydetails";
 
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
   <Route path="/Massages" element={<PropertyMessages />} />
   <Route path="/MyProfile" element={<ProfileDetails />} />
   <Route path="/Homepage" element={<HomePage />} />
-  <Route path="/PropertyDetails" element={<PropertyDetails />} />
+  <Route path="/PropertyDetails" element={<AdminPropertyDetails />} />
 </Routes>
    
     </Router>

@@ -124,12 +124,13 @@ function PropertyListings() {
           </td>
           <td className="px-6 py-4 text-white">
           <Link 
-    to="/PropertyDetails" 
-    className="bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2 text-white"
-  >
-    <FontAwesomeIcon icon={faEye} />
-    View
-  </Link>
+  to="/PropertyDetails" 
+  className="bg-blue-600 px-3 py-1.5 rounded-lg hover:bg-blue-700 flex items-center gap-1.5 text-white text-sm w-20"
+>
+  <FontAwesomeIcon icon={faEye} />
+  View
+</Link>
+
           </td>
         </tr>
       ))}
