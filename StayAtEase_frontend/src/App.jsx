@@ -7,8 +7,9 @@ import PropertyListings from "./Admin/PropertyListings";
 import Footer from "./Components/Footer";
 import PropertyCard from "./Components/Property_card";
 import HomePage from "./rental/home";
-import ProfileDetails from "./Admin/ProfileDetails";
-import PropertyMessages from "./Admin/PropertyMessages";
+import ProfileDetails from "./Admin/profileDetails";
+import AdminPropertyDetails from "./Admin/admin-propertydetails";
+
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
   <Route path="/Massages" element={<PropertyMessages />} />
   <Route path="/MyProfile" element={<ProfileDetails />} />
   <Route path="/Homepage" element={<HomePage />} />
+  <Route path="/PropertyDetails" element={<AdminPropertyDetails />} />
 </Routes>
    
     </Router>
