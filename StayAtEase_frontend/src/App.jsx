@@ -7,7 +7,7 @@ import PropertyListings from "./Admin/PropertyListings";
 import PropertyForm from "./Admin/AddProperty";
 import Footer from "./Components/Footer";
 import HomePage from "./rental/home";
-import ProfileDetails from "./Admin/profileDetails";
+import ProfileDetails from "./Admin/ProfileDetails";
 import AdminPropertyDetails from "./Admin/admin-propertydetails";
 import EditProperty from "./Admin/edit-property";
 
