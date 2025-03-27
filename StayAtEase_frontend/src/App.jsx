@@ -9,7 +9,7 @@ import Footer from "./Components/Footer";
 import HomePage from "./rental/home";
 import ProfileDetails from "./Admin/profileDetails";
 import AdminPropertyDetails from "./Admin/admin-propertydetails";
-
+import EditProperty from "./Admin/edit-property";
 
 function App() {
   return (
@@ -25,6 +25,7 @@ function App() {
   <Route path="/MyProfile" element={<ProfileDetails />} />
   <Route path="/Homepage" element={<HomePage />} />
   <Route path="/PropertyDetails" element={<AdminPropertyDetails />} />
+  <Route path="/EditProperty" element={<EditProperty />} />
 </Routes>
    
     </Router>

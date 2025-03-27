@@ -55,40 +55,41 @@ const PropertyForm = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
       <Header />
-      <div className="container mx-auto pt-4 p-28 m-5">
+      <div className="container mx-auto pt-4 p-28 mt-5 mb-0">
         <h2 className="text-2xl font-bold">Add New Property</h2>
         <div className="bg-white shadow-md rounded-lg p-6 mt-4">
           <form>
-            <div className="mb-4">
-              <label className="block font-medium">Property Title</label>
-              <input
-                type="text"
-                name="title"
-                className="w-full p-6 "
-                placeholder="Enter property title"
-                value={formData.title}
-                onChange={handleChange}
-              />
-            </div>
+          <div className="mb-6">
+  <label className="block font-medium mb-2">Property Title</label>
+  <input
+    type="text"
+    name="title"
+    className="w-full p-4 bg-gray-100 rounded-lg"
+    placeholder="Enter property title"
+    value={formData.title}
+    onChange={handleChange}
+  />
+</div>
 
-            <div className="grid grid-cols-2 gap-4">
+
+            <div className="grid grid-cols-2 gap-4 ">
               <div>
-                <label className="block font-medium">Price</label>
+                <label className="block font-medium mb-2">Price</label>
                 <input
                   type="text"
                   name="price"
-                  className="w-full p-6 "
+                  className="w-full p-4 bg-gray-100 rounded-lg "
                   placeholder="Enter price"
                   value={formData.price}
                   onChange={handleChange}
                 />
               </div>
               <div>
-                <label className="block font-medium">Square Footage</label>
+                <label className="block font-medium mb-2">Square Footage</label>
                 <input
                   type="text"
                   name="squareFootage"
-                  className="w-full p-6 "
+                  className="w-full p-4 bg-gray-100 rounded-lg"
                   placeholder="Enter square footage"
                   value={formData.squareFootage}
                   onChange={handleChange}
@@ -96,46 +97,46 @@ const PropertyForm = () => {
               </div>
             </div>
 
-            <div className="mt-4">
-              <label className="block font-medium">Address</label>
+            <div className="mt-4 ">
+              <label className="block font-medium mb-2">Address</label>
               <input
                 type="text"
                 name="address"
-                className="w-full p-6 "
+                className="w-full p-4 bg-gray-100 rounded-lg"
                 placeholder="Enter complete address"
                 value={formData.address}
                 onChange={handleChange}
               />
             </div>
 
-            <div className="grid grid-cols-3 gap-4 mt-4">
+            <div className="grid grid-cols-3 gap-4 mt-4 ">
               <div>
-                <label className="block font-medium">Bedrooms</label>
+                <label className="block font-medium mb-2">Bedrooms</label>
                 <input
                   type="number"
                   name="bedrooms"
-                  className="w-full p-6 "
+                  className="w-full p-4 bg-gray-100 rounded-lg  "
                   placeholder="Number of bedrooms"
                   value={formData.bedrooms}
                   onChange={handleChange}
                 />
               </div>
               <div>
-                <label className="block font-medium">Bathrooms</label>
+                <label className="block font-medium mb-2 ">Bathrooms</label>
                 <input
                   type="number"
                   name="bathrooms"
-                  className="w-full p-6 "
+                  className="w-full p-4 bg-gray-100 rounded-lg "
                   placeholder="Number of bathrooms"
                   value={formData.bathrooms}
                   onChange={handleChange}
                 />
               </div>
               <div>
-                <label className="block font-medium">Property Type</label>
+                <label className="block font-medium mb-2">Property Type</label>
                 <select
                   name="propertyType"
-                  className="w-full p-6 "
+                  className="w-full p-4 bg-gray-100 rounded-lg "
                   value={formData.propertyType}
                   onChange={handleChange}
                 >
@@ -147,12 +148,12 @@ const PropertyForm = () => {
               </div>
             </div>
 
-            <div className="m-4">
+            <div className="m-4 mb-6">
         <label className="block font-medium mb-2">Amenities</label>
         <div className="grid grid-cols-3 gap-4 p-2">
           {amenitiesList.map((amenity, index) => (
             <label key={index} className="flex items-center space-x-4 p-2 ">
-              <input
+              <input 
                 type="checkbox"
                 checked={formData.amenities.includes(amenity.name)}
                 onChange={() => handleAmenityToggle(amenity.name)}
@@ -195,6 +196,7 @@ const PropertyForm = () => {
             </div>
           </form>
         </div>
+      
       </div>
       <Footer />
     </div>

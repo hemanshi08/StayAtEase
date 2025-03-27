@@ -42,9 +42,12 @@ export default function AdminPropertyDetails() {
 
         {/* Actions */}
         <div className="flex items-center gap-8">
-          <button className="text-black hover:text-gray-600 text-sm flex items-center gap-1">
-            <FaEdit /> Edit
-          </button>
+        <Link 
+  to="/EditProperty" 
+  className="text-black hover:text-gray-600 text-sm flex items-center gap-1"
+>
+  <FaEdit /> Edit
+</Link>
           <button className="!text-red-500 hover:!text-red-700 text-sm flex items-center gap-1">
   <FaTrash /> Delete
 </button>

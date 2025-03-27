@@ -14,6 +14,7 @@ const properties = [
   { id: "P006", title: "Apartament 2 Camere", price: "₹ 180,000", area: "1,000", address: "Sector 3, București", status: "Available", img: "../Properties_image/iflat4.jpg" }
 ];
 
+
 const StatCard = ({ icon, title, count }) => (
   <div className="w-full md:w-1/3 p-4">
     <div className="bg-white shadow-lg rounded-lg p-6 flex items-center justify-between">

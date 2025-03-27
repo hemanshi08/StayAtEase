@@ -40,7 +40,7 @@ const ProfileDetails = () => {
     <div>
       <Header />
       <div className="container mx-auto p-6 max-w-3xl">
-        <h2 className="text-3xl font-bold text-center mb-6 text-left">Profile Details</h2>
+        <h2 className="text-3xl font-bold text-center mb-6 text-left"><strong>Profile Details</strong></h2>
         
         {/* Profile Image */}
         <div className="flex flex-col items-center mt-4">
@@ -71,7 +71,7 @@ const ProfileDetails = () => {
 
         {/* Change Password Section */}
         <div className="mt-12">
-          <h3 className="text-xl font-bold">Change Password</h3>
+          <h3 className="text-xl font-bold"><strong>Change Password</strong></h3>
           <div className="mt-4 space-y-4">
             <ProfileInput label="Current Password" name="currentPassword" type="password" value={userDetails.currentPassword} onChange={handleInputChange} />
             <ProfileInput label="New Password" name="newPassword" type="password" value={userDetails.newPassword} onChange={handleInputChange} />
@@ -85,9 +85,11 @@ const ProfileDetails = () => {
         {/* Logout Section */}
         <div className="flex justify-between items-center mt-12 border-t pt-6">
           <p className="text-gray-600">End your current session and sign out securely</p>
-          <button className="text-red-600 font-semibold hover:text-red-700 flex items-center">
-            <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" /> Logout
-          </button>
+          <button className="text-red-600 bg-transparent font-semibold hover:text-red-700 flex items-center">
+  <FontAwesomeIcon icon={faSignOutAlt} className="mr-2 text-red-600" /><span className="text-red-600">Logout</span>
+</button>
+
+
         </div>
       </div>
       <Footer />
