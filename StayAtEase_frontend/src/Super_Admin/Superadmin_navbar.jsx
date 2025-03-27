@@ -2,12 +2,18 @@ import { useState } from "react";
 // import { Link } from "react-router-dom";
 import { Menu, X, LogOut } from "lucide-react";
 import { Link ,useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function SuperAdminNavbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-
+  const navigate = useNavigate(); // <-- Add this line
   const isActive = (path) => location.pathname === path ? "text-blue-500 font-bold" : "text-gray-700";
+
+  const handleLogout = () => {
+    // Add logout logic here (e.g., clearing authentication data from local storage or calling an API)
+    navigate("/"); // Redirect to home page
+  };
 
   return (
     <>
@@ -44,14 +50,14 @@ export default function SuperAdminNavbar() {
         <div className="flex items-center space-x-4">
           {/* Profile Picture */}
           <img 
-      src="../public/profile_image/team-1.jpg" 
-      alt="Admin Profile" 
-      className="w-8 h-8 rounded-full border cursor-pointer"
-      //onClick={() => navigate('/your-target-page')}
-    />
+        src="../public/profile_image/team-1.jpg" 
+        alt="Admin Profile" 
+        className="w-8 h-8 rounded-full border cursor-pointer"
+        onClick={() => navigate('/superadmin_profiledetails')} // Change '/profile' to your actual profile page route
+      />
 
           {/* Logout Button */}
-          <button className="text-red-800 hover:text-red-600 cursor-pointer">
+          <button className="text-red-800 hover:text-red-600 cursor-pointer" onClick={handleLogout}>
   <LogOut size={20} stroke="red" />
 </button>
 
@@ -82,9 +88,9 @@ export default function SuperAdminNavbar() {
             Reviews
             </Link>
             
-          <button className="text-red-500 hover:text-red-600">
+          {/* <button className="text-red-500 hover:text-red-600" onClick={handleLogout}>
             <LogOut size={20} />
-          </button>
+          </button> */}
         </div>
       )}
     </nav>

@@ -36,8 +36,7 @@ export default function Navbar() {
             {/* Login Button */}
             <button 
               onClick={() => setIsModalOpen(true)} 
-              className="hidden md:block px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 !text-white  rounded-lg shadow-md"
-            >
+              className="hidden md:block px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 !text-white  rounded-lg shadow-md">
               Login
             </button>
 
