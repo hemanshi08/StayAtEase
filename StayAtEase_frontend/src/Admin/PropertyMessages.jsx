@@ -72,7 +72,7 @@ const PropertyMessages = () => {
           </table>
         </div>
         
-        {/* Pagination */}
+    
         <div className="flex justify-between items-center mt-6 pb-6">
           <p className="text-gray-500 text-sm">
             Showing {indexOfFirstMessage + 1} to {Math.min(indexOfLastMessage, filteredMessages.length)} of {filteredMessages.length} messages

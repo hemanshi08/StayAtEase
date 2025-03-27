@@ -42,7 +42,7 @@ const ProfileDetails = () => {
       <div className="container mx-auto p-6 max-w-3xl">
         <h2 className="text-3xl font-bold text-center mb-6 text-left"><strong>Profile Details</strong></h2>
         
-        {/* Profile Image */}
+      
         <div className="flex flex-col items-center mt-4">
           <img src={profileImage} alt="Profile" className="w-24 h-24 rounded-full border-2 border-gray-300 p-1 object-cover" />
           <label className="mt-2 cursor-pointer text-blue-600 font-semibold hover:underline">

@@ -147,7 +147,7 @@ const PropertyForm = () => {
                 </select>
               </div>
             </div>
-
+{/* Amenities */}
             <div className="m-4 mb-6">
         <label className="block font-medium mb-2">Amenities</label>
         <div className="grid grid-cols-3 gap-4 p-2">

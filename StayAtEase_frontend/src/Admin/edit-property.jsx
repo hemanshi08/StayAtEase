@@ -8,7 +8,7 @@ import { MdLocalLaundryService, MdElevator } from "react-icons/md";
 const EditProperty = () => {
   const navigate = useNavigate();
 
-  // Static pre-filled values
+ 
   const defaultValues = {
     title: "Luxury Apartment",
     price: "250000",

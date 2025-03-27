@@ -4,7 +4,7 @@ import { Menu, X, LogOut } from "lucide-react";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation(); // Get current route
+  const location = useLocation(); 
 
   return (
     <nav className="bg-white shadow-md py-3 w-full">

@@ -1,5 +1,5 @@
 import React from "react";
-import { X } from "lucide-react"; // Using Lucide icons for the close button
+import { X } from "lucide-react"; 
 
 const ReportModal = ({ isOpen, onClose, onSubmit }) => {
   if (!isOpen) return null;

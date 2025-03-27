@@ -67,7 +67,7 @@ const PropertyRow = ({ property }) => (
   </tr>
 );
 
-function PropertyListings() {
+export default function PropertyListings() {
   return (
     <div className="bg-gray-100 min-h-screen">
       <Header />
@@ -145,4 +145,4 @@ function PropertyListings() {
   );
 }
 
-export default PropertyListings;
+

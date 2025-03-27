@@ -23,7 +23,7 @@ export default function AdminPropertyDetails() {
       
       {/* Header Section */}
       <div className="flex justify-between items-start mb-6 pb-4">
-      {/* Left Section: Title & Availability */}
+   
       <div>
         <h1 className="text-3xl font-extrabold text-gray-900">Modern Apartment</h1>
         <div className="mt-2 flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1 text-sm rounded-full font-medium w-fit">

@@ -55,7 +55,7 @@ const PropertyReviews = () => {
           />
         </div>
 
-        {/* Review Table */}
+        {/* Review  */}
         <div className="overflow-x-auto">
           <table className="min-w-full">
             <thead className="bg-gray-100 text-left">
