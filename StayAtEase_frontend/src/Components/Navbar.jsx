@@ -51,7 +51,7 @@ export default function Navbar() {
         {isOpen && (
           <div className="md:hidden flex flex-col items-center space-y-4 mt-4">
             <Link to="/home" className={`hover:text-blue-500 font-medium ${isActive("/home")}`}>Home</Link>
-            <Link to="/properties" className={`hover:text-blue-500 font-medium ${isActive("/properties")}`}>Properties</Link>
+            <Link to="/properties" className={`hover:text-blue-500 font-medium${isActive("/properties") || isActive("/ShowProperty")}`}>Properties</Link>
             <Link to="/wishlist" className={`hover:text-blue-500 font-medium ${isActive("/wishlist")}`}>Wishlist</Link>
             
             <button 

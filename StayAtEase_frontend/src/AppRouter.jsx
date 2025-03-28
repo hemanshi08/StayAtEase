@@ -16,6 +16,7 @@ import TotalRoomOwner from "./Super_Admin/TotalRoomOwner";
 import TotalReviews from "./Super_Admin/TotalReviews";
 import ProfileDetails from "./Super_Admin/superadmin_profiledetails";
 import ShowProperty from "./Super_Admin/ShowProperty";
+import EditUser from "./Super_Admin/EditUsers";
 function AppRouter(){
   return (
     <Router>
@@ -41,7 +42,8 @@ function AppRouter(){
         <Route path="/TotalRoomOwner" element={<TotalRoomOwner />} /> {/* New Route */}
         <Route path="/TotalReviews" element={<TotalReviews />} /> {/* New Route */}
         <Route path="/superadmin_profiledetails" element={<ProfileDetails />} /> {/* New Route */}
-        <Route path="/show-property" element={<ShowProperty />} />
+        <Route path="/ShowProperty" element={<ShowProperty />} />
+        <Route path="/edit-user" element={<EditUser />} />
 
 
       </Routes>
