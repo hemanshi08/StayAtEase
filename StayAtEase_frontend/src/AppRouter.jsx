@@ -25,7 +25,7 @@ import PropertyReviews from "./Admin/PropertyReviews";
 import PropertyForm from "./Admin/AddProperty";
 import PropertyListings from "./Admin/PropertyListings";
 
-import RoomOwnerProfileDetails from "./Admin/profileDetails";
+import RoomOwnerProfileDetails from "./Admin/RoomOwnerProfileDetails";
 import AdminPropertyDetails from "./Admin/admin-propertydetails";
 import PropertyMessages from "./Admin/PropertyMessages";
 function AppRouter(){
