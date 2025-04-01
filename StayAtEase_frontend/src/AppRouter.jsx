@@ -25,7 +25,6 @@ import PropertyReviews from "./Admin/PropertyReviews";
 import PropertyForm from "./Admin/AddProperty";
 import PropertyListings from "./Admin/PropertyListings";
 
-import RoomOwnerProfileDetails from "./Admin/RoomOwnerProfileDetails";
 import AdminPropertyDetails from "./Admin/admin-propertydetails";
 import PropertyMessages from "./Admin/PropertyMessages";
 function AppRouter(){
@@ -59,7 +58,7 @@ function AppRouter(){
   <Route path="/propertyform" element={<PropertyForm />} />
   <Route path="/propertylistings" element={<PropertyListings />} />
   <Route path="/Massages" element={<PropertyMessages />} />
-  <Route path="/MyProfile" element={<RoomOwnerProfileDetails />} />
+  <Route path="/MyProfile" element={<ProfileDetails />} />
   <Route path="/Homepage" element={<HomePage />} />
   <Route path="/PropertyDetails" element={<AdminPropertyDetails />} />
 </Routes>
