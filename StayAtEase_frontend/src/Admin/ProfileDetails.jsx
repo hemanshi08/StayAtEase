@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import { LogoutOutlined } from "@ant-design/icons";
 import Header from "./component/header";
 import Footer from "../Components/Footer";
 
@@ -18,6 +17,8 @@ const ProfileDetails = () => {
     newPassword: "",
     confirmPassword: "",
   });
+
+  
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -39,7 +40,7 @@ const ProfileDetails = () => {
   return (
     <div>
       <Header />
-      <div className="container mx-auto p-6 max-w-3xl">
+      <div className="container mx-auto p-6 max-w-3xl px-10 py-30">
         <h2 className="text-3xl font-bold text-center mb-6 text-left"><strong>Profile Details</strong></h2>
         
       
@@ -85,9 +86,9 @@ const ProfileDetails = () => {
         {/* Logout Section */}
         <div className="flex justify-between items-center mt-12 border-t pt-6">
           <p className="text-gray-600">End your current session and sign out securely</p>
-          <button className="text-red-600 bg-transparent font-semibold hover:text-red-700 flex items-center">
-  <FontAwesomeIcon icon={faSignOutAlt} className="mr-2 text-red-600" /><span className="text-red-600">Logout</span>
-</button>
+          <button className="!text-red-600 font-semibold !hover:text-red-700 flex items-center cursor-pointer">
+            <LogoutOutlined className="mr-2" /> Logout
+          </button>
 
 
         </div>

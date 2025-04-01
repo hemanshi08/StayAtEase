@@ -1,148 +1,166 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
-import { faHome, faChartBar, faCalendarAlt, faSearch, faFilter, faPlus, faEye } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import  { useState } from "react";
+import { HomeOutlined, BarChartOutlined, CalendarOutlined, SearchOutlined, FilterOutlined, EyeOutlined } from "@ant-design/icons";
 import Footer from "../Components/Footer";
 import Header from "./component/header";
 
 const properties = [
-  { id: "P001", title: "Apartment Modern", price: "₹ 250,000", area: "2,450", address: "Sector 1, București", status: "Available", img: "../Properties_image/iflat4.jpg" },
-  { id: "P002", title: "Vila cu Grădină", price: "₹ 450,000", area: "5,650", address: "Pipera, București", status: "Unavailable", img: "../Properties_image/iflat1.jpg" },
-  { id: "P003", title: "Penthouse Exclusivist", price: "₹ 600,000", area: "3,650", address: "Băneasa, București", status: "Unavailable", img: "../Properties_image/iflat6.jpg" },
-  { id: "P004", title: "Apartament 2 Camere", price: "₹ 180,000", area: "1,000", address: "Sector 3, București", status: "Available", img: "../Properties_image/iflat4.jpg" },
-  { id: "P005", title: "Apartament 2 Camere", price: "₹ 180,000", area: "1,000", address: "Sector 3, București", status: "Available", img: "../Properties_image/iflat4.jpg" },
-  { id: "P006", title: "Apartament 2 Camere", price: "₹ 180,000", area: "1,000", address: "Sector 3, București", status: "Available", img: "../Properties_image/iflat4.jpg" }
+  { id: "P001", title: "Apartment Modern", price: "₹ 2500", address: "Sector 1, București", status: "Available",  addedByName: "John Doe", totalReviews: 12, totalInquiries: 5, propertyType: "Apartment", img: "../Properties_image/iflat4.jpg" },
+  { id: "P002", title: "Vila cu Grădină", price: "₹ 4500", address: "Pipera, București", status: "Unavailable", addedByName: "Alice Smith", totalReviews: 20, totalInquiries: 8, propertyType: "Villa", img: "../Properties_image/iflat1.jpg" },
+  { id: "P003", title: "Penthouse Exclusivist", price: "₹ 6000", address: "Băneasa, București", status: "Unavailable",  addedByName: "Michael Johnson", totalReviews: 15, totalInquiries: 10, propertyType: "Penthouse", img: "../Properties_image/iflat6.jpg" },
+  { id: "P004", title: "Apartament 2 Camere", price: "₹ 1800", address: "Sector 3, București", status: "Available",addedByName: "Emma Brown", totalReviews: 9, totalInquiries: 4, propertyType: "Apartment", img: "../Properties_image/iflat4.jpg" },
+  { id: "P005", title: "Casa Individuală", price: "₹ 3500", address: "Voluntari, Ilfov", status: "Available", addedBy: "Admin", addedByName: "David Wilson", totalReviews: 18, totalInquiries: 7, propertyType: "House", img: "../Properties_image/iflat5.jpg" },
+  { id: "P006", title: "Casa Individuală", price: "₹ 3500", address: "Voluntari, Ilfov", status: "Available", addedBy: "Admin", addedByName: "David Wilson", totalReviews: 18, totalInquiries: 7, propertyType: "House", img: "../Properties_image/iflat5.jpg" }
+
 ];
 
-
 const StatCard = ({ icon, title, count }) => (
-  <div className="w-full md:w-1/3 p-4">
-    <div className="bg-white shadow-lg rounded-lg p-6 flex items-center justify-between">
+  <div className="w-full md:w-1/3 p-3">
+    <div className="bg-white shadow-md rounded-lg p-6 flex items-center justify-between border border-gray-200">
       <div>
-        <h6 className="text-gray-600 font-semibold">{title}</h6>
-        <p className="text-2xl font-bold">{count}</p>
+        <h6 className="text-gray-500 font-semibold">{title}</h6>
+        <p className="text-2xl font-bold text-gray-800">{count}</p>
       </div>
-      <FontAwesomeIcon icon={icon} className="text-blue-500 text-3xl" />
+      {icon}
     </div>
   </div>
 );
 
 const SearchBar = () => (
-  <div className="flex items-center bg-white shadow-md p-3 rounded-lg w-full max-w-lg">
-    <FontAwesomeIcon icon={faSearch} className="text-gray-400 mr-2" />
-    <input type="text" className="flex-grow border-none focus:outline-none" placeholder="Search properties..." />
+  <div className="flex items-center bg-white shadow-md p-3 rounded-lg border border-gray-200 w-full">
+    <SearchOutlined className="text-gray-500 mr-2 text-lg" />
+    <input type="text" className="flex-grow border-none focus:outline-none text-gray-700" placeholder="Search properties..." />
     <div className="relative ml-4">
-      <FontAwesomeIcon icon={faFilter} className="absolute left-2 top-3 text-gray-400" />
-      <select className="pl-8 pr-4 py-2 rounded-lg bg-gray-100 focus:outline-none">
-        <option selected>All</option>
-        <option>Available</option>
-        <option>Unavailable</option>
-      </select>
+      <FilterOutlined className="absolute left-2 top-3 text-gray-500 text-lg" />
+      <select defaultValue="All" className="pl-8 pr-4 py-2 rounded-lg bg-gray-100 focus:outline-none text-gray-700">
+  <option value="All">All</option>
+  <option value="Available">Available</option>
+  <option value="Unavailable">Unavailable</option>
+</select>
     </div>
   </div>
 );
 
-const PropertyRow = ({ property }) => (
-  <tr className="border-b">
-    <td><img src={property.img} alt={property.title} className="w-16 h-16 object-cover rounded-lg" /></td>
-    <td className="py-4"><strong>{property.title}</strong><br /><span className="text-gray-500 text-sm">ID: {property.id}</span></td>
-    <td className="font-bold">{property.price}</td>
-    <td>{property.area} sq ft</td>
-    <td>{property.address}</td>
-    <td>
-  <span className={`px-3 py-1 text-sm font-semibold rounded-full 
-    ${property.status === "Available" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-    {property.status}
-  </span>
-</td>
-<td>
-<Link 
-    to="/PropertyDetails" 
-    className="bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2 text-white"
-  >
-    <FontAwesomeIcon icon={faEye} />
-    View
-  </Link>
+const PropertyRow = ({property, navigate  }) => (
+  <tr className="border-b hover:bg-gray-50">
+    <td className="p-4"><img src={property.img} alt={property.title} className="w-16 h-16 object-cover rounded-lg border border-gray-200" /></td>
+    <td className="p-4 text-gray-800 font-medium"><strong>{property.title}</strong><br /><span className="text-gray-500 text-sm">ID: {property.id}</span></td>
+    <td className="p-4 font-bold text-gray-700">{property.price}</td>
+    <td className="p-4 text-gray-700">{property.address}</td>
+    {/* <td className="p-4 text-gray-700">{property.addedByName}</td> */}
+    <td className="p-4 text-gray-700">{property.totalReviews}</td>
+    <td className="p-4 text-gray-700">{property.totalInquiries}</td>
+    <td className="p-4">
+      <span className={`px-3 py-1 text-sm font-semibold rounded-full 
+        ${property.status === "Available" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+        {property.status}
+      </span>
+    </td>
+    <td className="p-4">
+      <button className="bg-blue-600 !text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
+     onClick={() => navigate(`/PropertyDetails`)}>
+        <EyeOutlined className="!text-white" /> View
+      </button>
     </td>
   </tr>
 );
 
-export default function PropertyListings() {
-  return (
-    <div className="bg-gray-100 min-h-screen">
-      <Header />
-      <div className="container mx-auto mt-6 px-4 ">
-        <h3 className="text-2xl font-bold">My Listings</h3>
-        
-        <div className="flex flex-wrap mt-4 -mx-2">
-          <StatCard icon={faHome} title="Total Properties" count={6} />
-          <StatCard icon={faChartBar} title="Active Listings" count={4} />
-          <StatCard icon={faCalendarAlt} title="Inquiries" count={14} />
-        </div>
-        
-        <div className="flex justify-between items-center mt-6">
-          <SearchBar />
-          <Link 
-    to="/propertyform" 
-    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center gap-2"
-  >
-    <FontAwesomeIcon icon={faPlus} />
-    Add Property
-  </Link>
-        </div>
-        
-        <div className="overflow-x-auto mt-6 pt-4">
-  <table className="w-full bg-white shadow-lg rounded-lg border border-gray-200">
-    <thead>
-      <tr className="bg-gray-50 text-gray-600 uppercase text-sm font-semibold border-b border-gray-200">
-        <th className="px-6 py-4 text-left">Image</th>
-        <th className="px-6 py-4 text-left">Title</th>
-        <th className="px-6 py-4 text-left">Price / month</th>
-        <th className="px-6 py-4 text-left">Area (sqft)</th>
-        <th className="px-6 py-4 text-left">Address</th>
-        <th className="px-6 py-4 text-left">Status</th>
-        <th className="px-6 py-4 text-left">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      {properties.map((property) => (
-        <tr key={property.id} className="even:bg-gray-50 hover:bg-gray-100">
-          <td className="px-6 py-4">
-            <img src={property.img} alt={property.title} className="w-20 h-16 object-cover rounded-md shadow-sm" />
-          </td>
-          <td className="px-6 py-4">
-            <strong className="text-gray-800">{property.title}</strong>
-            <br />
-            <span className="text-gray-500 text-xs">ID: {property.id}</span>
-          </td>
-          <td className="px-6 py-4 font-bold text-gray-900">{property.price}</td>
-          <td className="px-6 py-4 text-gray-700">{property.area} sq ft</td>
-          <td className="px-6 py-4 text-gray-700">{property.address}</td>
-          <td className="px-6 py-4">
-            <span className={`px-3 py-1 text-sm font-medium rounded-full ${property.status === "Available" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-              {property.status}
-            </span>
-          </td>
-          <td className="px-6 py-4 text-white">
-          <Link 
-  to="/PropertyDetails" 
-  className="bg-blue-600 px-3 py-1.5 rounded-lg hover:bg-blue-700 flex items-center gap-1.5 text-white text-sm w-20"
->
-  <FontAwesomeIcon icon={faEye} />
-  View
-</Link>
 
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
+
+function PropertyListings() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const propertiesPerPage = 5;
+  const indexOfLastProperties = currentPage * propertiesPerPage;
+  const indexOfFirstProperties = indexOfLastProperties - propertiesPerPage;
+  const currentProperties = properties.slice(indexOfFirstProperties, indexOfLastProperties);
+  const totalPages = Math.ceil(properties.length / propertiesPerPage);
+  const navigate = useNavigate();
+
+  return (
+   
+
+    <div>
+      <Header/>
+    <div className="bg-gray-100 min-h-screen p-8 px-10 py-25">
+      
+      <div className="container mx-auto mt-5 px-4">
+      <h2 className="text-3xl !font-bold">Property Details</h2>
+      <div className="flex flex-wrap mt-4 -mx-2">
+          <StatCard icon={<HomeOutlined className="!text-blue-600 text-3xl" />} title="Total Properties" count={6} />
+          <StatCard icon={<BarChartOutlined className="!text-blue-600 text-3xl" />} title="Active Listings" count={4} />
+          <StatCard icon={<CalendarOutlined className="!text-blue-600 text-3xl" />} title="Inquiries" count={14} />
+        </div>
+        
+        <div className="mt-6">
+          <SearchBar />
+        </div>
+        
+        <div className="overflow-x-auto mt-6 pt-4 mb-10">
+          <table className="w-full bg-white shadow-lg rounded-lg border border-gray-200">
+            <thead>
+            <tr className="bg-gray-50 text-gray-600 uppercase text-sm font-semibold border-b border-gray-200">
+                  <th className="px-6 py-4 text-left">Image</th>
+                  <th className="px-6 py-4 text-left">Title</th>
+                  <th className="px-6 py-4 text-left">Price / month</th>
+                  <th className="px-6 py-4 text-left">Address</th>
+                  {/* <th className="px-6 py-4 text-left">Added By</th> */}
+                  <th className="px-6 py-4 text-left">Total Reviews</th>
+                  <th className="px-6 py-4 text-left">Total Inquiries</th>
+                  <th className="px-6 py-4 text-left">Status</th>
+                  <th className="px-6 py-4 text-left">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            {currentProperties.map((property) => (
+                <PropertyRow key={property.id} property={property} navigate={navigate} />
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+           {/* Pagination */}
+           <div className="flex flex-wrap justify-between items-center mt-6 text-gray-600">
+          <p>
+            Showing {indexOfFirstProperties + 1} to {Math.min(indexOfLastProperties, properties.length)} of {properties.length} reviews
+          </p>
+          <div className="flex space-x-4 mt-3 sm:mt-0">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className={`px-4 py-2 border rounded-lg transition-all ${
+                currentPage === 1
+                  ? "text-gray-400 border-gray-300 cursor-not-allowed"
+                  : "text-blue-600 hover:bg-blue-100 cursor-pointer"
+              }`}
+            >
+              Previous
+            </button>
+            <span className="w-1"></span>
+            <span className="px-5 py-2 border rounded-lg bg-blue-500 text-white font-bold">
+              {currentPage}
+            </span>
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className={`px-4 py-2 border rounded-lg transition-all ${
+                currentPage === totalPages
+                  ? "text-gray-400 border-gray-300 cursor-not-allowed"
+                  : "text-blue-600 hover:bg-blue-100 cursor-pointer"
+              }`}
+            >
+              Next
+            </button>
+          </div>
+        </div>
 
       </div>
+      </div>
       <Footer />
+
+
     </div>
   );
 }
 
-
+export default PropertyListings;

@@ -25,8 +25,8 @@ const PropertyMessages = () => {
   return (
     <div>
       <Header />
-      <div className="container mx-auto mt-6 p-6">
-        <h3 className="font-bold text-xl my-4 py-2">All Property Messages</h3>
+      <div className="container mx-auto mt-6 p-6 px-10 py-25">
+        <h3 className="!font-bold text-xl my-4 py-2">All Property Messages</h3>
         
         {/* Search Bar */}
         <div className="relative mb-4">

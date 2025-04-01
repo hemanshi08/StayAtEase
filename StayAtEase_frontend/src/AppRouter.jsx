@@ -2,7 +2,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
-import PropertyCard from "./Components/Property_card";
+
 import HomePage from "./rental/home";
 import About from "./rental/PropertyPage";
 import PropertyPage from "./rental/PropertyPage";
@@ -17,10 +17,21 @@ import TotalReviews from "./Super_Admin/TotalReviews";
 import ProfileDetails from "./Super_Admin/superadmin_profiledetails";
 import ShowProperty from "./Super_Admin/ShowProperty";
 import EditUser from "./Super_Admin/EditUsers";
+
+
+import Header from "./Admin/component/header";
+import RoomOwnerDashboard from "./Admin/dashboard";
+import PropertyReviews from "./Admin/PropertyReviews";
+import PropertyForm from "./Admin/AddProperty";
+import PropertyListings from "./Admin/PropertyListings";
+
+import RoomOwnerProfileDetails from "./Admin/profileDetails";
+import AdminPropertyDetails from "./Admin/admin-propertydetails";
+import PropertyMessages from "./Admin/PropertyMessages";
 function AppRouter(){
   return (
    
-   
+   <Router>
       <Routes>
         <Route path='/' element={<Navigate replace to='/home'/>}/>
         <Route path="/home" element={<HomePage />} />
@@ -30,9 +41,8 @@ function AppRouter(){
 
 
               {/* Router for superAdmin */}
+              <Route path="/Dashboard" element={<Dashboard />} /> {/* New Route */}
 
-
-        <Route path="/Dashboard" element={<Dashboard />} /> {/* New Route */}
         <Route path="/TotalProperties" element={<TotalProperties />} /> {/* New Route */}
         <Route path="/TotalUser" element={<TotalUser />} /> {/* New Route */}
         <Route path="/TotalRoomOwner" element={<TotalRoomOwner />} /> {/* New Route */}
@@ -41,9 +51,20 @@ function AppRouter(){
         <Route path="/ShowProperty" element={<ShowProperty />} />
         <Route path="/edit-user" element={<EditUser />} />
 
+{/* Owner routes */}
 
+<Route path="/" element={<PropertyMessages />} />
+<Route path="/RoomOwnerDashboard" element={<RoomOwnerDashboard />} /> {/* New Route */}
+  <Route path="/PropertyReviews" element={<PropertyReviews />} />
+  <Route path="/propertyform" element={<PropertyForm />} />
+  <Route path="/propertylistings" element={<PropertyListings />} />
+  <Route path="/Massages" element={<PropertyMessages />} />
+  <Route path="/MyProfile" element={<RoomOwnerProfileDetails />} />
+  <Route path="/Homepage" element={<HomePage />} />
+  <Route path="/PropertyDetails" element={<AdminPropertyDetails />} />
+</Routes>
           
-      </Routes>
+</Router>   
  
    
   );

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { SearchOutlined } from "@ant-design/icons";
 import Footer from "../Components/Footer";
 import Header from "./component/header";
 import ReportModal from "./component/ReportModal"; // Import the modal component
@@ -32,15 +31,15 @@ const PropertyReviews = () => {
 
   return (
     <div>
-      <Header />
-      <div className="container mx-auto p-6 px-7 mt-6">
-        <h2 className="text-2xl font-bold text-gray-800">Property Reviews</h2>
+      <Header/>
+      <div className="container mx-auto p-6  mt-6 px-10 py-25">
+        <h2 className="text-2xl !font-bold text-gray-800">Property Reviews</h2>
         <p className="text-gray-500">Sunset Heights Apartments</p>
 
         {/* Search Bar */}
         <div className="relative w-full max-w-md my-4">
-          <FontAwesomeIcon
-            icon={faSearch}
+          <SearchOutlined
+           
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
           />
           <input

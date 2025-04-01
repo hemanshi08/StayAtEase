@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Footer from "../Components/Footer";
-import "@fortawesome/fontawesome-free/css/all.min.css";
-
 import Header from "./component/header";
+import { HomeOutlined, UnorderedListOutlined, MailOutlined, StarOutlined, PlusSquareOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
-const Dashboard = () => {
+const RoomOwnerDashboard = () => {
     const [data, setData] = useState({
         totalProperties: 0,
         activeListings: 0,
@@ -32,20 +32,20 @@ const Dashboard = () => {
             ]
         });
     }, []);
-
+    const navigate = useNavigate();
     return (
-        <div>
+        <div className="flex flex-col min-h-screen">
             <Header />
-            <div className="bg-gray-100 min-h-screen p-8">
+            <div className="bg-gray-100 min-h-screen px-10 py-30 w-full">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-left">
-                    {[{ icon: "fa-building", label: "Total Properties", value: data.totalProperties },
-                       { icon: "fa-list text-green-500", label: "Active Listings", value: data.activeListings },
-                       { icon: "fa-envelope text-orange-500", label: "Total Inquiries", value: data.totalInquiries },
-                      { icon: "fa-star", label: "Review Rating", value: data.reviewRating }].map((card, index) => (
-                        <div key={index} className="bg-white p-4 shadow-lg rounded-lg">
-                            <i className={`fas ${card.icon} text-blue-500 text-3xl`}></i>
-                            <h3 className="text-xl font-bold mt-2">{card.value}</h3>
-                            <p className="text-gray-600">{card.label}</p>
+                    {[{ icon: <HomeOutlined className="!text-blue-500 text-3xl" />, label: "Total Properties", value: data.totalProperties },
+                        { icon: <UnorderedListOutlined className="!text-green-500 text-3xl" />, label: "Active Listings", value: data.activeListings },
+                        { icon: <MailOutlined className="!text-orange-500 text-3xl" />, label: "Total Inquiries", value: data.totalInquiries },
+                        { icon: <StarOutlined className="!text-yellow-500 text-3xl" />, label: "Review Rating", value: data.reviewRating }].map((card, index) => (
+                        <div key={index} className="bg-white p-4 shadow-lg rounded-lg flex flex-col items-center">
+                            {card.icon}
+                            <h3 className="text-xl !font-bold mt-2">{card.value}</h3>
+                            <p className="!text-gray-600">{card.label}</p>
                         </div>
                     ))}
                 </div>
@@ -80,7 +80,7 @@ const Dashboard = () => {
                         </table>
                     </div>
                 </div>
-{/* Review */}
+                
                 <div className="mt-8">
                     <div className="flex justify-between items-center mb-4">
                         <h4 className="text-xl font-bold">Latest Reviews</h4>
@@ -103,10 +103,11 @@ const Dashboard = () => {
                         ))}
                     </div>
                 </div>
-
-               <div className="flex justify-center text-white mt-8">
-                    <button className="bg-[#1A237E] text-white px-6 py-3 rounded-lg shadow-md font-semibold flex items-center gap-2">
-                        <i className="fas fa-plus-square "></i> Add New Property
+                
+                <div className="flex justify-center text-white mt-8">
+                    <button className="bg-[#1A237E] text-white px-6 py-3 rounded-lg shadow-md font-semibold flex items-center gap-2"
+                      onClick={() => navigate("/PropertyForm")}>
+                        <PlusSquareOutlined /> Add New Property
                     </button>
                 </div>
             </div>
@@ -115,4 +116,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default RoomOwnerDashboard;
