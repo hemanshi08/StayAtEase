@@ -7,10 +7,11 @@ export default function Navbar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
 
+
   const isActive = (path) => location.pathname === path ? "text-blue-500 font-bold" : "text-gray-700";
   return (
     <>
-    {/* <nav className="fixed top-0.5 left-0 w-full bg-white shadow-md p-4 z-50"></nav> */}
+    {/* <nav className="fixed top-0 left-0 w-full bg-white shadow-md p-4 z-50"> */}
       <nav className=" bg-white shadow-md p-4 ">
         <div className="container mx-auto flex justify-between items-center">
           {/* Logo */}

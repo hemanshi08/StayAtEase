@@ -5,6 +5,7 @@ import { Dropdown, Menu, Button } from "antd"; // Ant Design Dropdown
 import "antd/dist/reset.css"; // Import Ant Design Styles
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
+import { useNavigate } from "react-router-dom";
 
 
 // Sample Property Data (Dynamic Data)
@@ -102,10 +103,16 @@ const properties = [
 ];
 
 export default function HomePage() {
+
   const [selectedLocation, setSelectedLocation] = useState("Location");
   const [selectedType, setSelectedType] = useState("Property Type");
   const [selectedBudget, setSelectedBudget] = useState("Budget");
 
+  const navigate = useNavigate(); // React Router navigation hook
+
+  const handleExploreClick = () => {
+    navigate("/properties"); // Redirect to PropertyPage
+  };
   // Dropdown Menus
   const locationsMenu = (
     <Menu onClick={(e) => setSelectedLocation(e.key)}>
@@ -186,7 +193,7 @@ export default function HomePage() {
       Whether you're a tenant looking for a cozy place or an owner wanting to rent out your space, 
       we provide a smooth and secure experience.
     </p>
-    <button className="mt-6 px-6 py-2 bg-blue-600 !text-white rounded-lg shadow-md">
+    <button className="mt-6 px-6 py-2 bg-blue-600 !text-white rounded-lg shadow-md" onClick={handleExploreClick}>
   Explore Listings
 </button>  </div>
   <div className="md:w-1/2 mt-6 md:mt-0">
