@@ -12,10 +12,18 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
 
   const handleLogin = () => {
     if (phone === "9080706050" && password === "111") {
-      navigate("/Dashboard"); // Redirect to AdminDashboard
-    } else {
+      navigate("/Dashboard"); 
+      
+      // Redirect to AdminDashboard
+    } else if (phone === "8963254174" && password ==="123") {
+      navigate("/RoomOwnerDashboard"); 
+    }
+    
+    else {
       alert("Invalid phone number or password");
     }
+
+
   };
 
   return (
