@@ -3,7 +3,7 @@ import { LogoutOutlined } from "@ant-design/icons";
 import Header from "./component/header";
 import Footer from "../Components/Footer";
 
-const ProfileDetails = () => {
+const RommOwnerProfileDetails = () => {
   const [profileImage, setProfileImage] = useState("./profile.png");
   const [userDetails, setUserDetails] = useState({
     firstName: "John",
@@ -39,7 +39,7 @@ const ProfileDetails = () => {
 
   return (
     <div>
-      <Header />
+      <Header/>
       <div className="container mx-auto p-6 max-w-3xl px-10 py-30">
         <h2 className="text-3xl font-bold text-center mb-6 text-left"><strong>Profile Details</strong></h2>
         
@@ -126,4 +126,4 @@ const ProfileTextArea = ({ label, name, value, onChange }) => (
   </div>
 );
 
-export default ProfileDetails;
+export default RommOwnerProfileDetails;

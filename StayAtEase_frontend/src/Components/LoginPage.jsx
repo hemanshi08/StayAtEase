@@ -3,13 +3,13 @@ import { MobileOutlined, LockOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import SignupModal from "./SignupPage";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-
+import ForgotPasswordModal from "./forgetpassword";
 export default function LoginModal({ isModalOpen, handleCancel }) {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate(); // Initialize useNavigate
-
+  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
   const handleLogin = () => {
     if (phone === "9080706050" && password === "111") {
       navigate("/Dashboard"); 
@@ -67,9 +67,12 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
         />
       </div>
 
-      <div className="text-center text-red-500 mt-2 cursor-pointer mb-3 ">
-        Forgot password?
-      </div>
+      <div 
+          className="text-center text-red-500 mt-2 cursor-pointer mb-3"
+          onClick={() => setIsForgotPasswordOpen(true)}
+        >
+          Forgot password?
+        </div>
 
       <Button type="primary" className="bg-blue-600 w-full mt-4" onClick={handleLogin}>
         Log In
@@ -81,6 +84,10 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
     </Modal>
    {/* Signup Modal */}
    <SignupModal isOpen={isSignupOpen} handleClose={() => setIsSignupOpen(false)} />
+   <ForgotPasswordModal 
+  isOpen={isForgotPasswordOpen} 
+  handleClose={() => setIsForgotPasswordOpen(false)} 
+/>
    </>
  );
 }
