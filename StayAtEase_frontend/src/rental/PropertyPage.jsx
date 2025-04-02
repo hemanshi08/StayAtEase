@@ -2,32 +2,7 @@ import React from "react";
 import PropertyCard from "../Components/Property_card";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
-
-// const PropertyPage = () => {
-//   const properties = [
-//     { id: 1, image: "https://via.placeholder.com/600", title: "Luxury Beachfront Villa", location: "Miami Beach, Florida", beds: 4, baths: 3, sqft: 2800, rating: 3, price: "1,950" }
-//   ];
-
-//   return (
-//     <div>
-//       <Navbar/>
-//     <div className="container mx-auto p-6 grid grid-cols-3 gap-6">
-//       {properties.map((property) => (
-//         <PropertyCard key={property.id} {...property} showDetailsButton={true} />
-//       ))}
-//     </div>
-//     <Footer/>
-//     </div>
-//   );
-// };
-
-// export default PropertyPage;
-
-
-
-
 import { Input, Button, Select, Slider, Card, Rate } from "antd";
-import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -44,8 +19,8 @@ const properties = [
     baths:2,
     sqft:25000,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!",image: "../profile_image/team-1.jpg" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." ,image:"../profile_image/team-2.jpg"},
     ],
   },
   {
@@ -59,14 +34,8 @@ const properties = [
     baths:2,
     sqft:45000,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 5, comment: "Loved the experience." },
-      { name: "John Doe", date: "Feb 25, 2024", rating: 3, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 2, comment: "Loved the experience." },
-      { name: "John Doe", date: "Feb 25, 2024", rating: 3.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.5, comment: "Loved the experience." },
-      { name: "John Doe", date: "Feb 25, 2024", rating: 3, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 3.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" , image: "../profile_image/team-1.jpg" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." ,image: "../profile_image/team-2.jpg"},
     ],
   },
   {
@@ -80,8 +49,8 @@ const properties = [
     baths:2,
     sqft:25000 ,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" ,image: "../profile_image/team-1.jpg" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience.",image: "../profile_image/team-2.jpg" },
     ],
   },
   {
@@ -95,8 +64,8 @@ const properties = [
     baths:2,
     sqft:25000,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" , image: "../profile_image/team-1.jpg"},
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience.",image: "../profile_image/team-2.jpg" },
     ],
   },
   {
@@ -110,8 +79,8 @@ const properties = [
     baths:2,
     sqft:25000,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!",image: "../profile_image/team-1.jpg" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." ,image: "../profile_image/team-2.jpg"},
     ],
   },
   {
@@ -125,17 +94,15 @@ const properties = [
     baths:2,
     sqft:45000,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" ,image: "../profile_image/team-1.jpg"},
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience.",image: "../profile_image/team-2.jpg" },
     ],
   },
 ];
 
 const PropertyListing = () => {
  
-  return (
-    <div>
-      <Navbar/>
+  return (  
     <div className="p-8">
       <h1 className="text-2xl font-bold">Find Your Perfect Stay</h1>
       <p className="text-gray-500">Our curated collection of properties</p>
@@ -153,7 +120,7 @@ const PropertyListing = () => {
         </Select>
         <div className="flex items-center  gap-2">
           <span>Price</span>
-          <Slider range defaultValue={[0, 100]} className="w-40" />
+          <Slider range min={1000} max={20000} defaultValue={[1000, 20000]} className="w-40" />
         </div>
       </div>
       
@@ -164,8 +131,8 @@ const PropertyListing = () => {
       ))}
     </div>
     </div>
-    <Footer/>
-    </div>
+    
+  
   );
 };
 
