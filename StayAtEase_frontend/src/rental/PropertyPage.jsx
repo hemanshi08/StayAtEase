@@ -102,9 +102,7 @@ const properties = [
 
 const PropertyListing = () => {
  
-  return (
-    <div>
-      <Navbar/>
+  return (  
     <div className="p-8">
       <h1 className="text-2xl font-bold">Find Your Perfect Stay</h1>
       <p className="text-gray-500">Our curated collection of properties</p>
@@ -133,8 +131,8 @@ const PropertyListing = () => {
       ))}
     </div>
     </div>
-    <Footer/>
-    </div>
+    
+  
   );
 };
 

@@ -23,7 +23,7 @@ export default function Navbar() {
           {/* Desktop Menu */}
           <div className="flex items-center space-x-6">
             <div className="hidden md:flex space-x-6">
-            <Link to="/home" className={`hover:text-blue-500 font-medium ${isActive("/home")}`}>
+            <Link to="/" className={`hover:text-blue-500 font-medium ${isActive("/")}`}>
               Home
             </Link>
             <Link to="/properties" className={`hover:text-blue-500 font-medium ${isActive("/properties")}`}>

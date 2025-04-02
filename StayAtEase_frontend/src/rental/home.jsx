@@ -3,8 +3,6 @@ import PropertyCard from "../Components/Property_card";
 import { DownOutlined } from "@ant-design/icons"; // Ant Design Icon
 import { Dropdown, Menu, Button } from "antd"; // Ant Design Dropdown
 import "antd/dist/reset.css"; // Import Ant Design Styles
-import Navbar from "../Components/Navbar";
-import Footer from "../Components/Footer";
 import { useNavigate } from "react-router-dom";
 import { BadgeCheck, MessageSquare, Search, Bookmark, Star, Shield } from "lucide-react";
 // Sample Property Data (Dynamic Data)
@@ -150,8 +148,8 @@ export default function HomePage() {
   );
 
   return (
-   <div>    
-     <Navbar/>
+   
+  
 
     <div className="w-full">
       
@@ -233,9 +231,7 @@ export default function HomePage() {
 
     
     </div>
-    <div>
-      <Footer/>
-    </div>
-    </div>
+   
+  
   );
 }
