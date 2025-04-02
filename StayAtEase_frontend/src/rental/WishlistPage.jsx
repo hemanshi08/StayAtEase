@@ -1,7 +1,6 @@
 import React from "react";
 import PropertyCard from "../Components/Property_card";
-import Navbar from "../Components/Navbar";
-import Footer from "../Components/Footer";
+
 
 
 const WishlistPage = () => {
