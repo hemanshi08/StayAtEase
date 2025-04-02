@@ -19,8 +19,8 @@ const properties = [
     baths:2,
     sqft:25000,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!",image: "../profile_image/team-1.jpg" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." ,image:"../profile_image/team-2.jpg"},
     ],
   },
   {
@@ -34,14 +34,8 @@ const properties = [
     baths:2,
     sqft:45000,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 5, comment: "Loved the experience." },
-      { name: "John Doe", date: "Feb 25, 2024", rating: 3, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 2, comment: "Loved the experience." },
-      { name: "John Doe", date: "Feb 25, 2024", rating: 3.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.5, comment: "Loved the experience." },
-      { name: "John Doe", date: "Feb 25, 2024", rating: 3, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 3.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" , image: "../profile_image/team-1.jpg" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." ,image: "../profile_image/team-2.jpg"},
     ],
   },
   {
@@ -55,8 +49,8 @@ const properties = [
     baths:2,
     sqft:25000 ,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" ,image: "../profile_image/team-1.jpg" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience.",image: "../profile_image/team-2.jpg" },
     ],
   },
   {
@@ -70,8 +64,8 @@ const properties = [
     baths:2,
     sqft:25000,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" , image: "../profile_image/team-1.jpg"},
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience.",image: "../profile_image/team-2.jpg" },
     ],
   },
   {
@@ -85,8 +79,8 @@ const properties = [
     baths:2,
     sqft:25000,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!",image: "../profile_image/team-1.jpg" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." ,image: "../profile_image/team-2.jpg"},
     ],
   },
   {
@@ -100,8 +94,8 @@ const properties = [
     baths:2,
     sqft:45000,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" ,image: "../profile_image/team-1.jpg"},
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience.",image: "../profile_image/team-2.jpg" },
     ],
   },
 ];
@@ -128,7 +122,7 @@ const PropertyListing = () => {
         </Select>
         <div className="flex items-center  gap-2">
           <span>Price</span>
-          <Slider range defaultValue={[0, 100]} className="w-40" />
+          <Slider range min={1000} max={20000} defaultValue={[1000, 20000]} className="w-40" />
         </div>
       </div>
       

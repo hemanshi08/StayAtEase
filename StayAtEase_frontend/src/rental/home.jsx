@@ -6,8 +6,7 @@ import "antd/dist/reset.css"; // Import Ant Design Styles
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import { useNavigate } from "react-router-dom";
-
-
+import { BadgeCheck, MessageSquare, Search, Bookmark, Star, Shield } from "lucide-react";
 // Sample Property Data (Dynamic Data)
 const properties = [
   {
@@ -23,6 +22,9 @@ const properties = [
     reviews: [
       { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!",image: "../profile_image/team-1.jpg" },
       { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." ,image:"../profile_image/team-2.jpg"},
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!",image: "../profile_image/team-1.jpg" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." ,image:"../profile_image/team-2.jpg"},
+
     ],
   },
   {
@@ -51,8 +53,8 @@ const properties = [
     baths:2,
     sqft:25000 ,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" ,image: "../profile_image/team-1.jpg" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience.",image: "../profile_image/team-2.jpg" },
     ],
   },
   {
@@ -66,8 +68,8 @@ const properties = [
     baths:2,
     sqft:25000,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" , image: "../profile_image/team-1.jpg"},
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience.",image: "../profile_image/team-2.jpg" },
     ],
   },
   {
@@ -81,8 +83,8 @@ const properties = [
     baths:2,
     sqft:25000,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!",image: "../profile_image/team-1.jpg" },
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." ,image: "../profile_image/team-2.jpg"},
     ],
   },
   {
@@ -96,10 +98,19 @@ const properties = [
     baths:2,
     sqft:45000,
     reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." },
+      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" ,image: "../profile_image/team-1.jpg"},
+      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience.",image: "../profile_image/team-2.jpg" },
     ],
   },
+];
+
+const features = [
+  {  icon: <BadgeCheck className="text-blue-600 text-3xl" />,   title: "Verified Listings", description: "Ensuring only genuine properties are listed." },
+  { icon: <MessageSquare className="text-blue-600 text-3xl" />, title: "Secure Communication", description: "Chat directly with property owners." },
+  { icon: <Search className="text-blue-600 text-3xl" />, title: "Easy Search & Filters", description: "Find your ideal home in seconds." },
+  { icon: <Bookmark className="text-blue-600 text-3xl" />, title: "Wishlist Feature", description: "Save properties for later." },
+  {  icon: <Star className="text-blue-600 text-3xl" />, title: "Reviews & Ratings", description: "Honest feedback from previous tenants." },
+  {  icon: <Shield className="text-blue-600 text-3xl" />, title: "Secure Platform", description: "Your safety is our priority." }
 ];
 
 export default function HomePage() {
@@ -203,38 +214,24 @@ export default function HomePage() {
 
 {/* Why Choose Us Section */}
 <div className="bg-gray-100 py-10 mt-13">
-  <div className="max-w-6xl mx-auto text-center px-6">
-    <h2 className="text-3xl font-bold">Why Choose StayAtEase?</h2>
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-10">
-      {/* Feature Cards */}
-      <div className="bg-white p-6 shadow-md rounded-lg">
-        <h3 className="text-lg font-semibold">✅ Verified Listings</h3><br />
-        <p className="text-gray-500 mt-2">Ensuring only genuine properties are listed.</p>
-      </div>
-      <div className="bg-white p-6 shadow-md rounded-lg">
-        <h3 className="text-lg font-semibold">💬 Secure Communication</h3><br />
-        <p className="text-gray-500 mt-2">Chat directly with property owners.</p>
-      </div>
-      <div className="bg-white p-6 shadow-md rounded-lg">
-        <h3 className="text-lg font-semibold">🔎 Easy Search & Filters</h3><br />
-        <p className="text-gray-500 mt-2">Find your ideal home in seconds.</p>
-      </div>
-      <div className="bg-white p-6 shadow-md rounded-lg">
-        <h3 className="text-lg font-semibold">❤️ Wishlist Feature</h3><br />
-        <p className="text-gray-500 mt-2">Save properties for later.</p>
-      </div>
-      <div className="bg-white p-6 shadow-md rounded-lg">
-        <h3 className="text-lg font-semibold">⭐ Reviews & Ratings</h3><br />
-        <p className="text-gray-500 mt-2">Honest feedback from previous tenants.</p>
-      </div>
-      <div className="bg-white p-6 shadow-md rounded-lg">
-        <h3 className="text-lg font-semibold">🔒 Secure Platform</h3><br />
-        <p className="text-gray-500 mt-2">Your safety is our priority.</p>
+      <div className="max-w-6xl mx-auto text-center px-6">
+        <h2 className="text-3xl font-bold text-gray-800">Why Choose StayAtEase?</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-10">
+          {features.map((feature, index) => (
+            <div
+              key={index}
+              className="bg-white p-6 shadow-md rounded-lg flex flex-col items-center text-center transition-transform transform hover:scale-105 hover:shadow-lg"
+            >
+              <div className="mb-3">{feature.icon}</div>
+              <h3 className="text-lg font-semibold">{feature.title}</h3>
+              <p className="text-gray-500 mt-2">{feature.description}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
+    
     </div>
     <div>
       <Footer/>
