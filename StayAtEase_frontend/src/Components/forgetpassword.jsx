@@ -1,6 +1,6 @@
 import { Modal, Input, Button, message } from "antd";
 import { MobileOutlined, LockOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ForgotPasswordModal({ isOpen, handleClose }) {
   const [phone, setPhone] = useState("");
@@ -10,8 +10,34 @@ export default function ForgotPasswordModal({ isOpen, handleClose }) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
+  // ✅ Error states (initially hidden)
+  const [showPhoneError, setShowPhoneError] = useState(false);
+  const [showOtpError, setShowOtpError] = useState(false);
+  const [showPasswordError, setShowPasswordError] = useState(false);
+  const [showConfirmPasswordError, setShowConfirmPasswordError] = useState(false);
+
+  const phoneRegex = /^\d{10}$/;
+  const otpRegex = /^\d{6}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
+  // Reset modal state when opened
+  useEffect(() => {
+    if (isOpen) {
+      setStep(1);
+      setPhone("");
+      setOtp("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setShowPhoneError(false);
+      setShowOtpError(false);
+      setShowPasswordError(false);
+      setShowConfirmPasswordError(false);
+    }
+  }, [isOpen]);
+
   const handleSendOTP = () => {
-    if (!phone.match(/^\d{10}$/)) {
+    if (!phone.match(phoneRegex)) {
+      setShowPhoneError(true); // ✅ Show error message
       message.error("Please enter a valid 10-digit phone number.");
       return;
     }
@@ -24,7 +50,8 @@ export default function ForgotPasswordModal({ isOpen, handleClose }) {
   };
 
   const handleVerifyOTP = () => {
-    if (otp.length !== 6) {
+    if (!otp.match(otpRegex)) {
+      setShowOtpError(true); // ✅ Show error message
       message.error("Please enter a valid 6-digit OTP.");
       return;
     }
@@ -37,14 +64,21 @@ export default function ForgotPasswordModal({ isOpen, handleClose }) {
   };
 
   const handleUpdatePassword = () => {
-    if (newPassword.length < 6) {
-      message.error("Password must be at least 6 characters long.");
-      return;
+    let hasError = false;
+    
+    if (!newPassword.match(passwordRegex)) {
+      setShowPasswordError(true);
+      message.error("Password must have at least 6 characters, one uppercase letter, one lowercase letter, one number, and one special character.");
+      hasError = true;
     }
     if (newPassword !== confirmPassword) {
+      setShowConfirmPasswordError(true);
       message.error("Passwords do not match!");
-      return;
+      hasError = true;
     }
+
+    if (hasError) return;
+
     setLoading(true);
     setTimeout(() => {
       message.success("Password updated successfully!");
@@ -71,16 +105,14 @@ export default function ForgotPasswordModal({ isOpen, handleClose }) {
             placeholder="Enter your phone number"
             prefix={<MobileOutlined />}
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="mb-4"
+            onChange={(e) => {
+              setPhone(e.target.value);
+              setShowPhoneError(false); // ✅ Hide error on change
+            }}
+            className="mb-2"
           />
-          <Button 
-            type="primary" 
-            block 
-            loading={loading} 
-            onClick={handleSendOTP} 
-            disabled={!phone}
-          >
+          {showPhoneError && <p className="text-red-500 text-sm mb-2">Invalid phone number</p>}
+          <Button type="primary" block loading={loading} onClick={handleSendOTP}>
             Send OTP
           </Button>
         </>
@@ -93,16 +125,14 @@ export default function ForgotPasswordModal({ isOpen, handleClose }) {
             size="large"
             placeholder="Enter OTP"
             value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-            className="mb-4"
+            onChange={(e) => {
+              setOtp(e.target.value);
+              setShowOtpError(false); // ✅ Hide error on change
+            }}
+            className="mb-2"
           />
-          <Button 
-            type="primary" 
-            block 
-            loading={loading} 
-            onClick={handleVerifyOTP} 
-            disabled={!otp}
-          >
+          {showOtpError && <p className="text-red-500 text-sm mb-2">Invalid OTP</p>}
+          <Button type="primary" block loading={loading} onClick={handleVerifyOTP}>
             Verify OTP
           </Button>
         </>
@@ -116,24 +146,30 @@ export default function ForgotPasswordModal({ isOpen, handleClose }) {
             placeholder="New password"
             prefix={<LockOutlined />}
             value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className="mb-4"
+            onChange={(e) => {
+              setNewPassword(e.target.value);
+              setShowPasswordError(false); // ✅ Hide error on change
+            }}
+            className="mb-2"
           />
+          {showPasswordError && (
+            <p className="text-red-500 text-sm mb-2">
+              Password must have at least 6 characters, one uppercase letter, one lowercase letter, one number, and one special character.
+            </p>
+          )}
           <Input.Password
             size="large"
             placeholder="Confirm password"
             prefix={<LockOutlined />}
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="mb-4"
+            onChange={(e) => {
+              setConfirmPassword(e.target.value);
+              setShowConfirmPasswordError(false); // ✅ Hide error on change
+            }}
+            className="mb-2"
           />
-          <Button 
-            type="primary" 
-            block 
-            loading={loading} 
-            onClick={handleUpdatePassword} 
-            disabled={!newPassword || !confirmPassword}
-          >
+          {showConfirmPasswordError && <p className="text-red-500 text-sm mb-2">Passwords do not match</p>}
+          <Button type="primary" block loading={loading} onClick={handleUpdatePassword}>
             Update Password
           </Button>
         </>
