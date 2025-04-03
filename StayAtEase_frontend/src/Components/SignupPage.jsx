@@ -115,13 +115,13 @@ export default function SignupModal({ isOpen, handleClose }) {
 
   return (
     <Modal open={isOpen} onCancel={handleClose} footer={null} centered width={650}>
-      <h2 className="text-2xl font-bold text-center mb-4">Create your account</h2>
+      <h2 className="text-2xl font-bold text-center mb-6">Create your account</h2>
       <p className="text-gray-500 text-center mb-6">Join our community of tenants and property owners</p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+      <div className="space-y-4">
         {/* Phone Number */}
-        <div className="w-full mb-4">
-          <label className="block text-gray-700 font-medium mb-1">Phone Number *</label>
+        <div>
+          <label className="block text-gray-700 font-medium mb-2">Phone Number *</label>
           <Input
             size="large"
             placeholder="Enter your phone number"
@@ -129,12 +129,12 @@ export default function SignupModal({ isOpen, handleClose }) {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
           />
-          {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+          {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
         </div>
 
         {/* Email Address */}
-        <div className="w-full mb-4">
-          <label className="block text-gray-700 font-medium mb-1">Email Address</label>
+        <div>
+          <label className="block text-gray-700 font-medium mb-2">Email Address</label>
           <Input
             size="large"
             placeholder="your@email.com"
@@ -142,18 +142,18 @@ export default function SignupModal({ isOpen, handleClose }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
         </div>
 
         {/* Verification Code */}
-        <div className="col-span-1 md:col-span-2 mb-4">
-          <label className="block text-gray-700 font-medium mb-1">Enter Verification Code</label>
-          <div className="flex justify-center gap-3 sm:gap-4">
+        <div>
+          <label className="block text-gray-700 font-medium mb-2">Enter Verification Code</label>
+          <div className="flex justify-center gap-2">
             {verificationCode.map((digit, i) => (
               <Input
                 key={i}
                 maxLength={1}
-                className="w-10 sm:w-12 text-center"
+                className="w-10 text-center"
                 value={digit}
                 onChange={(e) => {
                   const newCode = [...verificationCode];
@@ -163,15 +163,12 @@ export default function SignupModal({ isOpen, handleClose }) {
               />
             ))}
           </div>
-          <p className="text-sm text-gray-500 mt-2 text-center">
-            We've sent a code to your phone <span className="text-blue-500 cursor-pointer">Resend Code</span>
-          </p>
-          {errors.verificationCode && <p className="text-red-500 text-sm text-center">{errors.verificationCode}</p>}
+          {errors.verificationCode && <p className="text-red-500 text-sm mt-1 text-center">{errors.verificationCode}</p>}
         </div>
 
         {/* Full Name */}
-        <div className="col-span-1 md:col-span-2 mb-4">
-          <label className="block text-gray-700 font-medium mb-1">Full Name *</label>
+        <div>
+          <label className="block text-gray-700 font-medium mb-2">Full Name *</label>
           <Input
             size="large"
             placeholder="Enter your full name"
@@ -179,49 +176,39 @@ export default function SignupModal({ isOpen, handleClose }) {
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
           />
-          {errors.fullName && <p className="text-red-500 text-sm">{errors.fullName}</p>}
+          {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
         </div>
 
-        {/* Password */}
-        <div className="w-full mb-4">
-          <label className="block text-gray-700 font-medium mb-1">Password *</label>
-          <Input.Password
-            size="large"
-            placeholder="Create a password"
-            prefix={<LockOutlined />}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
-        </div>
-
-        {/* Confirm Password */}
-        <div className="w-full mb-4">
-          <label className="block text-gray-700 font-medium mb-1">Confirm Password *</label>
-          <Input.Password
-            size="large"
-            placeholder="Confirm your password"
-            prefix={<LockOutlined />}
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
-        </div>
-
-        {/* User Type Selection */}
-        <div className="col-span-1 md:col-span-2 mb-4">
-          <label className="block text-gray-700 font-medium mb-1">I am a... *</label>
-          <Radio.Group value={userType} onChange={(e) => setUserType(e.target.value)} className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-            <Radio value="tenant">Tenant</Radio>
-            <Radio value="owner">Property Owner</Radio>
-          </Radio.Group>
-          {errors.userType && <p className="text-red-500 text-sm">{errors.userType}</p>}
+        {/* Password & Confirm Password */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-gray-700 font-medium mb-2">Password *</label>
+            <Input.Password
+              size="large"
+              placeholder="Create a password"
+              prefix={<LockOutlined />}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+          </div>
+          <div>
+            <label className="block text-gray-700 font-medium mb-2">Confirm Password *</label>
+            <Input.Password
+              size="large"
+              placeholder="Confirm your password"
+              prefix={<LockOutlined />}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
+          </div>
         </div>
 
         {/* Terms and Conditions */}
-        <div className="col-span-1 md:col-span-2 flex items-start gap-2 mb-4">
+        <div className="flex items-start gap-2">
           <Checkbox checked={isChecked} onChange={(e) => setIsChecked(e.target.checked)} />
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-gray-600 mb-4">
             I agree to the <span className="text-blue-600 cursor-pointer">Terms of Service</span> and <span className="text-blue-600 cursor-pointer">Privacy Policy</span>
           </span>
         </div>

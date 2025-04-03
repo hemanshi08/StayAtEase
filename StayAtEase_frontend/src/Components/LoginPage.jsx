@@ -1,29 +1,60 @@
 import { Modal, Input, Button } from "antd";
 import { MobileOutlined, LockOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Import useEffect
 import SignupModal from "./SignupPage";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import ForgotPasswordModal from "./forgetpassword";
+
 export default function LoginModal({ isModalOpen, handleCancel }) {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [errors, setErrors] = useState({ phone: "", password: "" }); // Validation errors
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      // Reset fields when modal closes
+      setPhone("");
+      setPassword("");
+      setErrors({ phone: "", password: "" });
+    }
+  }, [isModalOpen]); // Runs when modal opens/closes
+
+  const validateForm = () => {
+    let valid = true;
+    let newErrors = { phone: "", password: "" };
+
+    // Phone number validation
+    if (!phone.trim()) {
+      newErrors.phone = "Phone number is required";
+      valid = false;
+    } else if (!/^\d{10}$/.test(phone)) {
+      newErrors.phone = "Enter a valid 10-digit phone number";
+      valid = false;
+    }
+
+    // Password validation
+    if (!password.trim()) {
+      newErrors.password = "Password is required";
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
+  };
+
   const handleLogin = () => {
+    if (!validateForm()) return; // Stop if validation fails
+
     if (phone === "9080706050" && password === "111") {
       navigate("/Dashboard"); 
-      
-      // Redirect to AdminDashboard
-    } else if (phone === "8963254174" && password ==="123") {
+    } else if (phone === "8963254174" && password === "123") {
       navigate("/RoomOwnerDashboard"); 
-    }
-    
-    else {
+    } else {
       alert("Invalid phone number or password");
     }
-
-
   };
 
   return (
@@ -31,15 +62,15 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
     <Modal
       title={
         <div className="text-3xl font-bold text-center">
-      Welcome Back
-    </div>
+          Welcome Back
+        </div>
       } 
       open={isModalOpen}
       footer={null}
       onCancel={handleCancel}
       centered
-  width={420} // Decrease width
-  style={{ minHeight: "100px" }} // Increase height
+      width={420} // Decrease width
+      style={{ minHeight: "100px" }} // Increase height
     >
       <p className="text-center text-gray-600">Log in to your account</p>
 
@@ -53,6 +84,7 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
         />
+        {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>} {/* Validation Message */}
       </div>
 
       <div className="mt-4">
@@ -63,21 +95,20 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
           prefix={<LockOutlined />}
           className="mt-2"
           value={password}
-          onChange={(e)=>setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
         />
+        {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>} {/* Validation Message */}
       </div>
 
+      <Button type="primary" className="bg-blue-600 w-full " style={{marginTop:"16px"}} onClick={handleLogin}>
+        Log In
+      </Button>
       <div 
           className="text-center text-red-500 mt-2 cursor-pointer mb-3"
           onClick={() => setIsForgotPasswordOpen(true)}
         >
           Forgot password?
         </div>
-
-      <Button type="primary" className="bg-blue-600 w-full mt-4" onClick={handleLogin}>
-        Log In
-      </Button>
-
       <p className="text-center mt-4 text-gray-600 " style={{marginTop:"16px"}}>
         New to our platform? <span className="text-blue-600 cursor-pointer" onClick={() => setIsSignupOpen(true)}>Create an account</span>
       </p>
