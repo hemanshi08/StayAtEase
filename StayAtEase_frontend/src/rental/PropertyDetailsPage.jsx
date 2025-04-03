@@ -87,8 +87,7 @@ const handleSubmit = (values) => {
 };
 
   return (
-    <div>
-      <Navbar/>
+   
  
     <div className="max-w-8xl mx-auto px-10 py-8">
       {/* IMAGE GALLERY */}
@@ -314,8 +313,7 @@ const handleSubmit = (values) => {
       {/* Reviews Section */}
       <Reviews rating={rating} reviews={reviews} />
     </div>
-    <Footer/>
-    </div>
+   
 
   );
 };
