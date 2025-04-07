@@ -7,7 +7,9 @@ const TenantLayout = () => {
   return (
     <>
     <Navbar />
+    <div className="pt-14">
     <Outlet />
+    </div>
     <Footer />
         
     </>
