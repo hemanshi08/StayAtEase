@@ -43,6 +43,9 @@ export default function SuperAdminNavbar() {
             <Link to="/TotalReviews" className={`hover:text-blue-500 font-medium ${isActive("/TotalReviews")}`}>
             Reviews
             </Link>
+            <Link to="/TotalMeassges" className={`hover:text-blue-500 font-medium ${isActive("/TotalMeassges")}`}>
+            Inquires
+            </Link>
             </div>
 
 

@@ -17,6 +17,7 @@ import TotalReviews from "./Super_Admin/TotalReviews";
 import ProfileDetails from "./Super_Admin/superadmin_profiledetails";
 import ShowProperty from "./Super_Admin/ShowProperty";
 import EditUser from "./Super_Admin/EditUsers";
+import TotalMeassges from "./Super_Admin/TotalMeassges";
 function AppRouter(){
   return (
     <Router>
@@ -44,6 +45,7 @@ function AppRouter(){
         <Route path="/superadmin_profiledetails" element={<ProfileDetails />} /> {/* New Route */}
         <Route path="/ShowProperty" element={<ShowProperty />} />
         <Route path="/edit-user" element={<EditUser />} />
+        <Route path="/TotalMeassges" element={<TotalMeassges />} /> {/* New Route */}
 
 
       </Routes>
