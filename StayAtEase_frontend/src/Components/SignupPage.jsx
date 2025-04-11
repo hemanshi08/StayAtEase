@@ -205,6 +205,16 @@ export default function SignupModal({ isOpen, handleClose }) {
           </div>
         </div>
 
+        {/* User Type Selection */}
+        <div className="col-span-1 md:col-span-2">
+          <label className="block text-gray-700 font-medium mb-1">I am a... *</label>
+          <Radio.Group value={userType} onChange={(e) => setUserType(e.target.value)} className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+            <Radio value="tenant"> Tenant</Radio>
+            <Radio value="owner">Property Owner</Radio>
+          </Radio.Group>
+        </div>
+
+
         {/* Terms and Conditions */}
         <div className="flex items-start gap-2">
           <Checkbox checked={isChecked} onChange={(e) => setIsChecked(e.target.checked)} />
