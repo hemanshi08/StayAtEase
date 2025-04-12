@@ -16,7 +16,7 @@ const adminRoutes = require('./routes/adminRoutes');
 
 // Import the Sequelize instance and models
 const models = require('./models');
-const sequelize = models.db; // ✅ use db from models/index.js
+const sequelize = models.db; //  use db from models/index.js
 
 // Middleware
 app.use(cors());
@@ -34,11 +34,11 @@ app.use('/api/admin', adminRoutes);
 // Sync the database and start the server
 sequelize.sync({ alter: true }) // or { force: true } carefully!
   .then(() => {
-    console.log('✅ Database synced successfully.');
+    console.log('Database synced successfully.');
     app.listen(PORT, () => {
-      console.log(`🚀 Server is running on port ${PORT}`);
+      console.log(`Server is running on port ${PORT}`);
     });
   })
   .catch((err) => {
-    console.error('❌ Failed to sync database:', err);
+    console.error('Failed to sync database:', err);
   });

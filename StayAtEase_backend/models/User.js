@@ -2,10 +2,14 @@ module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     u_id: {
       type: DataTypes.INTEGER,
-      primaryKey: true, // ✅ must be primary key
+      primaryKey: true, 
       autoIncrement: true
     },
-    profile_pic: { type: DataTypes.STRING },
+    profile_pic: {
+      type: DataTypes.STRING,
+      
+      defaultValue: 'https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0='
+    },
     fullName: { type: DataTypes.STRING, allowNull: false },
     email: { type: DataTypes.STRING, allowNull: false, unique: true },
     phone: { type: DataTypes.STRING, allowNull: false },
@@ -13,7 +17,12 @@ module.exports = (sequelize, DataTypes) => {
     userType: { type: DataTypes.STRING, allowNull: false, defaultValue: 'tenant' },
     user_address: { type: DataTypes.STRING },
     bio: { type: DataTypes.STRING },
-    status: { type: DataTypes.STRING, allowNull: false, defaultValue: 'inactive' }
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'inactive'
+      // You can update this to 'active' manually in controller after email verification
+    },
   });
 
   User.associate = (models) => {
