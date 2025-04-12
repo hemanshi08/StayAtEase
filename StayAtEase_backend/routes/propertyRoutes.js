@@ -1,9 +1,8 @@
-const express = require('express');
+const express = require("express");
+const { createProperty, getAllProperties } = require("../controllers/propertyController");
 const router = express.Router();
-const propertyController = require('../controllers/propertyController');
 
-// middleware can be added to protect routes
-router.post('/add', propertyController.createProperty);
-router.get('/available', propertyController.getAvailableProperties);
+router.post("/", createProperty);
+router.get("/", getAllProperties);
 
 module.exports = router;

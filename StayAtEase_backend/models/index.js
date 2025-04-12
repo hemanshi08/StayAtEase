@@ -1,12 +1,21 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const sequelize = require('../db');
 
-const User = require('./User')(sequelize, DataTypes);
-const Admin = require('./Admin')(sequelize, DataTypes);
-const Property = require('./Property')(sequelize, DataTypes);
+const db = {};
 
-// One property is posted by one user
-User.hasMany(Property, { foreignKey: 'ownerId' });
-Property.belongsTo(User, { foreignKey: 'ownerId' });
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
 
-module.exports = { sequelize, User, Admin, Property };
+db.User = require('./User')(sequelize, DataTypes);
+db.Property = require('./Property')(sequelize, DataTypes);
+db.Admin = require('./Admin')(sequelize, DataTypes);
+db.Review = require('./Review')(sequelize, DataTypes);
+db.Inquiry = require('./Inquiry')(sequelize, DataTypes);
+
+Object.keys(db).forEach((modelName) => {
+  if ('associate' in db[modelName]) {
+    db[modelName].associate(db);
+  }
+});
+
+module.exports = db;

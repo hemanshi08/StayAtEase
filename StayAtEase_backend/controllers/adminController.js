@@ -1,19 +1,18 @@
-const { Admin } = require('../models');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const { Admin } = require("../models");
 
 exports.loginAdmin = async (req, res) => {
   try {
     const { email, password } = req.body;
     const admin = await Admin.findOne({ where: { email } });
 
-    if (!admin) return res.status(404).json({ error: 'Admin not found' });
+    if (!admin || !(await bcrypt.compare(password, admin.password)))
+      return res.status(401).json({ error: "Invalid credentials" });
 
-    const isMatch = await bcrypt.compare(password, admin.password);
-    if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
+    const token = jwt.sign({ admin_id: admin.admin_id, role: "admin" }, process.env.JWT_SECRET, { expiresIn: "2h" });
 
-    const token = jwt.sign({ id: admin.id, role: 'admin' }, 'secretkey', { expiresIn: '1h' });
-    res.json({ token });
+    res.status(200).json({ token, admin });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
