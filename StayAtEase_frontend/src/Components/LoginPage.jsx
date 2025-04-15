@@ -7,31 +7,31 @@ import ForgotPasswordModal from "./forgetpassword";
 
 export default function LoginModal({ isModalOpen, handleCancel }) {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
-  const [phone, setPhone] = useState("");
+  const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({ phone: "", password: "" }); // Validation errors
+  const [errors, setErrors] = useState({ email: "", password: "" }); // Validation errors
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
   const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     if (!isModalOpen) {
       // Reset fields when modal closes
-      setPhone("");
+      setemail("");
       setPassword("");
-      setErrors({ phone: "", password: "" });
+      setErrors({ email: "", password: "" });
     }
   }, [isModalOpen]); // Runs when modal opens/closes
 
   const validateForm = () => {
     let valid = true;
-    let newErrors = { phone: "", password: "" };
+    let newErrors = { email: "", password: "" };
 
-    // Phone number validation
-    if (!phone.trim()) {
-      newErrors.phone = "Phone number is required";
+    // email number validation
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
       valid = false;
-    } else if (!/^\d{10}$/.test(phone)) {
-      newErrors.phone = "Enter a valid 10-digit phone number";
+    } else if (!/^\d{10}$/.test(email)) {
+      newErrors.email = "Enter a valid 10-digit email number";
       valid = false;
     }
 
@@ -48,12 +48,12 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
   const handleLogin = () => {
     if (!validateForm()) return; // Stop if validation fails
 
-    if (phone === "9080706050" && password === "111") {
+    if (email === "9080706050" && password === "111") {
       navigate("/Dashboard"); 
-    } else if (phone === "8963254174" && password === "123") {
+    } else if (email === "8963254174" && password === "123") {
       navigate("/RoomOwnerDashboard"); 
     } else {
-      alert("Invalid phone number or password");
+      alert("Invalid email number or password");
     }
   };
 
@@ -75,16 +75,16 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
       <p className="text-center text-gray-600">Log in to your account</p>
 
       <div className="mt-4">
-        <label className="block font-semibold">Phone Number</label>
+        <label className="block font-semibold">Email</label>
         <Input
           size="large"
-          placeholder="Enter your phone number"
+          placeholder="Enter your email number"
           prefix={<MobileOutlined />}
           className="mt-2"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          value={email}
+          onChange={(e) => setemail(e.target.value)}
         />
-        {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>} {/* Validation Message */}
+        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>} {/* Validation Message */}
       </div>
 
       <div className="mt-4">

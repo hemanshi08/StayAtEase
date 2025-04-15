@@ -13,9 +13,7 @@ const ProfileDetails = () => {
     lastName: "Doe",
     email: "john.doe@example.com",
     phone: "+1 (555) 000-0000",
-    location: "San Francisco, CA",
-    timezone: "(GMT-08:00) Pacific Time",
-    bio: "Property dealer",
+   
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -68,10 +66,9 @@ const ProfileDetails = () => {
             <ProfileInput label="Last Name" name="lastName" value={userDetails.lastName} onChange={handleInputChange} />
             <ProfileInput label="Email Address" name="email" value={userDetails.email} onChange={handleInputChange} />
             <ProfileInput label="Phone Number" name="phone" value={userDetails.phone} onChange={handleInputChange} />
-            <ProfileInput label="Location" name="location" value={userDetails.location} onChange={handleInputChange} />
-            <ProfileInput label="Time Zone" name="timezone" value={userDetails.timezone} onChange={handleInputChange} />
+           
           </div>
-          <ProfileTextArea label="Bio" name="bio" value={userDetails.bio} onChange={handleInputChange} />
+         
           <div className="flex justify-end text-white">
             <button
               type="submit"
