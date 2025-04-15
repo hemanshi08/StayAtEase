@@ -39,3 +39,45 @@ exports.loginUser = async (req, res) => {
   }
 };
 
+exports.updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.u_id; // This should be set by JWT auth middleware
+    const { fullName, phone, user_address, bio, profile_pic } = req.body;
+
+    const user = await User.findByPk(userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    user.fullName = fullName || user.fullName;
+    user.phone = phone || user.phone;
+    user.user_address = user_address || user.user_address;
+    user.bio = bio || user.bio;
+    user.profile_pic = profile_pic || user.profile_pic;
+
+    await user.save();
+    res.status(200).json({ message: "Profile updated successfully", user });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// CHANGE PASSWORD
+exports.changePassword = async (req, res) => {
+  try {
+    const userId = req.user.u_id;
+    const { oldPassword, newPassword } = req.body;
+
+    const user = await User.findByPk(userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) return res.status(400).json({ error: "Old password is incorrect" });
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedNewPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

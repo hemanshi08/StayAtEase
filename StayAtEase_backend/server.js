@@ -13,6 +13,7 @@ const propertyRoutes = require('./routes/propertyRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const inquiryRoutes = require('./routes/inquiryRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const wishlistRoutes = require('./routes/wishlistRoutes');
 
 // Import the Sequelize instance and models
 const models = require('./models');
@@ -30,6 +31,7 @@ app.use('/api/properties', propertyRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/inquiries', inquiryRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/wishlist', wishlistRoutes);
 
 // Sync the database and start the server
 sequelize.sync({ alter: true }) // or { force: true } carefully!
