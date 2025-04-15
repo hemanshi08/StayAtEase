@@ -78,7 +78,7 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
         <label className="block font-semibold">Email</label>
         <Input
           size="large"
-          placeholder="Enter your email number"
+          placeholder="Enter your email Address"
           prefix={<MobileOutlined />}
           className="mt-2"
           value={email}
