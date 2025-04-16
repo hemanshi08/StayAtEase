@@ -1,6 +1,7 @@
-import { Modal, Input, Button, Checkbox, Radio } from "antd";
+import { Modal, Input, Button, Checkbox, Radio, message } from "antd";
 import { MailOutlined, LockOutlined, MobileOutlined, UserOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
+import axiosInstance from "../api/axiosInstance";
 
 export default function SignupModal({ isOpen, handleClose }) {
   const [userType, setUserType] = useState("tenant");
@@ -38,12 +39,6 @@ export default function SignupModal({ isOpen, handleClose }) {
       valid = false;
     } else if (!/^\d{10}$/.test(phone)) {
       newErrors.phone = "Enter a valid 10-digit phone number";
-      valid = false;
-    }
-
-    // Validate verification code
-    if (verificationCode.some((digit) => digit.trim() === "")) {
-      newErrors.verificationCode = "Enter all 6 digits of the verification code";
       valid = false;
     }
 
@@ -96,21 +91,44 @@ export default function SignupModal({ isOpen, handleClose }) {
     return valid;
   };
 
-  const handleSignup = () => {
-    if (!validateForm()) return;
+  const handleSignup = async () => {
+    //if (!validateForm()) return;
 
-    console.log("Form submitted successfully!");
+    try {
+      const userData = {
+        fullName,
+        email,
+        phone,
+        password,
+        userType,
+        user_address: "", // Not collected in form, send empty string or adjust as needed
+        bio: "", // Not collected in form, send empty string or adjust as needed
+      };
 
-    // Reset form after successful signup
-    setPhone("");
-    setEmail("");
-    setVerificationCode(["", "", "", "", "", ""]);
-    setFullName("");
-    setPassword("");
-    setConfirmPassword("");
-    setUserType("tenant");
-    setIsChecked(false);
-    setErrors({});
+      console.log(userData);
+      const resp = await axiosInstance.post("/users/register", userData);
+      console.log(resp)
+
+      message.success("Account created successfully!");
+      handleClose();
+
+      // Reset form after successful signup
+      setPhone("");
+      setEmail("");
+      setVerificationCode(["", "", "", "", "", ""]);
+      setFullName("");
+      setPassword("");
+      setConfirmPassword("");
+      setUserType("tenant");
+      setIsChecked(false);
+      setErrors({});
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        message.error(`Signup failed: ${error.response.data.error}`);
+      } else {
+        message.error("Signup failed: An unexpected error occurred.");
+      }
+    }
   };
 
   return (
@@ -146,7 +164,7 @@ export default function SignupModal({ isOpen, handleClose }) {
         </div>
 
         {/* Verification Code */}
-        <div>
+        {/* <div>
           <label className="block text-gray-700 font-medium mb-2">Enter Verification Code</label>
           <div className="flex justify-center gap-2">
             {verificationCode.map((digit, i) => (
@@ -164,7 +182,7 @@ export default function SignupModal({ isOpen, handleClose }) {
             ))}
           </div>
           {errors.verificationCode && <p className="text-red-500 text-sm mt-1 text-center">{errors.verificationCode}</p>}
-        </div>
+        </div> */}
 
         {/* Full Name */}
         <div>
@@ -211,16 +229,6 @@ export default function SignupModal({ isOpen, handleClose }) {
           <Radio.Group value={userType} onChange={(e) => setUserType(e.target.value)} className="flex flex-col sm:flex-row gap-2 sm:gap-4">
             <Radio value="tenant"> Tenant</Radio>
             <Radio value="owner"> Property Owner</Radio>
-          </Radio.Group>
-        </div>
-
-
-{/* User Type Selection */}
-<div className="col-span-1 md:col-span-2">
-          <label className="block text-gray-700 font-medium mb-1">I am a... *</label>
-          <Radio.Group value={userType} onChange={(e) => setUserType(e.target.value)} className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-            <Radio value="tenant">  Tenant</Radio>
-            <Radio value="owner">  Property Owner</Radio>
           </Radio.Group>
         </div>
 

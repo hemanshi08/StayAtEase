@@ -20,11 +20,17 @@ const models = require('./models');
 const sequelize = models.db; //  use db from models/index.js
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+  origin: ["http://localhost:3000", "http://localhost:5173", "http://localhost:5174"], // Allow all frontend origins
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/properties', propertyRoutes);
@@ -32,6 +38,11 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/inquiries', inquiryRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/wishlist', wishlistRoutes);
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
 
 // Sync the database and start the server
 sequelize.sync({ alter: true }) // or { force: true } carefully!
@@ -44,3 +55,4 @@ sequelize.sync({ alter: true }) // or { force: true } carefully!
   .catch((err) => {
     console.error('Failed to sync database:', err);
   });
+  

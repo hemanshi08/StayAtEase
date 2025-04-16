@@ -16,7 +16,10 @@ module.exports = (sequelize, DataTypes) => {
     password: { type: DataTypes.STRING, allowNull: false },
     userType: { type: DataTypes.STRING, allowNull: false, defaultValue: 'tenant' },
     user_address: { type: DataTypes.STRING },
-    bio: { type: DataTypes.STRING },
+    bio: { 
+      type: DataTypes.STRING, 
+      defaultValue: 'Welcome to my profile! I am excited to be part of the StayAtEase community.' 
+    },
     status: {
       type: DataTypes.STRING,
       allowNull: false,
