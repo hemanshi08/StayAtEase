@@ -1,37 +1,39 @@
-import { Modal, Input, Button } from "antd";
-import { MobileOutlined, LockOutlined } from "@ant-design/icons";
-import { useState, useEffect } from "react"; // Import useEffect
+import { Modal, Input, Button, message } from "antd";
+import { MailOutlined, LockOutlined } from "@ant-design/icons";
+import { useState, useEffect } from "react";
 import SignupModal from "./SignupPage";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import ForgotPasswordModal from "./forgetpassword";
+import { useAuth } from "../context/AuthContext";
 
 export default function LoginModal({ isModalOpen, handleCancel }) {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
-  const [email, setemail] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({ email: "", password: "" }); // Validation errors
+  const [errors, setErrors] = useState({ email: "", password: "" });
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { login, error: authError } = useAuth();
 
   useEffect(() => {
     if (!isModalOpen) {
-      // Reset fields when modal closes
-      setemail("");
+      setEmail("");
       setPassword("");
       setErrors({ email: "", password: "" });
     }
-  }, [isModalOpen]); // Runs when modal opens/closes
+  }, [isModalOpen]);
 
   const validateForm = () => {
     let valid = true;
     let newErrors = { email: "", password: "" };
 
-    // email number validation
+    // Email validation
     if (!email.trim()) {
       newErrors.email = "Email is required";
       valid = false;
-    } else if (!/^\d{10}$/.test(email)) {
-      newErrors.email = "Enter a valid 10-digit email number";
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
+      newErrors.email = "Enter a valid email address";
       valid = false;
     }
 
@@ -45,80 +47,111 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
     return valid;
   };
 
-  const handleLogin = () => {
-    if (!validateForm()) return; // Stop if validation fails
+  const handleLogin = async () => {
+    if (!validateForm()) return;
 
-    if (email === "9080706050" && password === "111") {
-      navigate("/Dashboard"); 
-    } else if (email === "8963254174" && password === "123") {
-      navigate("/RoomOwnerDashboard"); 
-    } else {
-      alert("Invalid email number or password");
+    setIsLoading(true);
+    try {
+      const userData = await login(email, password);
+      message.success("Login successful!");
+      handleCancel();
+
+      // Navigate based on user type
+      if (userData.userType === "admin") {
+        navigate("/Dashboard");
+      } else if (userData.userType === "Property_Owner") {
+        navigate("/RoomOwnerDashboard");
+      } else if (userData.userType === "tenant") {
+        navigate("/");
+      }
+    } catch (error) {
+      // Show error message from the server or a default message
+      const errorMessage = error.message || "Login failed. Please try again.";
+      message.error(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <>
-    <Modal
-      title={
-        <div className="text-3xl font-bold text-center">
-          Welcome Back
+      <Modal
+        title={
+          <div className="text-3xl font-bold text-center">
+            Welcome Back
+          </div>
+        }
+        open={isModalOpen}
+        footer={null}
+        onCancel={handleCancel}
+        centered
+        width={420}
+      >
+        <p className="text-center text-gray-600">Log in to your account</p>
+
+        {authError && (
+          <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            {authError}
+          </div>
+        )}
+
+        <div className="mt-4">
+          <label className="block font-semibold">Email</label>
+          <Input
+            size="large"
+            placeholder="Enter your email address"
+            prefix={<MailOutlined />}
+            className="mt-2"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={isLoading}
+          />
+          {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
         </div>
-      } 
-      open={isModalOpen}
-      footer={null}
-      onCancel={handleCancel}
-      centered
-      width={420} // Decrease width
-      style={{ minHeight: "100px" }} // Increase height
-    >
-      <p className="text-center text-gray-600">Log in to your account</p>
 
-      <div className="mt-4">
-        <label className="block font-semibold">Email</label>
-        <Input
-          size="large"
-          placeholder="Enter your email Address"
-          prefix={<MobileOutlined />}
-          className="mt-2"
-          value={email}
-          onChange={(e) => setemail(e.target.value)}
-        />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>} {/* Validation Message */}
-      </div>
+        <div className="mt-4">
+          <label className="block font-semibold">Password</label>
+          <Input.Password
+            size="large"
+            placeholder="Enter your password"
+            prefix={<LockOutlined />}
+            className="mt-2"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={isLoading}
+          />
+          {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+        </div>
 
-      <div className="mt-4">
-        <label className="block font-semibold">Password</label>
-        <Input.Password
-          size="large"
-          placeholder="Enter your password"
-          prefix={<LockOutlined />}
-          className="mt-2"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>} {/* Validation Message */}
-      </div>
+        <div className="mt-4 text-right">
+          <Button type="link" onClick={() => setIsForgotPasswordOpen(true)} disabled={isLoading}>
+            Forgot Password?
+          </Button>
+        </div>
 
-      <Button type="primary" className="bg-blue-600 w-full " style={{marginTop:"16px"}} onClick={handleLogin}>
-        Log In
-      </Button>
-      <div 
-          className="text-center text-red-500 mt-2 cursor-pointer mb-3"
-          onClick={() => setIsForgotPasswordOpen(true)}
+        <Button
+          type="primary"
+          className="w-full mt-6 bg-blue-600"
+          onClick={handleLogin}
+          loading={isLoading}
+          disabled={isLoading}
         >
-          Forgot password?
+          {isLoading ? "Logging in..." : "Login"}
+        </Button>
+
+        <div className="mt-4 text-center">
+          <span className="text-gray-600">Don't have an account? </span>
+          <Button type="link" onClick={() => setIsSignupOpen(true)} disabled={isLoading}>
+            Sign up
+          </Button>
         </div>
-      <p className="text-center mt-4 text-gray-600 " style={{marginTop:"16px"}}>
-        New to our platform? <span className="text-blue-600 cursor-pointer" onClick={() => setIsSignupOpen(true)}>Create an account</span>
-      </p>
-    </Modal>
-   {/* Signup Modal */}
-   <SignupModal isOpen={isSignupOpen} handleClose={() => setIsSignupOpen(false)} />
-   <ForgotPasswordModal 
-  isOpen={isForgotPasswordOpen} 
-  handleClose={() => setIsForgotPasswordOpen(false)} 
-/>
-   </>
- );
+      </Modal>
+
+      <SignupModal isOpen={isSignupOpen} handleClose={() => setIsSignupOpen(false)} />
+      <ForgotPasswordModal
+        isOpen={isForgotPasswordOpen}
+        handleClose={() => setIsForgotPasswordOpen(false)}
+      />
+    </>
+  );
 }

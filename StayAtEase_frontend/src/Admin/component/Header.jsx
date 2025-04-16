@@ -60,7 +60,7 @@ export default function Header() {
     alt="User" 
   />
 </Link> 
-   <Link to="/HomePage" className="text-red-500 hover:text-red-600"  onClick={handleLogout}>
+   <Link to="/" className="text-red-500 hover:text-red-600" onClick={handleLogout}>
       <LogOut size={22} />
     </Link>
 

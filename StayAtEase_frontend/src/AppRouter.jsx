@@ -34,37 +34,35 @@ function AppRouter(){
    <Router>
       <Routes>
         <Route path='/' element={<TenantLayout/>}>
-        <Route path="" index element={<HomePage />} />
-        <Route path="/properties" element={<PropertyPage />} />
-        <Route path="/Wishlist" element={<WishlistPage />} />
-        <Route path="/property/:id" element={<PropertyDetails />} />
+          <Route index element={<HomePage />} />
+          <Route path="properties" element={<PropertyPage />} />
+          <Route path="wishlist" element={<WishlistPage />} />
+          <Route path="property/:id" element={<PropertyDetails />} />
         </Route>
 
-              {/* Router for superAdmin */}
-              <Route path="/Dashboard" element={<Dashboard />} /> {/* New Route */}
-
-        <Route path="/TotalProperties" element={<TotalProperties />} /> {/* New Route */}
-        <Route path="/TotalUser" element={<TotalUser />} /> {/* New Route */}
-        <Route path="/TotalRoomOwner" element={<TotalRoomOwner />} /> {/* New Route */}
-        <Route path="/TotalReviews" element={<TotalReviews />} /> {/* New Route */}
-        <Route path="/superadmin_profiledetails" element={<ProfileDetails />} /> {/* New Route */}
+        {/* Router for superAdmin */}
+        <Route path="/Dashboard" element={<Dashboard />} />
+        <Route path="/TotalProperties" element={<TotalProperties />} />
+        <Route path="/TotalUser" element={<TotalUser />} />
+        <Route path="/TotalRoomOwner" element={<TotalRoomOwner />} />
+        <Route path="/TotalReviews" element={<TotalReviews />} />
+        <Route path="/superadmin_profiledetails" element={<ProfileDetails />} />
         <Route path="/ShowProperty" element={<ShowProperty />} />
         <Route path="/edit-user" element={<EditUser />} />
 
-{/* Owner routes */}
+        {/* Owner routes */}
+        <Route path="/RoomOwnerDashboard" element={<RoomOwnerDashboard />} />
+        <Route path="/PropertyReviews" element={<PropertyReviews />} />
+        <Route path="/propertyform" element={<PropertyForm />} />
+        <Route path="/propertylistings" element={<PropertyListings />} />
+        <Route path="/Massages" element={<PropertyMessages />} />
+        <Route path="/MyProfile" element={<RommOwnerProfileDetails />} />
+        <Route path="/PropertyDetails" element={<AdminPropertyDetails />} />
 
-<Route path="/" element={<PropertyMessages />} />
-<Route path="/RoomOwnerDashboard" element={<RoomOwnerDashboard />} /> {/* New Route */}
-  <Route path="/PropertyReviews" element={<PropertyReviews />} />
-  <Route path="/propertyform" element={<PropertyForm />} />
-  <Route path="/propertylistings" element={<PropertyListings />} />
-  <Route path="/Massages" element={<PropertyMessages />} />
-  <Route path="/MyProfile" element={<RommOwnerProfileDetails />} />
-  <Route path="/Homepage" element={<HomePage />} />
-  <Route path="/PropertyDetails" element={<AdminPropertyDetails />} />
-</Routes>
-          
-</Router>   
+        {/* Catch all route - redirect to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>   
  
    
   );
