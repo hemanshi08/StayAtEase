@@ -4,15 +4,17 @@ const { User, Admin } = require('../models');
 
 const generateTokens = (id, userType) => {
   try {
-    if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {
-      throw new Error('JWT secrets are not configured');
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET is not configured');
     }
 
     const token = jwt.sign({ id, userType }, process.env.JWT_SECRET, {
       expiresIn: '15m', // Access token expires in 15 minutes
     });
 
-    const refreshToken = jwt.sign({ id, userType }, process.env.JWT_REFRESH_SECRET, {
+    // Use JWT_SECRET for refresh token if JWT_REFRESH_SECRET is not available
+    const refreshSecret = process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET;
+    const refreshToken = jwt.sign({ id, userType }, refreshSecret, {
       expiresIn: '7d', // Refresh token expires in 7 days
     });
 
@@ -27,7 +29,10 @@ const generateTokens = (id, userType) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
+  console.log('Login request received:', { email, hasPassword: !!password });
+
   if (!email || !password) {
+    console.log('Missing credentials:', { email: !!email, password: !!password });
     return res.status(400).json({ error: 'Email and password are required' });
   }
 
@@ -49,7 +54,8 @@ exports.login = async (req, res) => {
             id: admin.admin_id,
             userType: 'admin',
             name: admin.fullName,
-            email: admin.email
+            email: admin.email,
+            profile_pic: admin.profile_pic
           }
         });
       }
@@ -81,13 +87,17 @@ exports.login = async (req, res) => {
         id: user.u_id,
         userType: user.userType,
         name: user.fullName,
-        email: user.email
+        email: user.email,
+        profile_pic: user.profile_pic
       }
     });
   } catch (error) {
     console.error('Login error details:', error);
     console.error('Error stack:', error.stack);
-    res.status(500).json({ error: 'Login failed. Please try again.' });
+    res.status(500).json({ 
+      error: 'Login failed. Please try again.',
+      details: error.message 
+    });
   }
 };
 
@@ -100,17 +110,13 @@ exports.refreshToken = async (req, res) => {
   }
 
   try {
-    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-    const { id, userType } = decoded;
-
-    // Generate new tokens
-    const { token, refreshToken: newRefreshToken } = generateTokens(id, userType);
-
-    res.json({
-      token,
-      refreshToken: newRefreshToken
-    });
+    const refreshSecret = process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET;
+    const decoded = jwt.verify(refreshToken, refreshSecret);
+    const { token, refreshToken: newRefreshToken } = generateTokens(decoded.id, decoded.userType);
+    
+    res.json({ token, refreshToken: newRefreshToken });
   } catch (error) {
+    console.error('Refresh token error:', error);
     res.status(401).json({ error: 'Invalid refresh token' });
   }
 };

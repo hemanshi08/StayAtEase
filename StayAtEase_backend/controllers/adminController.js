@@ -13,12 +13,21 @@ exports.loginAdmin = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { admin_id: admin.admin_id, role: "admin" },
+      { id: admin.admin_id, userType: "admin" },
       process.env.JWT_SECRET,
       { expiresIn: "2h" }
     );
 
-    res.status(200).json({ token, admin });
+    res.status(200).json({ 
+      token, 
+      admin: {
+        id: admin.admin_id,
+        email: admin.email,
+        name: admin.fullName,
+        userType: "admin",
+        profile_pic: admin.profile_pic
+      }
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -29,6 +29,8 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'inactive'
       // You can update this to 'active' manually in controller after email verification
     },
+  }, {
+    tableName: 'users' // Explicitly set the table name to lowercase
   });
 
   User.associate = (models) => {

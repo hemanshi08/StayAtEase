@@ -7,9 +7,17 @@ const verifyToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // This includes admin_id or u_id depending on login
+    
+    // Standardize the user ID field
+    req.user = {
+      id: decoded.id,
+      userType: decoded.userType,
+      role: decoded.userType // Use userType as role for consistency
+    };
+    
     next();
   } catch (err) {
+    console.error('Token verification error:', err);
     res.status(400).json({ error: "Invalid token" });
   }
 };
