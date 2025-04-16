@@ -28,14 +28,46 @@ exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ where: { email } });
 
-    if (!user || !(await bcrypt.compare(password, user.password)))
-      return res.status(401).json({ error: "Invalid email or password" });
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
 
-    const token = jwt.sign({ u_id: user.u_id, userType: user.userType }, process.env.JWT_SECRET, { expiresIn: "2h" });
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: "Invalid password" });
+    }
 
-    res.status(200).json({ token, user });
+    // Generate JWT token
+    const token = jwt.sign(
+      { 
+        u_id: user.u_id, 
+        userType: user.userType 
+      }, 
+      process.env.JWT_SECRET, 
+      { expiresIn: "2h" }
+    );
+
+    // Return user data without sensitive information
+    const userData = {
+      u_id: user.u_id,
+      fullName: user.fullName,
+      email: user.email,
+      phone: user.phone,
+      userType: user.userType,
+      user_address: user.user_address,
+      bio: user.bio,
+      profile_pic: user.profile_pic,
+      status: user.status
+    };
+
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: userData
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Login error:", err);
+    res.status(500).json({ error: "Login failed. Please try again." });
   }
 };
 
