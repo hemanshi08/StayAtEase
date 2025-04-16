@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import SignupModal from "./SignupPage";
 import { useNavigate } from "react-router-dom";
 import ForgotPasswordModal from "./forgetpassword";
-import axiosInstance from "../api/axiosInstance";
+import { useAuth } from "../context/AuthContext";
 
 export default function LoginModal({ isModalOpen, handleCancel }) {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
@@ -12,7 +12,9 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { login, error: authError } = useAuth();
 
   useEffect(() => {
     if (!isModalOpen) {
@@ -48,35 +50,26 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
   const handleLogin = async () => {
     if (!validateForm()) return;
 
+    setIsLoading(true);
     try {
-      const response = await axiosInstance.post("/users/login", {
-        email,
-        password
-      });
+      const userData = await login(email, password);
+      message.success("Login successful!");
+      handleCancel();
 
-      if (response.data.token) {
-        // Store token in localStorage
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-
-        message.success("Login successful!");
-        handleCancel();
-
-        // Navigate based on user type
-        if (response.data.user.userType === "admin") {
-          navigate("/Dashboard");
-        } else if (response.data.user.userType === "Property_Owner") {
-          navigate("/RoomOwnerDashboard");
-        } else if (response.data.user.userType === "tenant") {
-          navigate("/");
-        }
+      // Navigate based on user type
+      if (userData.userType === "admin") {
+        navigate("/Dashboard");
+      } else if (userData.userType === "Property_Owner") {
+        navigate("/RoomOwnerDashboard");
+      } else if (userData.userType === "tenant") {
+        navigate("/");
       }
     } catch (error) {
-      if (error.response) {
-        message.error(error.response.data.error || "Login failed");
-      } else {
-        message.error("An error occurred. Please try again.");
-      }
+      // Show error message from the server or a default message
+      const errorMessage = error.message || "Login failed. Please try again.";
+      message.error(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -96,6 +89,12 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
       >
         <p className="text-center text-gray-600">Log in to your account</p>
 
+        {authError && (
+          <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            {authError}
+          </div>
+        )}
+
         <div className="mt-4">
           <label className="block font-semibold">Email</label>
           <Input
@@ -105,6 +104,7 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
             className="mt-2"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            disabled={isLoading}
           />
           {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
         </div>
@@ -118,12 +118,13 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
             className="mt-2"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={isLoading}
           />
           {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
         </div>
 
         <div className="mt-4 text-right">
-          <Button type="link" onClick={() => setIsForgotPasswordOpen(true)}>
+          <Button type="link" onClick={() => setIsForgotPasswordOpen(true)} disabled={isLoading}>
             Forgot Password?
           </Button>
         </div>
@@ -132,13 +133,15 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
           type="primary"
           className="w-full mt-6 bg-blue-600"
           onClick={handleLogin}
+          loading={isLoading}
+          disabled={isLoading}
         >
-          Login
+          {isLoading ? "Logging in..." : "Login"}
         </Button>
 
         <div className="mt-4 text-center">
           <span className="text-gray-600">Don't have an account? </span>
-          <Button type="link" onClick={() => setIsSignupOpen(true)}>
+          <Button type="link" onClick={() => setIsSignupOpen(true)} disabled={isLoading}>
             Sign up
           </Button>
         </div>
