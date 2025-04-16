@@ -101,8 +101,7 @@ export default function SignupModal({ isOpen, handleClose }) {
         phone,
         password,
         userType,
-        user_address: "", // Not collected in form, send empty string or adjust as needed
-        bio: "", // Not collected in form, send empty string or adjust as needed
+        
       };
 
       console.log(userData);
@@ -228,7 +227,7 @@ export default function SignupModal({ isOpen, handleClose }) {
           <label className="block text-gray-700 font-medium mb-1">I am a... *</label>
           <Radio.Group value={userType} onChange={(e) => setUserType(e.target.value)} className="flex flex-col sm:flex-row gap-2 sm:gap-4">
             <Radio value="tenant"> Tenant</Radio>
-            <Radio value="owner"> Property Owner</Radio>
+            <Radio value="Property_Owner"> Property Owner</Radio>
           </Radio.Group>
         </div>
 

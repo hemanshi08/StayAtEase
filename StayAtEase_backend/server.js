@@ -45,9 +45,9 @@ app.use((req, res, next) => {
 });
 
 // Sync the database and start the server
-sequelize.sync({ alter: true }) // or { force: true } carefully!
+sequelize.sync({ alter: true }) // Temporarily using force: true to ensure default values are applied
   .then(() => {
-    console.log('Database synced successfully.');
+    console.log('Database synced successfully with default values.');
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });

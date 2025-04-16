@@ -14,8 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     email: { type: DataTypes.STRING, allowNull: false, unique: true },
     phone: { type: DataTypes.STRING, allowNull: false },
     password: { type: DataTypes.STRING, allowNull: false },
-    userType: { type: DataTypes.STRING, allowNull: false, defaultValue: 'tenant' },
-    user_address: { type: DataTypes.STRING },
+    userType: { type: DataTypes.STRING, allowNull: false, defaultValue: 'Property_Owner' },
+    user_address: { 
+      type: DataTypes.STRING, 
+      defaultValue: 'Add your address here' 
+    },
     bio: { 
       type: DataTypes.STRING, 
       defaultValue: 'Welcome to my profile! I am excited to be part of the StayAtEase community.' 
