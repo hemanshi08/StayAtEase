@@ -214,8 +214,8 @@ exports.getAllProperties = async (req, res) => {
 // Property owner sees all their properties (including Unavailable)
 exports.getMyProperties = async (req, res) => {
   try {
-    const { u_id } = req.user;
-    const properties = await Property.findAll({ where: { u_id } });
+    const { id } = req.user;
+    const properties = await Property.findAll({ where: { u_id:id } });
     res.status(200).json(properties);
   } catch (err) {
     res.status(500).json({ error: err.message });
