@@ -1,22 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
+import { Form, Input, InputNumber, Select, Upload, Button, message, Card } from 'antd';
+import { UploadOutlined, WifiOutlined, CarOutlined, FireOutlined, InsuranceOutlined, DesktopOutlined, HomeOutlined, RestOutlined, ApartmentOutlined, RiseOutlined } from '@ant-design/icons';
+import axiosInstance from '../api/axiosInstance';
 import Footer from "../Components/Footer";
 import Header from "./component/header";
-//BuildOutlined
-import { UploadOutlined, WifiOutlined, CarOutlined, FireOutlined, InsuranceOutlined, DesktopOutlined, HomeOutlined, RestOutlined, ApartmentOutlined ,RiseOutlined } from "@ant-design/icons";
+import { useNavigate } from 'react-router-dom';
 
-const PropertyForm = () => {
+const { Option } = Select;
+const { TextArea } = Input;
+
+const AddProperty = () => {
+  const navigate = useNavigate();
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  useEffect(() => {
+    // Check user authorization when component mounts
+    const checkAuthorization = () => {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const token = localStorage.getItem('token');
+
+      if (!user || !token) {
+        message.error('Please log in to access this page');
+        navigate('/login');
+        return;
+      }
+
+      if (user.userType !== 'Property_Owner') {
+        message.error('Only property owners can access this page');
+        navigate('/');
+        return;
+      }
+
+      setIsAuthorized(true);
+    };
+
+    checkAuthorization();
+  }, [navigate]);
+
   const [formData, setFormData] = useState({
     title: "",
     price: "",
-    squareFootage: "",
+    sq_ft: "",
     address: "",
-    bedrooms: "",
-    bathrooms: "",
-    propertyType: "",
+    no_of_beds: "",
+    no_of_bathrooms: "",
+    property_type: "",
     amenities: [],
     images: [],
-    property_images: [],
-    about: ""
+    property_images: []
   });
 
   const amenitiesList = [
@@ -146,7 +179,7 @@ const PropertyForm = () => {
   const removeImage = (index) => {
     setFormData((prev) => ({
       ...prev,
-      images: [...prev.images, ...files],
+      images: prev.images.filter((_, i) => i !== index),
     }));
   };
 
@@ -207,7 +240,6 @@ const PropertyForm = () => {
         property_type: formData.property_type,
         amenities: formData.amenities || [],
         property_images: formData.property_images || [],
-        about: formData.about.trim(),
         status: 'Available',
         u_id: storedUser.id,
         is_deleted: false
@@ -226,15 +258,7 @@ const PropertyForm = () => {
       console.log('5. Server response:', response.data);
 
       if (response.data.success) {
-        // Show success message
-        message.success({
-          content: 'Property added successfully!',
-          duration: 3,
-          style: {
-            marginTop: '5vh',
-          },
-        });
-
+        message.success('Property added successfully!');
         // Reset form
         setFormData({
           title: "",
@@ -246,17 +270,10 @@ const PropertyForm = () => {
           property_type: "",
           amenities: [],
           images: [],
-          property_images: [],
-          about: ""
+          property_images: []
         });
-
-        // Reset form fields
-        form.resetFields();
-
-        // Navigate to properties list after 2 seconds
-        setTimeout(() => {
-          navigate('/RoomOwnerDashboard');
-        }, 2000);
+        // Navigate to properties list
+        navigate('/properties');
       } else {
         throw new Error(response.data.message || 'Failed to add property');
       }
@@ -277,126 +294,121 @@ const PropertyForm = () => {
 
   return (
     <div>
-    <div className="bg-gray-100 min-h-screen px-10 py-25">
-      <Header />
-      <div className="container mx-auto pt-4 p-28 mt-5 mb-0">
-        <h2 className="text-2xl !font-bold">Add New Property</h2>
-        <div className="bg-white shadow-md rounded-lg p-6 mt-4">
-          <form>
-            <div className="mb-6">
-              <label className="block font-medium mb-2">Property Title</label>
-              <input
-                type="text"
-                name="title"
-                className="w-full p-4 bg-gray-100 rounded-lg"
-                placeholder="Enter property title"
-                value={formData.title}
-                onChange={handleChange}
-              />
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block font-medium mb-2">Price</label>
+      <div className="bg-gray-100 min-h-screen px-10 py-25">
+        <Header />
+        <div className="container mx-auto pt-4 p-28 mt-5 mb-0">
+          <h2 className="text-2xl !font-bold">Add New Property</h2>
+          <div className="bg-white shadow-md rounded-lg p-6 mt-4">
+            <form onSubmit={handleSubmit}>
+              <div className="mb-6">
+                <label className="block font-medium mb-2">Property Title</label>
                 <input
                   type="text"
-                  name="price"
+                  name="title"
                   className="w-full p-4 bg-gray-100 rounded-lg"
-                  placeholder="Enter price"
-                  value={formData.price}
+                  placeholder="Enter property title"
+                  value={formData.title}
                   onChange={handleChange}
+                  required
                 />
               </div>
-              <div>
-                <label className="block font-medium mb-2">Square Footage</label>
-                <input
-                  type="text"
-                  name="squareFootage"
-                  className="w-full p-4 bg-gray-100 rounded-lg"
-                  placeholder="Enter square footage"
-                  value={formData.squareFootage}
-                  onChange={handleChange}
-                />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-medium mb-2">Price</label>
+                  <input
+                    type="number"
+                    name="price"
+                    className="w-full p-4 bg-gray-100 rounded-lg"
+                    placeholder="Enter price"
+                    value={formData.price}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block font-medium mb-2">Square Footage</label>
+                  <input
+                    type="number"
+                    name="sq_ft"
+                    className="w-full p-4 bg-gray-100 rounded-lg"
+                    placeholder="Enter square footage"
+                    value={formData.sq_ft}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
               </div>
-            </div>
-            
-            <div className="mt-4">
-              <label className="block font-medium mb-2">Address</label>
-              <input
-                type="text"
-                name="address"
-                className="w-full p-4 bg-gray-100 rounded-lg"
-                placeholder="Enter complete address"
-                value={formData.address}
-                onChange={handleChange}
-              />
-            </div>
-            
-            <div className="grid grid-cols-3 gap-4 mt-4">
-              <div>
-                <label className="block font-medium mb-2">Bedrooms</label>
-                <input
-                  type="number"
-                  name="bedrooms"
-                  className="w-full p-4 bg-gray-100 rounded-lg"
-                  placeholder="Number of bedrooms"
-                  value={formData.bedrooms}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label className="block font-medium mb-2">Bathrooms</label>
-                <input
-                  type="number"
-                  name="bathrooms"
-                  className="w-full p-4 bg-gray-100 rounded-lg"
-                  placeholder="Number of bathrooms"
-                  value={formData.bathrooms}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label className="block font-medium mb-2">Property Type</label>
-                <select
-                  name="propertyType"
-                  className="w-full p-4 bg-gray-100 rounded-lg"
-                  value={formData.propertyType}
-                  onChange={handleChange}
-                >
-                  <option value="">Select Property Type</option>
-                  <option value="Apartment">Apartment</option>
-                  <option value="Villa">Villa</option>
-                  <option value="Condo">Condo</option>
-                </select>
-              </div>
-            </div>
-            
-            <div className="m-4 mb-6">
-              <label className="block font-medium mb-2">Amenities</label>
-              <div className="grid grid-cols-3 gap-4 p-2">
-                {amenitiesList.map((amenity, index) => (
-                  <label key={index} className="flex items-center space-x-4 p-2">
-                    <input 
-                      type="checkbox"
-                      checked={formData.amenities.includes(amenity.name)}
-                      onChange={() => handleAmenityToggle(amenity.name)}
-                    />
-                    <span className="flex items-center space-x-2">{amenity.icon} <span>{amenity.name}</span></span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
+              
               <div className="mt-4">
-                <label className="block font-medium mb-2">About Property</label>
-                <textarea
-                  name="about"
+                <label className="block font-medium mb-2">Address</label>
+                <input
+                  type="text"
+                  name="address"
                   className="w-full p-4 bg-gray-100 rounded-lg"
-                  placeholder="Describe your property in detail"
-                  value={formData.about}
+                  placeholder="Enter complete address"
+                  value={formData.address}
                   onChange={handleChange}
-                  rows={4}
+                  required
                 />
+              </div>
+              
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block font-medium mb-2">Bedrooms</label>
+                  <input
+                    type="number"
+                    name="no_of_beds"
+                    className="w-full p-4 bg-gray-100 rounded-lg"
+                    placeholder="Enter number of bedrooms"
+                    value={formData.no_of_beds}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block font-medium mb-2">Bathrooms</label>
+                  <input
+                    type="number"
+                    name="no_of_bathrooms"
+                    className="w-full p-4 bg-gray-100 rounded-lg"
+                    placeholder="Enter number of bathrooms"
+                    value={formData.no_of_bathrooms}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block font-medium mb-2">Property Type</label>
+                  <select
+                    name="property_type"
+                    className="w-full p-4 bg-gray-100 rounded-lg"
+                    value={formData.property_type}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select Property Type</option>
+                    <option value="Apartment">Apartment</option>
+                    <option value="Villa">Villa</option>
+                    <option value="Condo">Condo</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div className="m-4 mb-6">
+                <label className="block font-medium mb-2">Amenities</label>
+                <div className="grid grid-cols-3 gap-4 p-2">
+                  {amenitiesList.map((amenity, index) => (
+                    <label key={index} className="flex items-center space-x-4 p-2">
+                      <input 
+                        type="checkbox"
+                        checked={formData.amenities.includes(amenity.name)}
+                        onChange={() => handleAmenityToggle(amenity.name)}
+                      />
+                      <span className="flex items-center space-x-2">{amenity.icon} <span>{amenity.name}</span></span>
+                    </label>
+                  ))}
+                </div>
               </div>
 
               <div className="mt-4">
@@ -422,41 +434,19 @@ const PropertyForm = () => {
                   {formData.images.length > 0 && (
                     <div className="mt-4">
                       <h4 className="font-medium mb-2">Uploaded Files:</h4>
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                      <div className="space-y-2">
                         {formData.images.map((file, index) => (
                           <div
                             key={index}
-                            className="relative border rounded-lg overflow-hidden bg-gray-50"
+                            className="flex items-center justify-between p-2 bg-gray-50 rounded"
                           >
-                            <div className="aspect-w-16 aspect-h-9">
-                              <img
-                                src={URL.createObjectURL(file)}
-                                alt={file.name}
-                                className="object-cover w-full h-full"
-                              />
-                            </div>
-                            <div className="p-2">
-                              <p className="text-sm text-gray-600 truncate">{file.name}</p>
-                            </div>
+                            <span className="truncate">{file.name}</span>
                             <button
                               type="button"
                               onClick={() => removeImage(index)}
-                              className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors"
+                              className="text-red-500 hover:text-red-700"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M6 18L18 6M6 6l12 12"
-                                />
-                              </svg>
+                              Remove
                             </button>
                           </div>
                         ))}
@@ -466,17 +456,20 @@ const PropertyForm = () => {
                 </div>
               </div>
 
-            <div className="mt-6 text-center">
-              <button className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
-                Submit Property
-              </button>
-            </div>
-          </form>
+              <div className="mt-6 text-center">
+                <button 
+                  type="submit"
+                  className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+                  disabled={loading}
+                >
+                  {loading ? 'Submitting...' : 'Submit Property'}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-      
-    </div>
-    <Footer />
+      <Footer />
     </div>
   );
 };

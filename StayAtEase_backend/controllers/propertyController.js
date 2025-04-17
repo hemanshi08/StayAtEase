@@ -225,12 +225,37 @@ exports.getMyProperties = async (req, res) => {
 // Admin sees all properties
 exports.getAllPropertiesAdmin = async (req, res) => {
   try {
-    const properties = await Property.findAll();
+    const properties = await Property.findAll({
+      where: { is_deleted: false },
+      include: [
+        {
+          model: User,
+          attributes: ['name'] // or 'username' or 'email' — adjust based on your model
+        },
+        {
+          model: Review,
+          attributes: []
+        },
+        {
+          model: Inquiry,
+          attributes: []
+        }
+      ],
+      attributes: {
+        include: [
+          [sequelize.fn('COUNT', sequelize.col('Reviews.id')), 'totalReviews'],
+          [sequelize.fn('COUNT', sequelize.col('Inquiries.id')), 'totalInquiries']
+        ]
+      },
+      group: ['Property.p_id', 'User.id']
+    });
+
     res.status(200).json(properties);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // Owner updates property
 exports.updateProperty = async (req, res) => {
