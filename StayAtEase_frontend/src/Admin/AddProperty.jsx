@@ -1,52 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Input, InputNumber, Select, Upload, Button, message, Card } from 'antd';
-import { UploadOutlined, WifiOutlined, CarOutlined, FireOutlined, InsuranceOutlined, DesktopOutlined, HomeOutlined, RestOutlined, ApartmentOutlined, RiseOutlined } from '@ant-design/icons';
-import axiosInstance from '../api/axiosInstance';
+import React, { useState } from "react";
 import Footer from "../Components/Footer";
 import Header from "./component/header";
-import { useNavigate } from 'react-router-dom';
+//BuildOutlined
+import { UploadOutlined, WifiOutlined, CarOutlined, FireOutlined, InsuranceOutlined, DesktopOutlined, HomeOutlined, RestOutlined, ApartmentOutlined ,RiseOutlined } from "@ant-design/icons";
 
-const { Option } = Select;
-const { TextArea } = Input;
-
-const AddProperty = () => {
-  const navigate = useNavigate();
-  const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
-  const [isAuthorized, setIsAuthorized] = useState(false);
-
-  useEffect(() => {
-    // Check user authorization when component mounts
-    const checkAuthorization = () => {
-      const user = JSON.parse(localStorage.getItem('user'));
-      const token = localStorage.getItem('token');
-
-      if (!user || !token) {
-        message.error('Please log in to access this page');
-        navigate('/login');
-        return;
-      }
-
-      if (user.userType !== 'Property_Owner') {
-        message.error('Only property owners can access this page');
-        navigate('/');
-        return;
-      }
-
-      setIsAuthorized(true);
-    };
-
-    checkAuthorization();
-  }, [navigate]);
-
+const PropertyForm = () => {
   const [formData, setFormData] = useState({
     title: "",
     price: "",
-    sq_ft: "",
+    squareFootage: "",
     address: "",
-    no_of_beds: "",
-    no_of_bathrooms: "",
-    property_type: "",
+    bedrooms: "",
+    bathrooms: "",
+    propertyType: "",
     amenities: [],
     images: [],
     property_images: [],
@@ -180,7 +146,7 @@ const AddProperty = () => {
   const removeImage = (index) => {
     setFormData((prev) => ({
       ...prev,
-      images: prev.images.filter((_, i) => i !== index),
+      images: [...prev.images, ...files],
     }));
   };
 
@@ -311,122 +277,115 @@ const AddProperty = () => {
 
   return (
     <div>
-      <div className="bg-gray-100 min-h-screen px-10 py-25">
-        <Header />
-        <div className="container mx-auto pt-4 p-28 mt-5 mb-0">
-          <h2 className="text-2xl !font-bold">Add New Property</h2>
-          <div className="bg-white shadow-md rounded-lg p-6 mt-4">
-            <form onSubmit={handleSubmit}>
-              <div className="mb-6">
-                <label className="block font-medium mb-2">Property Title</label>
+    <div className="bg-gray-100 min-h-screen px-10 py-25">
+      <Header />
+      <div className="container mx-auto pt-4 p-28 mt-5 mb-0">
+        <h2 className="text-2xl !font-bold">Add New Property</h2>
+        <div className="bg-white shadow-md rounded-lg p-6 mt-4">
+          <form>
+            <div className="mb-6">
+              <label className="block font-medium mb-2">Property Title</label>
+              <input
+                type="text"
+                name="title"
+                className="w-full p-4 bg-gray-100 rounded-lg"
+                placeholder="Enter property title"
+                value={formData.title}
+                onChange={handleChange}
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block font-medium mb-2">Price</label>
                 <input
                   type="text"
-                  name="title"
+                  name="price"
                   className="w-full p-4 bg-gray-100 rounded-lg"
-                  placeholder="Enter property title"
-                  value={formData.title}
+                  placeholder="Enter price"
+                  value={formData.price}
                   onChange={handleChange}
-                  required
                 />
               </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-medium mb-2">Price</label>
-                  <input
-                    type="number"
-                    name="price"
-                    className="w-full p-4 bg-gray-100 rounded-lg"
-                    placeholder="Enter price"
-                    value={formData.price}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block font-medium mb-2">Square Footage</label>
-                  <input
-                    type="number"
-                    name="sq_ft"
-                    className="w-full p-4 bg-gray-100 rounded-lg"
-                    placeholder="Enter square footage"
-                    value={formData.sq_ft}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-              
-              <div className="mt-4">
-                <label className="block font-medium mb-2">Address</label>
+              <div>
+                <label className="block font-medium mb-2">Square Footage</label>
                 <input
                   type="text"
-                  name="address"
+                  name="squareFootage"
                   className="w-full p-4 bg-gray-100 rounded-lg"
-                  placeholder="Enter complete address"
-                  value={formData.address}
+                  placeholder="Enter square footage"
+                  value={formData.squareFootage}
                   onChange={handleChange}
-                  required
                 />
               </div>
-              
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <label className="block font-medium mb-2">Bedrooms</label>
-                  <input
-                    type="number"
-                    name="no_of_beds"
-                    className="w-full p-4 bg-gray-100 rounded-lg"
-                    placeholder="Enter number of bedrooms"
-                    value={formData.no_of_beds}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block font-medium mb-2">Bathrooms</label>
-                  <input
-                    type="number"
-                    name="no_of_bathrooms"
-                    className="w-full p-4 bg-gray-100 rounded-lg"
-                    placeholder="Enter number of bathrooms"
-                    value={formData.no_of_bathrooms}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block font-medium mb-2">Property Type</label>
-                  <select
-                    name="property_type"
-                    className="w-full p-4 bg-gray-100 rounded-lg"
-                    value={formData.property_type}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Select Property Type</option>
-                    <option value="Apartment">Apartment</option>
-                    <option value="Villa">Villa</option>
-                    <option value="Condo">Condo</option>
-                  </select>
-                </div>
+            </div>
+            
+            <div className="mt-4">
+              <label className="block font-medium mb-2">Address</label>
+              <input
+                type="text"
+                name="address"
+                className="w-full p-4 bg-gray-100 rounded-lg"
+                placeholder="Enter complete address"
+                value={formData.address}
+                onChange={handleChange}
+              />
+            </div>
+            
+            <div className="grid grid-cols-3 gap-4 mt-4">
+              <div>
+                <label className="block font-medium mb-2">Bedrooms</label>
+                <input
+                  type="number"
+                  name="bedrooms"
+                  className="w-full p-4 bg-gray-100 rounded-lg"
+                  placeholder="Number of bedrooms"
+                  value={formData.bedrooms}
+                  onChange={handleChange}
+                />
               </div>
-              
-              <div className="m-4 mb-6">
-                <label className="block font-medium mb-2">Amenities</label>
-                <div className="grid grid-cols-3 gap-4 p-2">
-                  {amenitiesList.map((amenity, index) => (
-                    <label key={index} className="flex items-center space-x-4 p-2">
-                      <input 
-                        type="checkbox"
-                        checked={formData.amenities.includes(amenity.name)}
-                        onChange={() => handleAmenityToggle(amenity.name)}
-                      />
-                      <span className="flex items-center space-x-2">{amenity.icon} <span>{amenity.name}</span></span>
-                    </label>
-                  ))}
-                </div>
+              <div>
+                <label className="block font-medium mb-2">Bathrooms</label>
+                <input
+                  type="number"
+                  name="bathrooms"
+                  className="w-full p-4 bg-gray-100 rounded-lg"
+                  placeholder="Number of bathrooms"
+                  value={formData.bathrooms}
+                  onChange={handleChange}
+                />
               </div>
+              <div>
+                <label className="block font-medium mb-2">Property Type</label>
+                <select
+                  name="propertyType"
+                  className="w-full p-4 bg-gray-100 rounded-lg"
+                  value={formData.propertyType}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Property Type</option>
+                  <option value="Apartment">Apartment</option>
+                  <option value="Villa">Villa</option>
+                  <option value="Condo">Condo</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="m-4 mb-6">
+              <label className="block font-medium mb-2">Amenities</label>
+              <div className="grid grid-cols-3 gap-4 p-2">
+                {amenitiesList.map((amenity, index) => (
+                  <label key={index} className="flex items-center space-x-4 p-2">
+                    <input 
+                      type="checkbox"
+                      checked={formData.amenities.includes(amenity.name)}
+                      onChange={() => handleAmenityToggle(amenity.name)}
+                    />
+                    <span className="flex items-center space-x-2">{amenity.icon} <span>{amenity.name}</span></span>
+                  </label>
+                ))}
+              </div>
+            </div>
 
               <div className="mt-4">
                 <label className="block font-medium mb-2">About Property</label>
@@ -507,20 +466,17 @@ const AddProperty = () => {
                 </div>
               </div>
 
-              <div className="mt-6 text-center">
-                <button 
-                  type="submit"
-                  className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-                  disabled={loading}
-                >
-                  {loading ? 'Submitting...' : 'Submit Property'}
-                </button>
-              </div>
-            </form>
-          </div>
+            <div className="mt-6 text-center">
+              <button className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
+                Submit Property
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-      <Footer />
+      
+    </div>
+    <Footer />
     </div>
   );
 };

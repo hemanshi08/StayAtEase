@@ -1,112 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import PropertyCard from "../Components/Property_card";
-import Navbar from "../Components/Navbar";
-import Footer from "../Components/Footer";
-import { Input, Button, Select, Slider, Card, Rate } from "antd";
+import { Input, Button, Select, Slider } from "antd";
 
 const { Search } = Input;
 const { Option } = Select;
 
-const properties = [
-  {
-    id: 1,
-    title: "Modern Luxury Apartment",
-    location: "Downtown, New York",
-    price: "2,500",
-    rating: 4,
-    image: "../Properties_image/iflat4.jpg",
-    beds:2,
-    baths:2,
-    sqft:25000,
-    reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!",image: "../profile_image/team-1.jpg" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." ,image:"../profile_image/team-2.jpg"},
-    ],
-  },
-  {
-    id: 2,
-    title: "Cozy Studio Apartment",
-    location: "Los Angeles, CA",
-    price: "1,800",
-    rating: 4.5,
-    image: "../Properties_image/flat5.jpg",
-    beds:3,
-    baths:2,
-    sqft:45000,
-    reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" , image: "../profile_image/team-1.jpg" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." ,image: "../profile_image/team-2.jpg"},
-    ],
-  },
-  {
-    id: 3,
-    title: "Spacious Family Home",
-    location: "Chicago, IL",
-    price: "3,200",
-    rating: 2,
-    image: "../Properties_image/villa3.jpg",
-    beds:2,
-    baths:2,
-    sqft:25000 ,
-    reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" ,image: "../profile_image/team-1.jpg" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience.",image: "../profile_image/team-2.jpg" },
-    ],
-  },
-  {
-    id: 4,
-    title: "Spacious Family Home",
-    location: "Chicago, IL",
-    price: "3,200",
-    rating: 3.5,
-    image: "../Properties_image/iflat6.jpg",
-    beds:2,
-    baths:2,
-    sqft:25000,
-    reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" , image: "../profile_image/team-1.jpg"},
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience.",image: "../profile_image/team-2.jpg" },
-    ],
-  },
-  {
-    id: 5,
-    title: "Spacious Family Home",
-    location: "Chicago, IL",
-    price: "3,200",
-    rating: 2,
-    image: "../Properties_image/i flat7.jpg",
-    beds:2,
-    baths:2,
-    sqft:25000,
-    reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!",image: "../profile_image/team-1.jpg" },
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience." ,image: "../profile_image/team-2.jpg"},
-    ],
-  },
-  {
-    id: 6,
-    title: "Cozy Studio Apartment",
-    location: "Los Angeles, CA",
-    price: "1,800",
-    rating: 4.5,
-    image: "../Properties_image/iflat1.jpg",
-    beds:3,
-    baths:2,
-    sqft:45000,
-    reviews: [
-      { name: "John Doe", date: "Feb 25, 2024", rating: 4.5, comment: "Amazing place to stay!" ,image: "../profile_image/team-1.jpg"},
-      { name: "Jane Smith", date: "Mar 1, 2024", rating: 4.8, comment: "Loved the experience.",image: "../profile_image/team-2.jpg" },
-    ],
-  },
-];
-
 const PropertyListing = () => {
- 
-  return (  
+  const [properties, setProperties] = useState([]);
+
+  useEffect(() => {
+    fetchProperties();
+  }, []);
+
+  const fetchProperties = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/properties"); // Change port if needed
+      setProperties(res.data);
+    } catch (err) {
+      console.error("Error fetching properties:", err);
+    }
+  };
+
+  return (
     <div className="p-8">
       <h1 className="text-2xl font-bold">Find Your Perfect Stay</h1>
       <p className="text-gray-500">Our curated collection of properties</p>
-      
+
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-4 my-8 mr-5 ml-5">
         <Search placeholder="Search" style={{ width: 300 }} />
@@ -114,7 +34,7 @@ const PropertyListing = () => {
         <Button>Price ascending</Button>
         <Button>Price descending</Button>
         <Select placeholder="Property Type" style={{ width: 150 }}>
-          <Option value="apartment">Apartment</Option>  
+          <Option value="apartment">Apartment</Option>
           <Option value="house">House</Option>
           <Option value="studio">Studio</Option>
         </Select>
@@ -123,16 +43,26 @@ const PropertyListing = () => {
           <Slider range min={1000} max={20000} defaultValue={[1000, 20000]} className="w-40" />
         </div>
       </div>
-      
+
       {/* Property Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8 mr-5 ml-5">
-       {properties.map((property) => (
-         <PropertyCard key={property.id} {...property} showDetailsButton={true} />
-      ))}
+        {properties.map((property) => (
+          <PropertyCard
+            key={property.p_id}
+            id={property.p_id}
+            title={property.title}
+            location={property.address}
+            price={property.price}
+            rating={0} // or fetch rating from reviews if available
+            image={property.property_images[0] || "../default.jpg"}
+            beds={property.no_of_beds}
+            baths={property.no_of_bathrooms}
+            sqft={property.sq_ft}
+            showDetailsButton={true}
+          />
+        ))}
+      </div>
     </div>
-    </div>
-    
-  
   );
 };
 
