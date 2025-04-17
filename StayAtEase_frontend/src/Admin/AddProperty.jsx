@@ -49,7 +49,8 @@ const AddProperty = () => {
     property_type: "",
     amenities: [],
     images: [],
-    property_images: []
+    property_images: [],
+    about: ""
   });
 
   const amenitiesList = [
@@ -240,6 +241,7 @@ const AddProperty = () => {
         property_type: formData.property_type,
         amenities: formData.amenities || [],
         property_images: formData.property_images || [],
+        about: formData.about.trim(),
         status: 'Available',
         u_id: storedUser.id,
         is_deleted: false
@@ -258,7 +260,15 @@ const AddProperty = () => {
       console.log('5. Server response:', response.data);
 
       if (response.data.success) {
-        message.success('Property added successfully!');
+        // Show success message
+        message.success({
+          content: 'Property added successfully!',
+          duration: 3,
+          style: {
+            marginTop: '5vh',
+          },
+        });
+
         // Reset form
         setFormData({
           title: "",
@@ -270,10 +280,17 @@ const AddProperty = () => {
           property_type: "",
           amenities: [],
           images: [],
-          property_images: []
+          property_images: [],
+          about: ""
         });
-        // Navigate to properties list
-        navigate('/properties');
+
+        // Reset form fields
+        form.resetFields();
+
+        // Navigate to properties list after 2 seconds
+        setTimeout(() => {
+          navigate('/RoomOwnerDashboard');
+        }, 2000);
       } else {
         throw new Error(response.data.message || 'Failed to add property');
       }
@@ -412,6 +429,18 @@ const AddProperty = () => {
               </div>
 
               <div className="mt-4">
+                <label className="block font-medium mb-2">About Property</label>
+                <textarea
+                  name="about"
+                  className="w-full p-4 bg-gray-100 rounded-lg"
+                  placeholder="Describe your property in detail"
+                  value={formData.about}
+                  onChange={handleChange}
+                  rows={4}
+                />
+              </div>
+
+              <div className="mt-4">
                 <label className="block font-medium mb-2">Property Images</label>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
                   <input
@@ -434,19 +463,41 @@ const AddProperty = () => {
                   {formData.images.length > 0 && (
                     <div className="mt-4">
                       <h4 className="font-medium mb-2">Uploaded Files:</h4>
-                      <div className="space-y-2">
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {formData.images.map((file, index) => (
                           <div
                             key={index}
-                            className="flex items-center justify-between p-2 bg-gray-50 rounded"
+                            className="relative border rounded-lg overflow-hidden bg-gray-50"
                           >
-                            <span className="truncate">{file.name}</span>
+                            <div className="aspect-w-16 aspect-h-9">
+                              <img
+                                src={URL.createObjectURL(file)}
+                                alt={file.name}
+                                className="object-cover w-full h-full"
+                              />
+                            </div>
+                            <div className="p-2">
+                              <p className="text-sm text-gray-600 truncate">{file.name}</p>
+                            </div>
                             <button
                               type="button"
                               onClick={() => removeImage(index)}
-                              className="text-red-500 hover:text-red-700"
+                              className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors"
                             >
-                              Remove
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
+                              </svg>
                             </button>
                           </div>
                         ))}

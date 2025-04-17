@@ -163,6 +163,7 @@ exports.createProperty = async (req, res) => {
       property_type: req.body.property_type,
       amenities: Array.isArray(req.body.amenities) ? req.body.amenities : [],
       property_images: Array.isArray(req.body.property_images) ? req.body.property_images : [],
+      about: req.body.about ? req.body.about.trim() : null,
       status: 'Available',
       u_id: req.body.u_id || req.user.u_id,
       is_deleted: false
@@ -217,8 +218,8 @@ exports.getMyProperties = async (req, res) => {
     const properties = await Property.findAll({ where: { u_id } });
     res.status(200).json(properties);
   } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    res.status(500).json({ error: err.message });
+  }
 };
 
 // Admin sees all properties
