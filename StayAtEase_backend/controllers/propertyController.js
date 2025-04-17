@@ -1,15 +1,204 @@
 const { Property, User } = require("../models");
+const cloudinary = require('../config/cloudinary');
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() });
+
+// Upload images to Cloudinary
+exports.uploadImages = async (req, res) => {
+  try {
+    console.log('Upload Images - Request received:', {
+      files: req.files ? req.files.length : 0,
+      body: req.body
+    });
+
+    if (!req.files || req.files.length === 0) {
+      console.log('No files uploaded');
+      return res.status(400).json({ error: 'No images uploaded' });
+    }
+
+    const uploadPromises = req.files.map(file => {
+      return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { 
+            resource_type: 'auto',
+            folder: 'stayatease-properties',
+            use_filename: true,
+            unique_filename: true
+          },
+          (error, result) => {
+            if (error) {
+              console.error('Cloudinary upload error:', error);
+              reject(error);
+            } else {
+              console.log('Image uploaded successfully:', {
+                url: result.secure_url,
+                folder: result.folder,
+                public_id: result.public_id
+              });
+              resolve(result.secure_url);
+            }
+          }
+        );
+        
+        const bufferStream = require('stream').Readable.from(file.buffer);
+        bufferStream.pipe(uploadStream);
+      });
+    });
+
+    const imageUrls = await Promise.all(uploadPromises);
+    console.log('All images uploaded successfully:', imageUrls);
+    
+    res.status(200).json({ 
+      success: true,
+      urls: imageUrls 
+    });
+  } catch (err) {
+    console.error('Error in uploadImages:', err);
+    res.status(500).json({ 
+      success: false,
+      error: 'Failed to upload images' 
+    });
+  }
+};
 
 // Owner creates property
-    exports.createProperty = async (req, res) => {
-      try {
-        const { u_id } = req.user; // from token
-        const property = await Property.create({ ...req.body, u_id });
-        res.status(201).json(property);
-      } catch (err) {
-        res.status(400).json({ error: err.message });
-      }
+exports.createProperty = async (req, res) => {
+  try {
+    console.log('Create Property - Request received:', {
+      body: req.body,
+      user: req.user,
+      headers: req.headers
+    });
+
+    // Validate required fields
+    const requiredFields = ['title', 'price', 'sq_ft', 'address', 'no_of_beds', 'no_of_bathrooms', 'property_type'];
+    const missingFields = requiredFields.filter(field => !req.body[field]);
+    
+    if (missingFields.length > 0) {
+      console.log('Missing required fields:', missingFields);
+      return res.status(400).json({ 
+        success: false,
+        error: `Missing required fields: ${missingFields.join(', ')}` 
+      });
+    }
+
+    // Validate numeric fields
+    if (isNaN(parseFloat(req.body.price)) || parseFloat(req.body.price) <= 0) {
+      console.log('Invalid price:', req.body.price);
+      return res.status(400).json({ 
+        success: false,
+        error: 'Please enter a valid price' 
+      });
+    }
+    if (isNaN(parseFloat(req.body.sq_ft)) || parseFloat(req.body.sq_ft) <= 0) {
+      console.log('Invalid square footage:', req.body.sq_ft);
+      return res.status(400).json({ 
+        success: false,
+        error: 'Please enter a valid square footage' 
+      });
+    }
+    if (isNaN(parseInt(req.body.no_of_beds)) || parseInt(req.body.no_of_beds) <= 0) {
+      console.log('Invalid number of beds:', req.body.no_of_beds);
+      return res.status(400).json({ 
+        success: false,
+        error: 'Please enter a valid number of bedrooms' 
+      });
+    }
+    if (isNaN(parseInt(req.body.no_of_bathrooms)) || parseInt(req.body.no_of_bathrooms) <= 0) {
+      console.log('Invalid number of bathrooms:', req.body.no_of_bathrooms);
+      return res.status(400).json({ 
+        success: false,
+        error: 'Please enter a valid number of bathrooms' 
+      });
+    }
+
+    // Validate property type
+    const validPropertyTypes = ['Apartment', 'Villa', 'Condo'];
+    if (!req.body.property_type) {
+      console.log('Property type is missing');
+      return res.status(400).json({ 
+        success: false,
+        error: 'Property type is required' 
+      });
+    }
+
+    // Convert property type to title case for consistency
+    const propertyType = req.body.property_type.charAt(0).toUpperCase() + 
+                        req.body.property_type.slice(1).toLowerCase();
+    
+    if (!validPropertyTypes.includes(propertyType)) {
+      console.log('Invalid property type:', req.body.property_type);
+      return res.status(400).json({ 
+        success: false,
+        error: `Invalid property type. Must be one of: ${validPropertyTypes.join(', ')}` 
+      });
+    }
+
+    // Update the property type in the request body
+    req.body.property_type = propertyType;
+
+    // Validate user is a property owner
+    const user = await User.findByPk(req.body.u_id);
+    console.log('User found:', user ? {
+      u_id: user.u_id,
+      userType: user.userType
+    } : 'User not found');
+
+    if (!user || user?.userType !== 'Property_Owner') {
+      console.log('User not authorized to create property');
+      return res.status(403).json({ 
+        success: false,
+        error: 'Only property owners can add properties' 
+      });
+    }
+
+    // Prepare property data
+    const propertyData = {
+      title: req.body.title.trim(),
+      price: parseFloat(req.body.price),
+      sq_ft: parseFloat(req.body.sq_ft),
+      address: req.body.address.trim(),
+      no_of_beds: parseInt(req.body.no_of_beds),
+      no_of_bathrooms: parseInt(req.body.no_of_bathrooms),
+      property_type: req.body.property_type,
+      amenities: Array.isArray(req.body.amenities) ? req.body.amenities : [],
+      property_images: Array.isArray(req.body.property_images) ? req.body.property_images : [],
+      status: 'Available',
+      u_id: req.body.u_id || req.user.u_id,
+      is_deleted: false
     };
+
+    console.log('Property data prepared:', propertyData);
+
+    
+    // Create property
+    const property = await Property.create(propertyData);
+
+    console.log('Property created successfully:', property.toJSON());
+    
+    // Fetch the created property with user details
+    const createdProperty = await Property.findByPk(property.p_id, {
+      include: [{
+        model: User,
+        attributes: ['u_id', 'full_name', 'email']
+      }]
+    });
+
+    console.log('Created property with user details:', createdProperty.toJSON());
+
+    res.status(201).json({
+      success: true,
+      message: 'Property added successfully',
+      property: createdProperty
+    });
+  } catch (err) {
+    console.error('Error in createProperty:', err);
+    res.status(400).json({ 
+      success: false,
+      error: err.message || 'Failed to create property'
+    });
+  }
+};
 
 // All available properties (visible to all users)
 exports.getAllProperties = async (req, res) => {
