@@ -25,7 +25,7 @@ export default function HomePage() {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/properties");
+        const response = await axios.get("http://localhost:5000/api/properties?limit=6");
         setProperties(response.data);
       } catch (error) {
         console.error("Error fetching properties:", error);
