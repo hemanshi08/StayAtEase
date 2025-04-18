@@ -1,26 +1,64 @@
 const { Review, Property ,User } = require("../models");
+const updatePropertyRating = require('../utils/updatePropertyRating');
+// Add or update a review (only for tenants)
+// Add or update a review (only for tenants)
 
-// Tenant creates or updates review
-exports.createOrUpdateReview = async (req, res) => {
+
+exports.addOrUpdateReview = async (req, res) => {
   try {
-    const { u_id } = req.user; // From token
-    const { p_id, rating, review } = req.body;
-
-    const existing = await Review.findOne({ where: { u_id, p_id } });
-
-    if (existing) {
-      existing.rating = rating;
-      existing.review = review;
-      await existing.save();
-      return res.status(200).json({ message: "Review updated", review: existing });
+    console.log("User:", req.user); 
+    if (req.user.userType !== 'tenant') {
+      return res.status(403).json({ error: 'Only tenants can submit reviews' });
     }
 
-    const newReview = await Review.create({ u_id, p_id, rating, review });
-    res.status(201).json({ message: "Review created", review: newReview });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+    const { p_id, rating, review: comment } = req.body;
+    console.log("Body:", req.body); 
+    if (!p_id || !rating || rating < 1 || rating > 5 || !comment) {
+      return res.status(400).json({ error: 'Invalid input data' });
+    }
+
+    const property = await Property.findByPk(p_id);
+    if (!property) {
+      return res.status(404).json({ error: 'Property not found' });
+    }
+
+    let review = await Review.findOne({
+      where: {
+        p_id,
+        u_id: req.user.id
+      }
+    });
+
+    let isNew = false;
+
+    if (review) {
+      review.rating = rating;
+      review.review = comment;
+      review.date = new Date();
+    } else {
+      review = await Review.create({
+        p_id,
+        u_id: req.user.id,
+        rating,
+        review: comment
+      });
+      isNew = true;
+    }
+
+    await review.save();
+    await updatePropertyRating(p_id);
+
+    res.status(201).json({
+      message: isNew ? 'Review added successfully' : 'Review updated successfully',
+      review
+    });
+
+  } catch (error) {
+    console.error('Error adding/updating review:', error); 
+    res.status(500).json({ error: 'Server error' });
   }
 };
+
 
 // Get reviews for a property (Tenant, Owner, Admin)
 // exports.getReviewsByProperty = async (req, res) => {
@@ -131,3 +169,46 @@ exports.deleteReview = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+ exports.getAllReviewsForOwner =  async (req, res) => {
+  try {
+    const userId = req.user.id; // Auth middleware gives this
+    console.log("User ID from token:", userId);
+    // Step 1: Find all property IDs owned by this user
+    const properties = await Property.findAll({
+      where: { u_id: userId },
+      attributes: ['p_id']
+    });
+
+    const propertyIds = properties.map((prop) => prop.p_id);
+
+    if (propertyIds.length === 0) {
+      return res.status(200).json({ message: 'No properties found for this user.', reviews: [] });
+    }
+
+    // Step 2: Find all reviews for those properties
+    const reviews = await Review.findAll({
+      where: { p_id: propertyIds },
+      include: [
+        {
+          model: Property,
+          attributes: ['p_id', 'title', 'address'],
+          required: true
+        },
+        {
+          model: User,
+          attributes: ['u_id', 'fullName', 'profile_pic'],
+          required: true
+        }
+      ],
+      order: [['date', 'DESC']]
+    });
+
+    res.status(200).json({ message: 'Reviews fetched successfully.', reviews });
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    res.status(500).json({ message: 'Server error while fetching reviews.', error: error.message });
+  }
+};
+
