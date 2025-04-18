@@ -7,6 +7,7 @@ import HomePage from "./rental/home";
 import About from "./rental/PropertyPage";
 import PropertyPage from "./rental/PropertyPage";
 import WishlistPage from "./rental/WishlistPage";
+
 // import LoginPage from "./Components/LoginPage";
 import PropertyDetails from "./rental/PropertyDetailsPage";
 import Dashboard from "./Super_Admin/Dashboard";
@@ -17,7 +18,7 @@ import TotalReviews from "./Super_Admin/TotalReviews";
 import ProfileDetails from "./Super_Admin/superadmin_profiledetails";
 import ShowProperty from "./Super_Admin/ShowProperty";
 import EditUser from "./Super_Admin/EditUsers";
-
+import UserProfileDetails from "./rental/profilepage";
 
 import Header from "./Admin/component/header";
 import RoomOwnerDashboard from "./Admin/dashboard";
@@ -38,6 +39,7 @@ function AppRouter(){
           <Route path="properties" element={<PropertyPage />} />
           <Route path="wishlist" element={<WishlistPage />} />
           <Route path="property/:id" element={<PropertyDetails />} />
+          <Route path="profilepage" element={<UserProfileDetails />} />
         </Route>
 
         {/* Router for superAdmin */}

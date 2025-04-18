@@ -46,14 +46,13 @@ export default function Navbar() {
             {/* Auth Button */}
             {user && user.userType === "tenant" ? (
               <div className="flex items-center -space-x-2">
-                <img 
-                  src={user.profile_pic} 
-                  alt="Profile" 
-                  className="w-8 h-8 rounded-full object-cover"
-                  onError={(e) => {
-                    e.target.src = 'https://via.placeholder.com/32'; // Fallback image
-                  }}
-                />
+                      <Link to="/profilepage">
+  <img 
+    src="/profile.png" 
+    className="w-10 h-10 rounded-full border border-gray-300 hover:border-gray-400 transition duration-200" 
+    alt="User" 
+  />
+</Link> 
                 <span className="text-white">{user.name}</span>
                 <button
                   onClick={handleLogout}
@@ -88,9 +87,13 @@ export default function Navbar() {
             
             {user ? (
               <div className="flex flex-col items-center space-y-4 w-full">
-                <Link to="/profile" className="text-gray-700 hover:text-blue-500">
-                  {user.name}
-                </Link>
+               <Link to="/profilepage">
+  <img 
+    src="/profile.png" 
+    className="w-10 h-10 rounded-full border border-gray-300 hover:border-gray-400 transition duration-200" 
+    alt="User" 
+  />
+</Link> 
                 <button 
                   onClick={handleLogout}
                   className="flex items-center px-4 py-2 text-red-600 hover:text-red-700"

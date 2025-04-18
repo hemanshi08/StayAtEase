@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 
-const ProfileDetails = () => {
+const UserProfileDetails = () => {
   const [form] = Form.useForm();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -535,4 +535,4 @@ const ProfileTextArea = ({ label, name, value, onChange, disabled }) => (
   </div>
 );
 
-export default ProfileDetails; 
+export default UserProfileDetails; 
