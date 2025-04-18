@@ -1,21 +1,29 @@
 const { Inquiry, Property, User } = require('../models');
 
-exports.addInquiry = async (req, res) => {
+exports.createInquiry = async (req, res) => {
   try {
-    const { p_id, message } = req.body;
+    const { p_id, message, name, email, phone } = req.body;
 
-    const newInquiry = await Inquiry.create({
-      u_id: req.user.u_id,
+    if (!p_id || !message || !name || !email || !phone) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const inquiry = await Inquiry.create({
+      u_id: req.user.id, // from auth middleware
       p_id,
       message,
+      name,
+      email,
+      phone,
     });
 
-    res.status(201).json(newInquiry);
+    res.status(201).json({ message: "Inquiry submitted successfully", inquiry });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to create inquiry' });
+    console.error("Error creating inquiry:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 exports.getOwnerInquiries = async (req, res) => {
   try {

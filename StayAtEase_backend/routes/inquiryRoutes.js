@@ -5,7 +5,7 @@ const { verifyToken } = require('../middleware/authMiddleware');
 const { requireRole } = require('../middleware/roleMiddleware');
 
 // Tenant: Add inquiry
-router.post('/', verifyToken, requireRole('tenant'), inquiryController.addInquiry);
+router.post('/', verifyToken, requireRole('tenant'),inquiryController.createInquiry);
 
 // Property Owner: Get inquiries for their properties
 router.get('/owner', verifyToken, requireRole('Property_Owner'), inquiryController.getOwnerInquiries);
