@@ -1,13 +1,24 @@
 import React, { useState } from "react";
 import { Modal, Button, Carousel, Rate, Input, message , Form} from "antd";
 import { PhoneOutlined, SendOutlined, EditOutlined, ClockCircleOutlined } from "@ant-design/icons";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Reviews from "../Components/ReviewPage";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
+import LoginModal from "../Components/LoginPage";
+import axios from "axios";
 
 const PropertyDetails = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  
+  // Get property ID from URL params
+  const { id: propertyId } = useParams();
+  
+  // Debug logs
+  console.log("URL Property ID:", propertyId);
+  console.log("Location state:", location.state);
+  
   const {
     title,
     location: propertyLocation,
@@ -15,10 +26,17 @@ const PropertyDetails = () => {
     beds,
     baths,
     sqft,
-    rating = 0, // Default to 0 if undefined
-    reviews = [], // Default to empty array to avoid undefined errors
-    image
+    rating = 0,
+    reviews = [],
+    image,
+    id: stateId
   } = location.state || {};
+
+  // Use URL ID if state ID is not available
+  const id = stateId || propertyId;
+  
+  // Debug log for final ID
+  console.log("Final Property ID:", id);
 
   const images = [
     image,
@@ -36,7 +54,9 @@ const PropertyDetails = () => {
   const [reviewText, setReviewText] = useState("");
   const [form] = Form.useForm(); // Form instance to reset fields
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [showReviewAfterLogin, setShowReviewAfterLogin] = useState(false);
+  const [existingReview, setExistingReview] = useState(null);
   const { TextArea } = Input;
 
   const openSlider = (index) => {
@@ -52,25 +72,85 @@ const PropertyDetails = () => {
     
   };
 
-  const handleReviewSubmit = () => {
+  const handleReviewSubmit = async () => {
     if (userRating === 0 || reviewText.trim() === "") {
       message.error("Please provide a rating and review.");
       return;
     }
+  
+    const token = localStorage.getItem("token");
+  
+    if (!token) {
+      message.error("You must be logged in to submit a review.");
+      return;
+    }
 
-     // Simulate API call (Replace with actual API logic)
-  setReviewModal(false);
-  setUserRating(0);  // Reset Rating
-  setReviewText(""); // Clear Review Text
+    if (!id) {
+      message.error("Property ID is missing. Please try again.");
+      return;
+    }
+  
+    try {
+      const reviewData = {
+        p_id: id,
+        rating: userRating,
+        review: reviewText
+      };
 
-  setTimeout(() => {
-    setThankYouModal(true);
-  }, 500);
+      console.log("Submitting review with data:", reviewData);
+
+      const response = await fetch("http://localhost:5000/api/reviews", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(reviewData)
+      });
+  
+      const data = await response.json();
+      console.log("Server response:", data);
+  
+      if (!response.ok) {
+        throw new Error(data.message || data.error || "Failed to submit review");
+      }
+  
+      message.success("Review submitted successfully!");
+      setReviewModal(false);
+      setUserRating(0);
+      setReviewText("");
+      setTimeout(() => {
+        setThankYouModal(true);
+      }, 500);
+    } catch (err) {
+      console.error("Review submission error:", err);
+      message.error(err.message || "Failed to submit review. Please try again.");
+    }
+  };
+  
+
+const handleReviewButtonClick = () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    message.info("Please login to write a review");
+    setShowReviewAfterLogin(true); // Flag to show review modal after login
+    setIsLoginModalOpen(true); // Show login modal first
+  } else {
+    setReviewModal(true); // Show review modal directly if logged in
+  }
 };
 
 // Open Modal
 const showModal = () => {
-  setIsModalVisible(true);
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    message.info("Please login to send an inquiry.");
+    setIsLoginModalOpen(true); // Show login modal
+  } else {
+    setIsModalVisible(true); // Show inquiry modal
+  }
 };
 
 // Close Modal and Reset Form
@@ -80,11 +160,41 @@ const handleCancel = () => {
 };
 
 // Handle Form Submission
-const handleSubmit = (values) => {
-  console.log("Inquiry Data:", values);
-  form.resetFields(); // Clear fields after submit
-  setIsModalVisible(false);
+const handleSubmit = async (values) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      message.error("You must be logged in to submit an inquiry.");
+      return;
+    }
+
+    const payload = {
+      message: values.message,
+      p_id: id, // Make sure `id` is the current property ID
+    };
+
+    const response = await axios.post(
+      "http://localhost:5000/api/inquiries",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 201) {
+      message.success("Inquiry submitted successfully!");
+      form.resetFields(); // clear form after successful submission
+      setIsModalVisible(false); // close the modal
+    }
+  } catch (error) {
+    console.error("Inquiry submission failed:", error);
+    message.error("Something went wrong. Please try again.");
+  }
 };
+
 
   return (
    
@@ -185,7 +295,7 @@ const handleSubmit = (values) => {
             <h2 className="text-2xl font-semibold">About this property</h2>
             <p className="text-gray-600 tracking-wider leading-relaxed">
               This stunning apartment offers modern living at its finest. With breathtaking city views, premium amenities,
-              and a prime location, it’s perfect for those seeking luxury and convenience.
+              and a prime location, it's perfect for those seeking luxury and convenience.
             </p>
           </div>
         </div>
@@ -211,9 +321,14 @@ const handleSubmit = (values) => {
               <Button icon={<SendOutlined />} className="w-full mt-2" onClick={showModal}>
                 Send Inquiry
               </Button>
-              <Button type="link" icon={<EditOutlined />} className="w-full mt-2" onClick={() => setReviewModal(true)}>
-                Write Review
-              </Button>
+              <Button 
+  type="link" 
+  icon={<EditOutlined />} 
+  className="w-full mt-2" 
+  onClick={handleReviewButtonClick}
+>
+  Write Review
+</Button>
             </div>
             <div className="mt-6 flex flex-col gap-2">
               <h2 className="mt-6 flex text-lg font-semibold">
@@ -262,53 +377,43 @@ const handleSubmit = (values) => {
 
       {/* Modal for Inquiry Form */}
       <Modal
-        title="Send us an inquiry"
-        open={isModalVisible}
-        onCancel={handleCancel}
-        footer={null} // Remove default footer buttons
-      >
-        <Form form={form} layout="vertical" onFinish={handleSubmit}>
-          <Form.Item
-            label="Full Name"
-            name="fullName"
-            rules={[{ required: true, message: "Please enter your full name" }]}
-          >
-            <Input placeholder="Enter your full name" />
-          </Form.Item>
+  title="Send us an inquiry"
+  open={isModalVisible}
+  onCancel={handleCancel}
+  footer={null}
+>
+  <Form form={form} layout="vertical" onFinish={handleSubmit}>
+    
+    <Form.Item
+      name="message"
+      label="Message"
+      rules={[{ required: true, message: "Please enter your message" }]}
+    >
+      <Input.TextArea placeholder="Write your inquiry here..." rows={4} />
+    </Form.Item>
 
-          <Form.Item
-            label="Email Address"
-            name="email"
-            rules={[{ required: true, type: "email", message: "Please enter a valid email" }]}
-          >
-            <Input placeholder="Enter your email address" />
-          </Form.Item>
+    <Form.Item>
+      <Button type="primary" htmlType="submit" className="w-full">
+        Submit Inquiry
+      </Button>
+    </Form.Item>
+  </Form>
+</Modal>
 
-          <Form.Item
-            label="Contact No"
-            name="contact"
-            rules={[{ required: true, message: "Please enter your contact number" }]}
-          >
-            <Input placeholder="Enter your contact no" />
-          </Form.Item>
-
-          <Form.Item
-            label="Your Message"
-            name="message"
-            rules={[{ required: true, message: "Please enter your message" }]}
-          >
-            <Input.TextArea placeholder="Enter your message" rows={4} />
-          </Form.Item>
-
-          {/* Submit Button */}
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              Send Inquiry
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
-
+<LoginModal 
+  isModalOpen={isLoginModalOpen}
+  handleCancel={() => {
+    setIsLoginModalOpen(false);
+    setShowReviewAfterLogin(false); // Clear the flag if login is canceled
+  }}
+  onLoginSuccess={() => {
+    setIsLoginModalOpen(false);
+    if (showReviewAfterLogin) {
+      setReviewModal(true); // Show review modal after successful login
+      setShowReviewAfterLogin(false); // Reset the flag
+    }
+  }}
+/>
 
       {/* Reviews Section */}
       <Reviews rating={rating} reviews={reviews} />

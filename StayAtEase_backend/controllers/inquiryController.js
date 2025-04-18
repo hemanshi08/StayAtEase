@@ -1,20 +1,29 @@
 const { Inquiry, Property, User } = require('../models');
 
+
+
 exports.createInquiry = async (req, res) => {
   try {
-    const { p_id, message, name, email, phone } = req.body;
+    const { p_id, message } = req.body;
 
-    if (!p_id || !message || !name || !email || !phone) {
-      return res.status(400).json({ error: "All fields are required" });
+    if (!p_id || !message) {
+      return res.status(400).json({ error: "Property ID and message are required" });
+    }
+
+    // Fetch user details from DB using token-based user ID
+    const user = await User.findByPk(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
 
     const inquiry = await Inquiry.create({
-      u_id: req.user.id, // from auth middleware
+      u_id: req.user.id,
       p_id,
       message,
-      name,
-      email,
-      phone,
+      name: user.fullName,
+      email: user.email,
+      phone: user.phone,
     });
 
     res.status(201).json({ message: "Inquiry submitted successfully", inquiry });
@@ -23,6 +32,7 @@ exports.createInquiry = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 
 exports.getOwnerInquiries = async (req, res) => {

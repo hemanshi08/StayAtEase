@@ -11,7 +11,23 @@ const PropertyCard = ({ id, image, title, location, beds, baths, sqft, rating, p
   
 
   const handleViewDetails = () => {
-    navigate(`/property/${id}`, { state: { image, title, location, beds, baths, sqft, rating, price,reviews} });
+    // Debug log to check what data we're passing
+    console.log("Navigating with property ID:", id);
+    
+    navigate(`/property/${id}`, { 
+      state: { 
+        id: id, // Explicitly set the id
+        image, 
+        title, 
+        location, 
+        beds, 
+        baths, 
+        sqft, 
+        rating, 
+        price,
+        reviews 
+      } 
+    });
   };
 
   return (
