@@ -8,7 +8,7 @@ const { requireRole } = require('../middleware/roleMiddleware');
 router.post('/', verifyToken, requireRole('tenant'),inquiryController.createInquiry);
 
 // Property Owner: Get inquiries for their properties
-router.get('/owner', verifyToken, requireRole('Property_Owner'), inquiryController.getOwnerInquiries);
+router.get("/owner-inquiries", verifyToken,requireRole("Property_Owner"),inquiryController.getAllInquiriesForOwner);
 
 // Admin: Get all inquiries
 router.get('/admin', verifyToken, requireRole('admin'), inquiryController.getAllInquiries);

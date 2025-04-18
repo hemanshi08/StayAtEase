@@ -55,7 +55,7 @@ const PropertyReviews = () => {
           <SearchOutlined className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
             type="text"
-            className="border border-gray-300 rounded-full py-2 pl-10 pr-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full"
+            className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-300 focus:border-blue-200 transition duration-200 w-full"
             placeholder="Search reviews by reviewer name..."
             value={searchTerm}
             onChange={(e) => {
