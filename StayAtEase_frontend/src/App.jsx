@@ -1,11 +1,12 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import AppRouter from "./AppRouter";
-import Reviews from "./Components/ReviewPage";
+
 
 function App() {
   return (
-   <AppRouter/>
-  
+
+    <AppRouter/>
   );
 }
 
