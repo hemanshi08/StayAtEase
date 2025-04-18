@@ -131,3 +131,46 @@ exports.deleteReview = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+ exports.getAllReviewsForOwner =  async (req, res) => {
+  try {
+    const userId = req.user.id; // Auth middleware gives this
+    console.log("User ID from token:", userId);
+    // Step 1: Find all property IDs owned by this user
+    const properties = await Property.findAll({
+      where: { u_id: userId },
+      attributes: ['p_id']
+    });
+
+    const propertyIds = properties.map((prop) => prop.p_id);
+
+    if (propertyIds.length === 0) {
+      return res.status(200).json({ message: 'No properties found for this user.', reviews: [] });
+    }
+
+    // Step 2: Find all reviews for those properties
+    const reviews = await Review.findAll({
+      where: { p_id: propertyIds },
+      include: [
+        {
+          model: Property,
+          attributes: ['p_id', 'title', 'address'],
+          required: true
+        },
+        {
+          model: User,
+          attributes: ['u_id', 'fullName', 'profile_pic'],
+          required: true
+        }
+      ],
+      order: [['date', 'DESC']]
+    });
+
+    res.status(200).json({ message: 'Reviews fetched successfully.', reviews });
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    res.status(500).json({ message: 'Server error while fetching reviews.', error: error.message });
+  }
+};
+
