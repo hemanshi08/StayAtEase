@@ -1,4 +1,4 @@
-const { Property, User } = require("../models");
+const { Property, User , Review, Inquiry } = require("../models");
 const cloudinary = require('../config/cloudinary');
 const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
@@ -200,6 +200,139 @@ exports.createProperty = async (req, res) => {
     });
   }
 };
+
+
+
+// Get property by ID with associations
+// exports.getPropertyById = async (req, res) => {
+//   try {
+//     console.log('Fetching property with id:', req.params.id);
+    
+//     const property = await Property.findOne({
+//       where: { p_id: req.params.id, is_deleted: false },
+//       include: [
+//         {
+//           model: User,
+//           attributes: ['u_id', 'full_name', 'email', 'phone', 'profile_pic']
+//         },
+//         {
+//           model: Review,
+//           include: [{
+//             model: User,
+//             attributes: ['u_id', 'full_name', 'profile_pic']
+//           }],
+//           limit: 5
+//         },
+//         {
+//           model: Inquiry,
+//           include: [{
+//             model: User,
+//             attributes: ['u_id', 'full_name', 'email', 'profile_pic']
+//           }],
+//           limit: 5
+//         }
+//       ]
+//     });
+
+//     if (!property) {
+//       return res.status(404).json({ success: false, message: 'Property not found' });
+//     }
+
+//     res.json({ success: true, property });
+//   } catch (error) {
+//     console.error('Error fetching property:', error.message, error.stack);
+//     res.status(500).json({ success: false, message: 'Server error' });
+//   }
+// };
+
+exports.getPropertyById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const property = await Property.findOne({
+      where: { p_id: id, is_deleted: false },
+      include: [
+        {
+          model: User,
+          attributes: ["u_id", "fullName", "email", "phone", "profile_pic"]
+        },
+        {
+          model: Review,
+          include: [
+            {
+              model: User,
+              attributes: ["u_id", "fullName", "email"]
+            }
+          ]
+        },
+        {
+          model: Inquiry,
+          include: [
+            {
+              model: User,
+              attributes: ["u_id", "fullName", "email"]
+            }
+          ]
+        }
+      ]
+    });
+
+    if (!property) {
+      return res.status(404).json({ error: "Property not found" });
+    }
+
+    return res.status(200).json(property);
+  } catch (error) {
+    console.error("Error in getPropertyById:", error);
+    return res.status(500).json({ error: "Something went wrong" });
+  }
+};
+// Get reviews for a property
+exports.getPropertyReviews = async (req, res) => {
+  try {
+    const reviews = await Review.findAll({
+      where: { p_id: req.params.id },
+      include: [{
+        model: User,
+        attributes: ['u_id', 'name', 'profileImage']
+      }],
+      order: [['createdAt', 'DESC']]
+    });
+
+    res.json({ success: true, reviews });
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+// Get inquiries for a property
+exports.getPropertyInquiries = async (req, res) => {
+  try {
+    const inquiries = await Inquiry.findAll({
+      where: { p_id: req.params.id },
+      include: [{
+        model: User,
+        attributes: ['u_id', 'name', 'email', 'phone']
+      }],
+      order: [['createdAt', 'DESC']]
+    });
+
+    res.json({ success: true, inquiries });
+  } catch (error) {
+    console.error('Error fetching inquiries:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+
+
+
+
+
+
+
+
 
 // All available properties (visible to all users)
 exports.getAllProperties = async (req, res) => {
