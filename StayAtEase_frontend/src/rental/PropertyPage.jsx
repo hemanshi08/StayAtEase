@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import PropertyCard from "../Components/Property_card";
 import { Input, Button, Select, Slider } from "antd";
+import { useAuth } from "../context/AuthContext";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -9,6 +10,8 @@ const { Option } = Select;
 const PropertyListing = () => {
   const [properties, setProperties] = useState([]);
   const [filteredProperties, setFilteredProperties] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
+  const { user } = useAuth();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("new");
@@ -17,7 +20,8 @@ const PropertyListing = () => {
 
   useEffect(() => {
     fetchProperties();
-  }, []);
+    if (user) fetchWishlist();
+  }, [user]);
 
   useEffect(() => {
     applyFilters();
@@ -32,10 +36,22 @@ const PropertyListing = () => {
     }
   };
 
+  const fetchWishlist = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/wishlist", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setWishlist(res.data.map((item) => item.property.p_id));
+    } catch (err) {
+      console.error("Error fetching wishlist:", err);
+    }
+  };
+
   const applyFilters = () => {
     let filtered = [...properties];
 
-    // 🔍 Search filter
     if (searchTerm) {
       filtered = filtered.filter((property) =>
         property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -43,20 +59,17 @@ const PropertyListing = () => {
       );
     }
 
-    // 🏠 Property type filter
     if (selectedType) {
       filtered = filtered.filter((property) =>
         property.property_type.toLowerCase() === selectedType.toLowerCase()
       );
     }
 
-    // 💰 Price range filter
     filtered = filtered.filter(
       (property) =>
         property.price >= priceRange[0] && property.price <= priceRange[1]
     );
 
-    // 📊 Sort order
     if (sortOrder === "asc") {
       filtered.sort((a, b) => a.price - b.price);
     } else if (sortOrder === "desc") {
@@ -129,6 +142,7 @@ const PropertyListing = () => {
             beds={property.no_of_beds}
             baths={property.no_of_bathrooms}
             sqft={property.sq_ft}
+            defaultLiked={wishlist.includes(property.p_id)}
             showDetailsButton={true}
           />
         ))}

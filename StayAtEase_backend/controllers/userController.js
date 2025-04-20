@@ -240,3 +240,26 @@ exports.changePassword = async (req, res) => {
     res.status(500).json({ error: 'Failed to change password' });
   }
 };
+
+exports.getAllTenants = async (req, res) => {
+  try {
+    // Verify admin role (assuming you store role in req.user)
+    if (req.user.userType !== 'admin') {
+      return res.status(403).json({ error: 'Unauthorized access' });
+    }
+
+    const tenants = await req.db.User.findAll({
+      where: {
+        userType: 'tenant'
+      },
+      attributes: { 
+        exclude: ['password'] // Don't return passwords
+      }
+    });
+
+    res.status(200).json(tenants);
+  } catch (err) {
+    console.error('Error fetching tenants:', err);
+    res.status(500).json({ error: 'Failed to fetch tenants' });
+  }
+};

@@ -20,7 +20,9 @@ export default function HomePage() {
   const [selectedLocation, setSelectedLocation] = useState("All");
   const [selectedType, setSelectedType] = useState("All");
   const [selectedBudget, setSelectedBudget] = useState("All");
+  const [wishlist, setWishlist] = useState([]);
 
+  const userId = localStorage.getItem("user_id");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,7 +30,7 @@ export default function HomePage() {
       try {
         const response = await axios.get("http://localhost:5000/api/properties");
         setProperties(response.data);
-        setFilteredProperties(response.data); // set both initially
+        setFilteredProperties(response.data);
       } catch (error) {
         console.error("Error fetching properties:", error);
       }
@@ -36,6 +38,19 @@ export default function HomePage() {
 
     fetchProperties();
   }, []);
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/wishlist/${userId}`);
+        setWishlist(res.data);
+      } catch (err) {
+        console.error("Failed to fetch wishlist:", err);
+      }
+    };
+
+    if (userId) fetchWishlist();
+  }, [userId]);
 
   const handleExploreClick = () => {
     navigate("/properties");
@@ -52,7 +67,7 @@ export default function HomePage() {
         if (selectedBudget === "₹2,500 - ₹5,500") return price >= 2500 && price <= 5500;
         if (selectedBudget === "₹5,500 - ₹7,500") return price > 5500 && price <= 7500;
         if (selectedBudget === "₹7,500+") return price > 7500;
-        return true; // "All"
+        return true;
       })();
 
       return matchesLocation && matchesType && matchesBudget;
@@ -81,8 +96,6 @@ export default function HomePage() {
     onClick: ({ key }) => setSelectedType(key),
   };
 
-  
- 
   const budgetMenu = {
     items: [
       { key: "All", label: "All Budgets" },
@@ -168,46 +181,50 @@ export default function HomePage() {
         </div>
       </div>
 
-     {/* Featured Properties */}
-<div className="bg-gray-100 py-2 mt-13">
-  <div className="max-w-6xl mx-auto mt-10 mb-10">
-    <h2 className="text-3xl font-semibold ml-5">Featured Properties</h2>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 mr-5 ml-5">
-      {filteredProperties.length > 0 ? (
-        filteredProperties
-          .slice(0, 6) // Only take first 6 properties
-          .map((property) => (
-            <PropertyCard
-              key={property.p_id}
-              id={property.p_id}
-              title={property.title}
-              location={property.address}
-              price={property.price}
-              rating={property.avgRating}
-              image={property.property_images[0] || "/default.jpg"}
-              beds={property.no_of_beds}
-              baths={property.no_of_bathrooms}
-              sqft={property.sq_ft}
-              showDetailsButton={true}
-            />
-          ))
-      ) : (
-        <div className="col-span-3 text-center">No properties found.</div>
-      )}
-    </div>
-    {/* Add a "View More" button if there are more than 6 properties */}
-    {filteredProperties.length > 6 && (
-      <div className="text-center mt-6">
-        <button
-          onClick={handleExploreClick}
-          className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition"
-        >
-          View More Properties
-        </button>
+      {/* Featured Properties */}
+      <div className="bg-gray-100 py-2 mt-13">
+        <div className="max-w-6xl mx-auto mt-10 mb-10">
+          <h2 className="text-3xl font-semibold ml-5">Featured Properties</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 mr-5 ml-5">
+            {filteredProperties.length > 0 ? (
+              filteredProperties.slice(0, 6).map((property) => {
+                const isWishlisted = wishlist.some(
+                  (item) => item.user_id === userId && item.property_id === property.p_id
+                );
+
+                return (
+                  <PropertyCard
+                    key={property.p_id}
+                    id={property.p_id}
+                    title={property.title}
+                    location={property.address}
+                    price={property.price}
+                    rating={property.avgRating}
+                    image={property.property_images[0] || "/default.jpg"}
+                    beds={property.no_of_beds}
+                    baths={property.no_of_bathrooms}
+                    sqft={property.sq_ft}
+                    showDetailsButton={true}
+                    defaultLiked={isWishlisted}
+                  />
+                );
+              })
+            ) : (
+              <div className="col-span-3 text-center">No properties found.</div>
+            )}
+          </div>
+          {filteredProperties.length > 6 && (
+            <div className="text-center mt-6">
+              <button
+                onClick={handleExploreClick}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition"
+              >
+                View More Properties
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-    )}
-  </div>
-</div>
 
       {/* About Section */}
       <div className="max-w-6xl mx-auto mt-13 flex flex-col md:flex-row items-center px-5 gap-7">

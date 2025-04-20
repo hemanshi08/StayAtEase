@@ -4,7 +4,8 @@ const {
   loginUser, 
   updateProfile, 
   changePassword,
-  getUserProfile 
+  getUserProfile ,
+  getAllTenants
 } = require("../controllers/userController");
 const { verifyToken } = require('../middleware/authMiddleware');
 const router = express.Router();
@@ -17,5 +18,8 @@ router.post("/login", loginUser);
 router.get("/profile", verifyToken, getUserProfile);
 router.put("/profile", verifyToken, updateProfile);
 router.put("/change-password", verifyToken, changePassword);
+
+// Admin-only route to get all tenants
+router.get('/admin/tenants', verifyToken, getAllTenants);
 
 module.exports = router;
