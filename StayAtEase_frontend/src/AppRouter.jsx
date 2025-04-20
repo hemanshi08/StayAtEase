@@ -28,6 +28,7 @@ import RommOwnerProfileDetails from "./Admin/ProfileDetails";
 import AdminPropertyDetails from "./Admin/admin-propertydetails";
 import PropertyMessages from "./Admin/PropertyMessages";
 import TenantLayout from "./Layouts/TenantLayout";
+import ProtectedRoute from './Layouts/ProtectedRoute';
 function AppRouter(){
   return (
    
@@ -36,7 +37,9 @@ function AppRouter(){
         <Route path='/' element={<TenantLayout/>}>
           <Route index element={<HomePage />} />
           <Route path="properties" element={<PropertyPage />} />
-          <Route path="wishlist" element={<WishlistPage />} />
+          <Route path="wishlist" element={<ProtectedRoute>
+            <WishlistPage />
+          </ProtectedRoute>} />
           <Route path="property/:id" element={<PropertyDetails />} />
         </Route>
 
