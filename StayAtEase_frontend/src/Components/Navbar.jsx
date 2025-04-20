@@ -65,24 +65,24 @@ export default function Navbar() {
 
             {/* Auth Button */}
             {user ? (
-              <div className="flex items-center -space-x-2">
-                <img 
-                  src={user.profile_pic} 
-                  alt="Profile" 
-                  className="w-8 h-8 rounded-full object-cover"
-                  onError={(e) => {
-                    e.target.src = 'https://via.placeholder.com/32';
-                  }}
-                />
-                <span className="text-white">{user.name}</span>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center text-red-500 hover:text-red-600 cursor-pointer"
-                >
-                  <LogOut size={20} className="text-red-500" />
-                  <span className="text-red-500">Logout</span>
-                </button>
-              </div>
+               <div className="flex items-center space-x-3">
+    
+               <Link to="/Userprofile">
+               <img 
+                 src="/profile.png" 
+                 className="w-10 h-10 rounded-full border border-gray-300 hover:border-gray-400 transition duration-200" 
+                 alt="User" 
+               />
+             </Link> 
+                <Link to="/" className="text-red-500 hover:text-red-600" onClick={handleLogout}>
+                   <LogOut size={22} />
+                 </Link>
+             
+                   {/* Mobile Menu Button */}
+                   <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+                           {isOpen ? <X size={24} /> : <Menu size={24} />}
+                         </button>
+               </div>
             ) : (
               <button 
                 onClick={() => setIsLoginModalOpen(true)} 

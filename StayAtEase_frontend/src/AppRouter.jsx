@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 
+
 import HomePage from "./rental/home";
 import About from "./rental/PropertyPage";
 import PropertyPage from "./rental/PropertyPage";
@@ -29,6 +30,7 @@ import AdminPropertyDetails from "./Admin/admin-propertydetails";
 import PropertyMessages from "./Admin/PropertyMessages";
 import TenantLayout from "./Layouts/TenantLayout";
 import ProtectedRoute from './Layouts/ProtectedRoute';
+import UserProfile from "./Components/UserProfile";
 function AppRouter(){
   return (
    
@@ -41,6 +43,7 @@ function AppRouter(){
             <WishlistPage />
           </ProtectedRoute>} />
           <Route path="property/:id" element={<PropertyDetails />} />
+          <Route path="UserProfile" element={<UserProfile />} />
         </Route>
 
         {/* Router for superAdmin */}

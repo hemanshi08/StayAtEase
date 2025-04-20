@@ -100,7 +100,7 @@ const PropertyCard = ({
               {loading ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-900"></div>
               ) : liked ? (
-                <HeartFilled className="text-red-500" />
+                <HeartFilled className="!text-red-500" />
               ) : (
                 <HeartOutlined />
               )}

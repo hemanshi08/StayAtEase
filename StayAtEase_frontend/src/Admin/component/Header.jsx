@@ -12,7 +12,7 @@ export default function Header() {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
-    logout(); // Ensure this also clears context if needed
+    LogOut(); // Ensure this also clears context if needed
     navigate("/"); // Redirect to home page
   };
   return (
