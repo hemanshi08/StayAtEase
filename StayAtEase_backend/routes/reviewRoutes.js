@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { createOrUpdateReview,addOrUpdateReview, getReviewsByProperty, deleteReview,getAllReviewsForOwner } = require("../controllers/reviewController");
+const { createOrUpdateReview,addOrUpdateReview, getReviewsByProperty, deleteReview,getAllReviewsForOwner ,getAllReviews } = require("../controllers/reviewController");
 const { verifyToken } = require("../middleware/authMiddleware");
 const { requireRole } = require("../middleware/roleMiddleware");
 const { getAllReviews } = require('../controllers/reviewController');
@@ -24,4 +24,5 @@ router.get("/owner-reviews", verifyToken,requireRole("Property_Owner"), getAllRe
 router.get('/all-reviews', verifyToken, requireRole("Admin", "Super_Admin"), getAllReviews);
 
 
+router.get('/admin-reviews', verifyToken, getAllReviews);
 module.exports = router;
