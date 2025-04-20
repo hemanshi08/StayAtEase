@@ -168,35 +168,46 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Featured Properties */}
-      <div className="bg-gray-100 py-2 mt-13">
-        <div className="max-w-6xl mx-auto mt-10 mb-10">
-          <h2 className="text-3xl font-semibold ml-5">Featured Properties</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 mr-5 ml-5">
-          
-            {filteredProperties.length > 0 ? (
-              filteredProperties.map((property) => (
-                console.log(property),
-                <PropertyCard
-                  key={property.p_id}
-                  id={property.p_id}
-                  title={property.title}
-                  location={property.address}
-                  price={property.price}
-                  rating={property.avgRating}
-                  image={property.property_images[0] || "/default.jpg"}
-                  beds={property.no_of_beds}
-                  baths={property.no_of_bathrooms}
-                  sqft={property.sq_ft}
-                  showDetailsButton={true}
-                />
-              ))
-            ) : (
-              <div className="col-span-3 text-center">No properties found.</div>
-            )}
-          </div>
-        </div>
+     {/* Featured Properties */}
+<div className="bg-gray-100 py-2 mt-13">
+  <div className="max-w-6xl mx-auto mt-10 mb-10">
+    <h2 className="text-3xl font-semibold ml-5">Featured Properties</h2>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 mr-5 ml-5">
+      {filteredProperties.length > 0 ? (
+        filteredProperties
+          .slice(0, 6) // Only take first 6 properties
+          .map((property) => (
+            <PropertyCard
+              key={property.p_id}
+              id={property.p_id}
+              title={property.title}
+              location={property.address}
+              price={property.price}
+              rating={property.avgRating}
+              image={property.property_images[0] || "/default.jpg"}
+              beds={property.no_of_beds}
+              baths={property.no_of_bathrooms}
+              sqft={property.sq_ft}
+              showDetailsButton={true}
+            />
+          ))
+      ) : (
+        <div className="col-span-3 text-center">No properties found.</div>
+      )}
+    </div>
+    {/* Add a "View More" button if there are more than 6 properties */}
+    {filteredProperties.length > 6 && (
+      <div className="text-center mt-6">
+        <button
+          onClick={handleExploreClick}
+          className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition"
+        >
+          View More Properties
+        </button>
       </div>
+    )}
+  </div>
+</div>
 
       {/* About Section */}
       <div className="max-w-6xl mx-auto mt-13 flex flex-col md:flex-row items-center px-5 gap-7">
