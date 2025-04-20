@@ -70,7 +70,7 @@ const PropertyRow = ({ property, navigate }) => {
       <td className="p-4">
         <button 
           className="bg-blue-600 !text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
-          onClick={() => navigate(`/AdminPropertydetails.jsx/${property.p_id}`)}
+          onClick={() => navigate(`/AdminPropertydetails/${property.p_id}`)}
         >
           <EyeOutlined className="!text-white" /> View
         </button>

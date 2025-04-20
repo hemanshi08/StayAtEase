@@ -10,9 +10,11 @@ import {
 } from '@ant-design/icons';
 import { message } from 'antd';
 import Footer from '../Components/Footer';
+import SuperAdminNavbar from "./Superadmin_navbar";
 
 
-export default function AdminPropertydetails() {
+
+export default function SuperAdminPropertydetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [property, setProperty] = useState(null);
@@ -142,7 +144,8 @@ export default function AdminPropertydetails() {
   }
 
   if (error) {
-    return (
+    
+     (
       <div className="flex flex-col justify-center items-center h-screen">
         <ExclamationCircleOutlined className="text-red-500 text-4xl mb-4" />
         <div className="text-red-500 text-xl">{error}</div>
@@ -172,7 +175,10 @@ export default function AdminPropertydetails() {
 
   return (
     <div>
+         <SuperAdminNavbar />
       <div className='bg-gray-50 p-7'>
+               
+        
         <div className="max-w-7xl mx-auto pt-4 mb-6 mt-6">
           
           {/* Header Section */}
