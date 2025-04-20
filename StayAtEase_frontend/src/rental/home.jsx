@@ -16,17 +16,21 @@ import {
 
 export default function HomePage() {
   const [properties, setProperties] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState("Location");
-  const [selectedType, setSelectedType] = useState("Property Type");
-  const [selectedBudget, setSelectedBudget] = useState("Budget");
+  const [filteredProperties, setFilteredProperties] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState("All");
+  const [selectedType, setSelectedType] = useState("All");
+  const [selectedBudget, setSelectedBudget] = useState("All");
+  const [wishlist, setWishlist] = useState([]);
 
+  const userId = localStorage.getItem("user_id");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/properties?limit=6");
+        const response = await axios.get("http://localhost:5000/api/properties");
         setProperties(response.data);
+        setFilteredProperties(response.data);
       } catch (error) {
         console.error("Error fetching properties:", error);
       }
@@ -50,6 +54,26 @@ export default function HomePage() {
 
   const handleExploreClick = () => {
     navigate("/properties");
+  };
+
+  const handleFilterSearch = () => {
+    const filtered = properties.filter((property) => {
+      const matchesLocation =
+        selectedLocation === "All" || property.address.includes(selectedLocation);
+      const matchesType =
+        selectedType === "All" || property.property_type === selectedType;
+      const matchesBudget = (() => {
+        const price = property.price;
+        if (selectedBudget === "₹2,500 - ₹5,500") return price >= 2500 && price <= 5500;
+        if (selectedBudget === "₹5,500 - ₹7,500") return price > 5500 && price <= 7500;
+        if (selectedBudget === "₹7,500+") return price > 7500;
+        return true;
+      })();
+
+      return matchesLocation && matchesType && matchesBudget;
+    });
+
+    setFilteredProperties(filtered);
   };
 
   const locationsMenu = {
@@ -162,22 +186,29 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto mt-10 mb-10">
           <h2 className="text-3xl font-semibold ml-5">Featured Properties</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 mr-5 ml-5">
-            {properties.length > 0 ? (
-              properties.map((property) => (
-                <PropertyCard
-                  key={property.p_id}
-                  id={property.p_id}
-                  title={property.title}
-                  location={property.address}
-                  price={property.price}
-                  rating={0}
-                  image={property.property_images[0] || "/default.jpg"}
-                  beds={property.no_of_beds}
-                  baths={property.no_of_bathrooms}
-                  sqft={property.sq_ft}
-                  showDetailsButton={true}
-                />
-              ))
+            {filteredProperties.length > 0 ? (
+              filteredProperties.slice(0, 6).map((property) => {
+                const isWishlisted = wishlist.some(
+                  (item) => item.user_id === userId && item.property_id === property.p_id
+                );
+
+                return (
+                  <PropertyCard
+                    key={property.p_id}
+                    id={property.p_id}
+                    title={property.title}
+                    location={property.address}
+                    price={property.price}
+                    rating={property.avgRating}
+                    image={property.property_images[0] || "/default.jpg"}
+                    beds={property.no_of_beds}
+                    baths={property.no_of_bathrooms}
+                    sqft={property.sq_ft}
+                    showDetailsButton={true}
+                    defaultLiked={isWishlisted}
+                  />
+                );
+              })
             ) : (
               <div className="col-span-3 text-center">No properties found.</div>
             )}

@@ -1,26 +1,25 @@
 const express = require("express");
-const { 
-  registerUser, 
-  loginUser, 
-  updateProfile, 
-  changePassword,
-  getUserProfile ,
-  getAllTenants ,
-  getAllOwners
-} = require("../controllers/userController");
-const { verifyToken } = require('../middleware/authMiddleware');
 const router = express.Router();
+const { createOrUpdateReview,addOrUpdateReview, getReviewsByProperty, deleteReview,getAllReviewsForOwner ,getAllReviews } = require("../controllers/reviewController");
+const { verifyToken } = require("../middleware/authMiddleware");
+const { requireRole } = require("../middleware/roleMiddleware");
 
-// Auth routes
-router.post("/register", registerUser);
-router.post("/login", loginUser);
+// Add or update a review (protected route - only tenants)
+router.post(
+    '/',
+    verifyToken,
+    requireRole('tenant'),
+   addOrUpdateReview
+  );
 
-// Profile routes (protected)
-router.get("/profile", verifyToken, getUserProfile);
-router.put("/profile", verifyToken, updateProfile);
-router.put("/change-password", verifyToken, changePassword);
+// Owner, Tenant, Admin can fetch reviews for a property
+router.get('/property/:id', verifyToken, requireRole('Property_Owner'), getReviewsByProperty);
 
-// Admin-only route to get all tenants
-router.get('/admin/tenants', verifyToken, getAllTenants);
-router.get('/admin/owners', verifyToken, getAllOwners);
+
+
+// router.get('/property/:p_id', reviewController.getReviewsByPropertyId);
+
+router.get("/owner-reviews", verifyToken,requireRole("Property_Owner"), getAllReviewsForOwner);
+
+router.get('/admin-reviews', verifyToken, getAllReviews);
 module.exports = router;

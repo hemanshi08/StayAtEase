@@ -30,6 +30,7 @@ import RommOwnerProfileDetails from "./Admin/ProfileDetails";
 import AdminPropertyDetails from "./Admin/admin-propertydetails";
 import PropertyMessages from "./Admin/PropertyMessages";
 import TenantLayout from "./Layouts/TenantLayout";
+import AddProperty from "./Admin/AddProperty";
 function AppRouter(){
   return (
    
@@ -56,7 +57,7 @@ function AppRouter(){
         {/* Owner routes */}
         <Route path="/RoomOwnerDashboard" element={<RoomOwnerDashboard />} />
         <Route path="/PropertyReviews" element={<PropertyReviews />} />
-        <Route path="/propertyform" element={<PropertyForm />} />
+        <Route path="/AddProperty" element={<AddProperty />} />
         <Route path="/propertylistings" element={<PropertyListings />} />
         <Route path="/Massages" element={<PropertyMessages />} />
         <Route path="/MyProfile" element={<RommOwnerProfileDetails />} />

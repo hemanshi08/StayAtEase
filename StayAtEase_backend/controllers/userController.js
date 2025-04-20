@@ -263,21 +263,35 @@ exports.getAllTenants = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch tenants' });
   }
 };
+const { User, Property } = require('../models');
+const { Sequelize } = require('sequelize');
 
 exports.getAllOwners = async (req, res) => {
   try {
-    // Verify admin role (assuming you store role in req.user)
     if (req.user.userType !== 'admin') {
       return res.status(403).json({ error: 'Unauthorized access' });
     }
 
     const owners = await User.findAll({
       where: {
-        userType: 'Property_Owner'
+        userType: 'Property_Owner',
       },
-      attributes: { 
-        exclude: ['password'] // Don't return passwords
-      }
+      attributes: [
+        'u_id',
+        ['fullName', 'name'],
+        ['profile_pic', 'profileImage'],
+        'email',
+        ['phone', 'mobile'],
+        'status',
+        [Sequelize.fn('COUNT', Sequelize.col('Properties.p_id')), 'totalProperties']
+      ],
+      include: [
+        {
+          model: Property,
+          attributes: [],
+        },
+      ],
+      group: ['User.u_id'],
     });
 
     res.status(200).json(owners);

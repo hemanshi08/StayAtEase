@@ -9,6 +9,11 @@ const { Option } = Select;
 
 const PropertyListing = () => {
   const [properties, setProperties] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState(""); // "new", "asc", or "desc"
+  const [selectedType, setSelectedType] = useState(null);
+  const [priceRange, setPriceRange] = useState([1000, 20000]);
+  const [wishlist, setWishlist] = useState([]); // For now, can be empty or fetched if implemented
 
   useEffect(() => {
     fetchProperties();
@@ -22,6 +27,26 @@ const PropertyListing = () => {
       console.error("Error fetching properties:", err);
     }
   };
+
+  const filteredProperties = properties
+    .filter((property) => {
+      const matchesSearch =
+        property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        property.address.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesType = selectedType ? property.type === selectedType : true;
+
+      const matchesPrice =
+        property.price >= priceRange[0] && property.price <= priceRange[1];
+
+      return matchesSearch && matchesType && matchesPrice;
+    })
+    .sort((a, b) => {
+      if (sortOrder === "asc") return a.price - b.price;
+      if (sortOrder === "desc") return b.price - a.price;
+      if (sortOrder === "new") return new Date(b.created_at) - new Date(a.created_at);
+      return 0;
+    });
 
   return (
     <div className="p-8">
@@ -37,13 +62,22 @@ const PropertyListing = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           allowClear
         />
-        <Button type={sortOrder === "new" ? "primary" : "default"} onClick={() => setSortOrder("new")}>
+        <Button
+          type={sortOrder === "new" ? "primary" : "default"}
+          onClick={() => setSortOrder("new")}
+        >
           New
         </Button>
-        <Button type={sortOrder === "asc" ? "primary" : "default"} onClick={() => setSortOrder("asc")}>
+        <Button
+          type={sortOrder === "asc" ? "primary" : "default"}
+          onClick={() => setSortOrder("asc")}
+        >
           Price ascending
         </Button>
-        <Button type={sortOrder === "desc" ? "primary" : "default"} onClick={() => setSortOrder("desc")}>
+        <Button
+          type={sortOrder === "desc" ? "primary" : "default"}
+          onClick={() => setSortOrder("desc")}
+        >
           Price descending
         </Button>
         <Select
@@ -79,7 +113,7 @@ const PropertyListing = () => {
             title={property.title}
             location={property.address}
             price={property.price}
-            rating={0} // or fetch rating from reviews if available
+            rating={0} // Update if you have ratings
             image={property.property_images[0] || "../default.jpg"}
             beds={property.no_of_beds}
             baths={property.no_of_bathrooms}

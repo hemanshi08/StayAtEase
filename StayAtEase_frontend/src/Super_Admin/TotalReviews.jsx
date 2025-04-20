@@ -19,7 +19,7 @@ function TotalReviews() {
           return;
         }
   
-        const response = await axios.get("http://localhost:5000/api/reviews/all-reviews", {
+        const response = await axios.get("http://localhost:5000/api/reviews/admin-reviews", {
           headers: {
             Authorization: `Bearer ${token}`
           },
