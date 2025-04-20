@@ -14,6 +14,9 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path ? "text-blue-500 font-bold" : "text-gray-700";
 
   const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
     logout();
     navigate("/");
   };

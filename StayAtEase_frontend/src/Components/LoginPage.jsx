@@ -15,6 +15,7 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { login, error: authError } = useAuth();
+  
 
   useEffect(() => {
     if (!isModalOpen) {
@@ -144,6 +145,8 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
           <Button type="link" onClick={() => setIsSignupOpen(true)} disabled={isLoading}>
             Sign up
           </Button>
+
+          
         </div>
       </Modal>
 

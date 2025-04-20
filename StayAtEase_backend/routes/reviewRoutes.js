@@ -15,9 +15,7 @@ router.post(
 // Owner, Tenant, Admin can fetch reviews for a property
 router.get('/property/:id', verifyToken, requireRole('Property_Owner'), getReviewsByProperty);
 
-// Admin can delete review
-// router.get('/',verifyToken , reviewController.getAllReviews);
-router.delete("/:r_id", verifyToken, requireRole("admin"), deleteReview);
+
 
 // router.get('/property/:p_id', reviewController.getReviewsByPropertyId);
 

@@ -240,6 +240,7 @@ const AddProperty = () => {
         property_type: formData.property_type,
         amenities: formData.amenities || [],
         property_images: formData.property_images || [],
+        about: formData.about.trim(),
         status: 'Available',
         u_id: storedUser.id,
         is_deleted: false
@@ -258,7 +259,15 @@ const AddProperty = () => {
       console.log('5. Server response:', response.data);
 
       if (response.data.success) {
-        message.success('Property added successfully!');
+        // Show success message
+        message.success({
+          content: 'Property added successfully!',
+          duration: 3,
+          style: {
+            marginTop: '5vh',
+          },
+        });
+
         // Reset form
         setFormData({
           title: "",
@@ -270,10 +279,17 @@ const AddProperty = () => {
           property_type: "",
           amenities: [],
           images: [],
-          property_images: []
+          property_images: [],
+          about: ""
         });
-        // Navigate to properties list
-        navigate('/properties');
+
+        // Reset form fields
+        form.resetFields();
+
+        // Navigate to properties list after 2 seconds
+        setTimeout(() => {
+          navigate('/RoomOwnerDashboard');
+        }, 2000);
       } else {
         throw new Error(response.data.message || 'Failed to add property');
       }
