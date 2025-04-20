@@ -12,6 +12,7 @@ import {
 import Footer from "../Components/Footer";
 import Header from "./component/header";
 
+
 // Stat Card Component
 const StatCard = ({ icon, title, count, loading }) => (
   <div className="w-full md:w-1/3 p-3">
@@ -49,7 +50,10 @@ const PropertyRow = ({ property, navigate }) => {
   
   const handleViewClick = () => {
     console.log("Navigating to property:", property.p_id); // Debug log
-    navigate(`/admin-property/${property.p_id}`);
+    navigate(`/admin-propertydetails/${property.p_id}`);
+
+
+
   };
   
   return (

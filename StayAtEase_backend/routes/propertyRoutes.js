@@ -10,6 +10,8 @@ const upload = multer({ storage: multer.memoryStorage() });
 router.get("/", propertyController.getAllProperties);
 router.get("/property/:id", propertyController.getPropertyById);
 
+
+
 // Property Owner routes
 router.post("/create", verifyToken, requireRole("Property_Owner"), propertyController.createProperty);
 router.get("/my", verifyToken, requireRole("Property_Owner"), propertyController.getMyProperties);
@@ -23,5 +25,6 @@ router.delete("/delete/:p_id", verifyToken, requireRole("admin"), propertyContro
 
 // Image upload route
 router.post("/upload-images", verifyToken, upload.array('images', 8), propertyController.uploadImages);
+
 
 module.exports = router;

@@ -261,7 +261,7 @@ exports.getPropertyById = async (req, res) => {
           include: [
             {
               model: User,
-              attributes: ["u_id", "fullName", "email"]
+              attributes: ["u_id", "fullName", "email",'profile_pic']
             }
           ]
         },
@@ -281,12 +281,18 @@ exports.getPropertyById = async (req, res) => {
       return res.status(404).json({ error: "Property not found" });
     }
 
-    return res.status(200).json(property);
+    const propData = property.get({ plain: true });
+
+      const reviews = propData.Reviews || [];
+      const totalRating = reviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+    const avgRating = reviews.length > 0 ? (totalRating / reviews.length).toFixed(1) : 0;
+   return res.status(200).json({...propData,avgRating: parseFloat(avgRating)});
   } catch (error) {
     console.error("Error in getPropertyById:", error);
     return res.status(500).json({ error: "Something went wrong" });
   }
 };
+
 // Get reviews for a property
 exports.getPropertyReviews = async (req, res) => {
   try {
@@ -337,9 +343,34 @@ exports.getPropertyInquiries = async (req, res) => {
 // All available properties (visible to all users)
 exports.getAllProperties = async (req, res) => {
   try {
-    const properties = await Property.findAll({ where: { status: "Available" } });
-    res.status(200).json(properties);
+    const properties = await Property.findAll({
+      where: { status: "Available" },
+      include: [
+        {
+          model: Review,
+          required: false, // include properties even without reviews
+          attributes: ['rating'] // only fetch rating from reviews
+        }
+      ]
+    });
+
+    // Calculate average rating manually
+    const formattedProperties = properties.map(property => {
+      const propData = property.get({ plain: true });
+
+      const reviews = propData.Reviews || [];
+      const totalRating = reviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+      const avgRating = reviews.length > 0 ? (totalRating / reviews.length).toFixed(1) : 0;
+
+      return {
+        ...propData,
+        avgRating: parseFloat(avgRating)
+      };
+    });
+
+    res.status(200).json(formattedProperties);
   } catch (err) {
+    console.error('Error fetching properties:', err);
     res.status(500).json({ error: err.message });
   }
 };

@@ -16,10 +16,9 @@ import {
 
 export default function HomePage() {
   const [properties, setProperties] = useState([]);
-  const [filteredProperties, setFilteredProperties] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState("All");
-  const [selectedType, setSelectedType] = useState("All");
-  const [selectedBudget, setSelectedBudget] = useState("All");
+  const [selectedLocation, setSelectedLocation] = useState("Location");
+  const [selectedType, setSelectedType] = useState("Property Type");
+  const [selectedBudget, setSelectedBudget] = useState("Budget");
 
   const navigate = useNavigate();
 
@@ -28,7 +27,6 @@ export default function HomePage() {
       try {
         const response = await axios.get("http://localhost:5000/api/properties?limit=6");
         setProperties(response.data);
-        setFilteredProperties(response.data); // set both initially
       } catch (error) {
         console.error("Error fetching properties:", error);
       }
@@ -37,28 +35,21 @@ export default function HomePage() {
     fetchProperties();
   }, []);
 
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/wishlist/${userId}`);
+        setWishlist(res.data);
+      } catch (err) {
+        console.error("Failed to fetch wishlist:", err);
+      }
+    };
+
+    if (userId) fetchWishlist();
+  }, [userId]);
+
   const handleExploreClick = () => {
     navigate("/properties");
-  };
-
-  const handleFilterSearch = () => {
-    const filtered = properties.filter((property) => {
-      const matchesLocation =
-        selectedLocation === "All" || property.address.includes(selectedLocation);
-      const matchesType =
-        selectedType === "All" || property.property_type === selectedType;
-      const matchesBudget = (() => {
-        const price = property.price;
-        if (selectedBudget === "₹2,500 - ₹5,500") return price >= 2500 && price <= 5500;
-        if (selectedBudget === "₹5,500 - ₹7,500") return price > 5500 && price <= 7500;
-        if (selectedBudget === "₹7,500+") return price > 7500;
-        return true; // "All"
-      })();
-
-      return matchesLocation && matchesType && matchesBudget;
-    });
-
-    setFilteredProperties(filtered);
   };
 
   const locationsMenu = {
@@ -75,8 +66,8 @@ export default function HomePage() {
     items: [
       { key: "All", label: "All Types" },
       { key: "Apartment", label: "Apartment" },
-      { key: "House", label: "House" },
-      { key: "Studio", label: "Studio" },
+      { key: "Villa", label: "Villa" },
+      { key: "Condo", label: "Condo" },
     ],
     onClick: ({ key }) => setSelectedType(key),
   };
@@ -171,8 +162,8 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto mt-10 mb-10">
           <h2 className="text-3xl font-semibold ml-5">Featured Properties</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 mr-5 ml-5">
-            {filteredProperties.length > 0 ? (
-              filteredProperties.map((property) => (
+            {properties.length > 0 ? (
+              properties.map((property) => (
                 <PropertyCard
                   key={property.p_id}
                   id={property.p_id}
@@ -191,6 +182,16 @@ export default function HomePage() {
               <div className="col-span-3 text-center">No properties found.</div>
             )}
           </div>
+          {filteredProperties.length > 6 && (
+            <div className="text-center mt-6">
+              <button
+                onClick={handleExploreClick}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition"
+              >
+                View More Properties
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

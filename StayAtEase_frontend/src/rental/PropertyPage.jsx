@@ -2,26 +2,17 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import PropertyCard from "../Components/Property_card";
 import { Input, Button, Select, Slider } from "antd";
+import { useAuth } from "../context/AuthContext";
 
 const { Search } = Input;
 const { Option } = Select;
 
 const PropertyListing = () => {
   const [properties, setProperties] = useState([]);
-  const [filteredProperties, setFilteredProperties] = useState([]);
-
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState("new");
-  const [selectedType, setSelectedType] = useState(null);
-  const [priceRange, setPriceRange] = useState([1000, 20000]);
 
   useEffect(() => {
     fetchProperties();
   }, []);
-
-  useEffect(() => {
-    applyFilters();
-  }, [searchTerm, sortOrder, selectedType, priceRange, properties]);
 
   const fetchProperties = async () => {
     try {
@@ -30,42 +21,6 @@ const PropertyListing = () => {
     } catch (err) {
       console.error("Error fetching properties:", err);
     }
-  };
-
-  const applyFilters = () => {
-    let filtered = [...properties];
-
-    // 🔍 Search filter
-    if (searchTerm) {
-      filtered = filtered.filter((property) =>
-        property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        property.address.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // 🏠 Property type filter
-    if (selectedType) {
-      filtered = filtered.filter((property) =>
-        property.property_type.toLowerCase() === selectedType.toLowerCase()
-      );
-    }
-
-    // 💰 Price range filter
-    filtered = filtered.filter(
-      (property) =>
-        property.price >= priceRange[0] && property.price <= priceRange[1]
-    );
-
-    // 📊 Sort order
-    if (sortOrder === "asc") {
-      filtered.sort((a, b) => a.price - b.price);
-    } else if (sortOrder === "desc") {
-      filtered.sort((a, b) => b.price - a.price);
-    } else if (sortOrder === "new") {
-      filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    }
-
-    setFilteredProperties(filtered);
   };
 
   return (
@@ -124,11 +79,12 @@ const PropertyListing = () => {
             title={property.title}
             location={property.address}
             price={property.price}
-            rating={0}
+            rating={0} // or fetch rating from reviews if available
             image={property.property_images[0] || "../default.jpg"}
             beds={property.no_of_beds}
             baths={property.no_of_bathrooms}
             sqft={property.sq_ft}
+            defaultLiked={wishlist.includes(property.p_id)}
             showDetailsButton={true}
           />
         ))}
