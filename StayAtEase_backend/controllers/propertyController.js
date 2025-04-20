@@ -281,7 +281,12 @@ exports.getPropertyById = async (req, res) => {
       return res.status(404).json({ error: "Property not found" });
     }
 
-    return res.status(200).json(property);
+    const propData = property.get({ plain: true });
+
+      const reviews = propData.Reviews || [];
+      const totalRating = reviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+    const avgRating = reviews.length > 0 ? (totalRating / reviews.length).toFixed(1) : 0;
+   return res.status(200).json({...propData,avgRating: parseFloat(avgRating)});
   } catch (error) {
     console.error("Error in getPropertyById:", error);
     return res.status(500).json({ error: "Something went wrong" });

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { StarOutlined } from "@ant-design/icons";
 import axios from 'axios';
 import { 
   EditOutlined, DeleteOutlined, StarFilled, CheckCircleFilled, 
@@ -20,10 +21,8 @@ export default function PropertyDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const totalReviews = reviews.length;
-  const averageRating = totalReviews > 0
-    ? (reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews).toFixed(1)
-    : 0;
+  
+    
 
   const fetchPropertyData = async () => {
     try {
@@ -81,6 +80,7 @@ export default function PropertyDetails() {
           message.warning('Could not load reviews for this property');
         }
         setReviews([]);
+
       }
       
       // Fetch inquiries with improved error handling
@@ -188,11 +188,22 @@ export default function PropertyDetails() {
 
             <div className="flex items-center gap-6 text-gray-700">
               <div className="flex items-center gap-2">
-              <span className="text-xl font-bold text-black">{averageRating}</span>
+              <span className="text-xl font-bold text-black">{property.avgRating}</span>
               <span className="text-yellow-500 flex">
-                  {[...Array(5)].map((_, i) => <StarFilled key={i} />)}
-                </span>
-                <span className="text-gray-500 text-sm">({totalReviews} reviews)</span>
+  {[...Array(5)].map((_, i) => {
+    const ratingValue = i + 1;
+    const avgRating = parseFloat(property.avgRating) || 0; // Ensure it's a number
+    
+    if (avgRating >= ratingValue) {
+      return <StarFilled key={i} />;
+    } else if (avgRating >= ratingValue - 0.5) {
+      return <StarFilled key={i} style={{ opacity: 0.5 }} />; // Half star
+    } else {
+      return <StarOutlined key={i} />; // Empty star
+    }
+  })}
+</span>
+                <span className="text-gray-500 text-sm">({property.Reviews.length} reviews)</span>
                 </div>
 
               <div className="flex items-center gap-8">
