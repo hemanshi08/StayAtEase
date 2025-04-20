@@ -338,9 +338,34 @@ exports.getPropertyInquiries = async (req, res) => {
 // All available properties (visible to all users)
 exports.getAllProperties = async (req, res) => {
   try {
-    const properties = await Property.findAll({ where: { status: "Available" } });
-    res.status(200).json(properties);
+    const properties = await Property.findAll({
+      where: { status: "Available" },
+      include: [
+        {
+          model: Review,
+          required: false, // include properties even without reviews
+          attributes: ['rating'] // only fetch rating from reviews
+        }
+      ]
+    });
+
+    // Calculate average rating manually
+    const formattedProperties = properties.map(property => {
+      const propData = property.get({ plain: true });
+
+      const reviews = propData.Reviews || [];
+      const totalRating = reviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+      const avgRating = reviews.length > 0 ? (totalRating / reviews.length).toFixed(1) : 0;
+
+      return {
+        ...propData,
+        avgRating: parseFloat(avgRating)
+      };
+    });
+
+    res.status(200).json(formattedProperties);
   } catch (err) {
+    console.error('Error fetching properties:', err);
     res.status(500).json({ error: err.message });
   }
 };

@@ -26,7 +26,7 @@ export default function HomePage() {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/properties?limit=6");
+        const response = await axios.get("http://localhost:5000/api/properties");
         setProperties(response.data);
         setFilteredProperties(response.data); // set both initially
       } catch (error) {
@@ -75,12 +75,14 @@ export default function HomePage() {
     items: [
       { key: "All", label: "All Types" },
       { key: "Apartment", label: "Apartment" },
-      { key: "House", label: "House" },
-      { key: "Studio", label: "Studio" },
+      { key: "Villa", label: "Villa" },
+      { key: "Condo", label: "Condo" },
     ],
     onClick: ({ key }) => setSelectedType(key),
   };
 
+  
+ 
   const budgetMenu = {
     items: [
       { key: "All", label: "All Budgets" },
@@ -171,15 +173,17 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto mt-10 mb-10">
           <h2 className="text-3xl font-semibold ml-5">Featured Properties</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 mr-5 ml-5">
+          
             {filteredProperties.length > 0 ? (
               filteredProperties.map((property) => (
+                console.log(property),
                 <PropertyCard
                   key={property.p_id}
                   id={property.p_id}
                   title={property.title}
                   location={property.address}
                   price={property.price}
-                  rating={0}
+                  rating={property.avgRating}
                   image={property.property_images[0] || "/default.jpg"}
                   beds={property.no_of_beds}
                   baths={property.no_of_bathrooms}

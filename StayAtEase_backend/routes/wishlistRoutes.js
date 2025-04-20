@@ -4,8 +4,8 @@ const router = express.Router();
 const { verifyToken } = require("../middleware/authMiddleware");
 const wishlistController = require("../controllers/wishlistController");
 
-router.post("/", verifyToken, wishlistController.addToWishlist);
+
 router.get("/", verifyToken, wishlistController.getUserWishlist);
-router.delete("/", verifyToken, wishlistController.removeFromWishlist);
+router.post("/toggle", verifyToken, wishlistController.toggleWishlist);
 
 module.exports = router;

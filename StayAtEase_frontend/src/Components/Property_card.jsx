@@ -1,57 +1,104 @@
-import React, { useState } from "react";
-import { Card, Typography, Rate } from "antd";
+import React, { useState, useEffect } from "react";
+import { Card, Typography, Rate, message } from "antd";
 import { HeartFilled, HeartOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext"; // Assuming you have an auth context
 
 const { Title, Text } = Typography;
 
-const PropertyCard = ({ id, image, title, location, beds, baths, sqft, rating, price,reviews, showDetailsButton = false , defaultLiked = false  }) => {
+const PropertyCard = ({
+  id,
+  image,
+  title,
+  location,
+  beds,
+  baths,
+  sqft,
+  rating,
+  price,
+  reviews,
+  showDetailsButton = false,
+  defaultLiked = false
+}) => {
   const [liked, setLiked] = useState(defaultLiked);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  
+  const { user } = useAuth(); // Get current user from auth context
+
+  useEffect(() => {
+    setLiked(defaultLiked);
+  }, [defaultLiked]);
 
   const handleViewDetails = () => {
-    // Debug log to check what data we're passing
-    console.log("Navigating with property ID:", id);
-    
-    navigate(`/property/${id}`, { 
-      state: { 
-        id: id, // Explicitly set the id
-        image, 
-        title, 
-        location, 
-        beds, 
-        baths, 
-        sqft, 
-        rating, 
+    navigate(`/property/${id}`, {
+      state: {
+        id,
+        image,
+        title,
+        location,
+        beds,
+        baths,
+        sqft,
+        rating,
         price,
-        reviews 
-      } 
+        reviews
+      }
     });
   };
 
-  return (
-    <Card onClick={handleViewDetails} 
-    hoverable
-    className="rounded-2xl shadow-lg overflow-hidden relative"
-    cover={
-      <div className="relative">
-        <img alt={title} src={image} className="h-48 w-full object-cover" />
-        {/* Heart Icon positioned correctly on top-right without affecting the image */}
-        <div 
+  const toggleWishlist = async (e) => {
+    e.stopPropagation();
 
-  onClick={(e) => {
-    e.stopPropagation(); // Prevents click from propagating to the Card
-    setLiked(!liked);
-  }} 
-  className="absolute top-2 right-2 cursor-pointer bg-white w-10 h-10 rounded-full shadow-md flex items-center justify-center text-xl"
->
-  {liked ? <HeartFilled className="text-red-500" style={{color:"red"}} /> : <HeartOutlined />}
-</div>
-      </div>
+    if (!user) {
+      message.warning("Please login to add to wishlist");
+      return;
     }
-  >
-    <div className="flex justify-between items-center">
+
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/wishlist/toggle",
+        { p_id: id },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
+
+      setLiked(response.data.status === "added");
+      message.success(response.data.message);
+    } catch (err) {
+      console.error("Wishlist toggle error:", err);
+      message.error(err.response?.data?.error || "Failed to update wishlist");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Card
+      onClick={handleViewDetails}
+      hoverable
+      className="rounded-2xl shadow-lg overflow-hidden relative"
+      cover={
+        <div className="relative">
+          <img alt={title} src={image} className="h-48 w-full object-cover" />
+          <div
+            onClick={toggleWishlist}
+            className="absolute top-2 right-2 cursor-pointer bg-white w-10 h-10 rounded-full shadow-md flex items-center justify-center text-xl"
+          >
+            {liked ? (
+              <HeartFilled className="text-red-500" />
+            ) : (
+              <HeartOutlined />
+            )}
+          </div>
+        </div>
+      }
+    >
+      <div className="flex justify-between items-center">
         <Title level={4} className="m-0">{title}</Title>
       </div>
       <Text type="secondary" className="flex items-center gap-1 text-gray-500">
@@ -67,21 +114,16 @@ const PropertyCard = ({ id, image, title, location, beds, baths, sqft, rating, p
         ₹{price} /month
       </Text>
 
-      {/* Conditionally render View Details Button */}
       {showDetailsButton && (
-        <span>
-        <button 
-          onClick={handleViewDetails} 
+        <button
+          onClick={handleViewDetails}
           className="mt-2 w-full bg-blue-600 !text-white py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer"
         >
-          View Details   
+          View Details
         </button>
-        </span>
       )}
     </Card>
   );
 };
 
 export default PropertyCard;
-
-

@@ -168,9 +168,12 @@ const RoomOwnerDashboard = () => {
         <div className="mt-8">
           <div className="flex justify-between items-center mb-4">
             <h4 className="text-xl font-bold">Latest Reviews</h4>
-            <a href="#" className="text-blue-500">
+            <span
+              className="text-blue-500 cursor-pointer"
+              onClick={() => navigate("/PropertyReviews")}
+            >
               View All
-            </a>
+            </span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {data.reviews.map((review, index) => (

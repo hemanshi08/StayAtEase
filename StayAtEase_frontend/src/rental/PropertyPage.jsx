@@ -124,7 +124,7 @@ const PropertyListing = () => {
             title={property.title}
             location={property.address}
             price={property.price}
-            rating={0}
+            rating={property.avgRating}
             image={property.property_images[0] || "../default.jpg"}
             beds={property.no_of_beds}
             baths={property.no_of_bathrooms}
