@@ -59,6 +59,7 @@ function AppRouter(){
         <Route path="/MyProfile" element={<RommOwnerProfileDetails />} />
         <Route path="/PropertyDetails" element={<AdminPropertyDetails />} />
         <Route path="/admin-propertydetails/:id" element={<AdminPropertyDetails />} />
+        <Route path="/PropertyMessages" element={<PropertyMessages />} />
         {/* Catch all route - redirect to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

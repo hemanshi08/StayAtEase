@@ -6,10 +6,10 @@ const Reviews = ({ reviews = [], rating }) => {
     <div className="mt-6">
       <h2 className="text-2xl font-semibold">Reviews</h2>
       <p className="font-bold flex items-center">
-  <span className="text-3xl mr-1.5">{rating}</span>
-  <Rate allowHalf disabled defaultValue={rating} className="ml-3 text-yellow-500 text-xl" />
-  <span className="ml-3  text-gray-600">({reviews.length} reviews)</span>
-</p>
+        <span className="text-3xl mr-1.5">{rating.toFixed(1)}</span>
+        <Rate allowHalf disabled value={rating} className="ml-3 text-yellow-500 text-xl" />
+        <span className="ml-3 text-gray-600">({reviews.length} reviews)</span>
+      </p>
 
       {/* Scrollable Review Container */}
       <div className="mt-4 max-h-88 overflow-y-auto pr-2">
@@ -21,9 +21,14 @@ const Reviews = ({ reviews = [], rating }) => {
             >
               {/* Review Header */}
               <div>
-                <div className="flex gap-3 ">
-                  {/* Profile Picture */}
-                  <Avatar src={review.image} size={40} className="border border-gray-300 " />
+                <div className="flex gap-3">
+                  {/* Profile Picture with proper image source */}
+                  <Avatar 
+                    src={review.image} 
+                    size={40} 
+                    className="border border-gray-300"
+                    onError={() => true} // Prevent broken image icon
+                  />
 
                   {/* Name and Date */}
                   <div className="flex flex-col">
@@ -32,7 +37,7 @@ const Reviews = ({ reviews = [], rating }) => {
                   </div>
                 </div>
 
-                <Rate allowHalf disabled defaultValue={review.rating} className="mt-2 " />
+                <Rate allowHalf disabled value={review.rating} className="mt-2" />
               </div>
 
               {/* Full Review Text */}

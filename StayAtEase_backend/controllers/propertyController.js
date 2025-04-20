@@ -261,7 +261,7 @@ exports.getPropertyById = async (req, res) => {
           include: [
             {
               model: User,
-              attributes: ["u_id", "fullName", "email"]
+              attributes: ["u_id", "fullName", "email",'profile_pic']
             }
           ]
         },
@@ -287,6 +287,7 @@ exports.getPropertyById = async (req, res) => {
     return res.status(500).json({ error: "Something went wrong" });
   }
 };
+
 // Get reviews for a property
 exports.getPropertyReviews = async (req, res) => {
   try {
