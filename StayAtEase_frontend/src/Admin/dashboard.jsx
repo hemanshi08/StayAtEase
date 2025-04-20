@@ -27,16 +27,12 @@ const RoomOwnerDashboard = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-
-        const inquiryRes = await axios.get(
-          "http://localhost:5000/api/inquiries/owner-inquiries",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
+  
+        // 1. Fetch inquiries
+        const inquiryRes = await axios.get("http://localhost:5000/api/inquiries/owner-inquiries", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
         const messages = inquiryRes.data.inquiries.map((inq) => ({
           name: inq.User.fullName,
           propertyId: `P - ${inq.p_id}`,
@@ -44,61 +40,53 @@ const RoomOwnerDashboard = () => {
           contact: inq.User.phone,
           message: inq.message,
         }));
-
+  
+        // 2. Fetch reviews
+        const reviewRes = await axios.get("http://localhost:5000/api/reviews/owner-reviews", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        const reviews = reviewRes.data.reviews.map((rev) => ({
+          name: rev.User.fullName,
+          date: new Date(rev.date).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          }),
+          rating: rev.rating,
+          text: rev.review,
+          property: rev.Property.title,
+          img: rev.User.profile_pic || "../profile.png",
+        }));
+  
+        const totalRating = reviews.reduce((sum, r) => sum + r.rating, 0);
+        const avgRating = reviews.length ? (totalRating / reviews.length).toFixed(1) : 0;
+  
+        // 3. Fetch properties
+        const propertiesRes = await axios.get("http://localhost:5000/api/properties/my", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        const allProperties = propertiesRes.data;
+        const active = allProperties.filter((prop) => prop.status === "Available");
+  
         setData((prev) => ({
           ...prev,
+          totalProperties: allProperties.length,
+          activeListings: active.length,
           totalInquiries: messages.length,
-          messages: messages.slice(0, 3), // show only latest 3
+          messages: messages.slice(0, 3),
+          reviews: reviews.slice(0, 3),
+          reviewRating: avgRating,
         }));
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching dashboard data:", error);
       }
     };
-
+  
     fetchData();
-
-    // Dummy static stats for now
-    setData((prev) => ({
-      ...prev,
-      totalProperties: 24,
-      activeListings: 18,
-      reviewRating: 4.8,
-      reviews: [
-        {
-          name: "John Smith",
-          date: "Feb 12, 2024",
-          rating: 5,
-          text: "Amazing property with stunning views. Highly recommended!",
-          property: "Lakefront Cottage",
-          img: "../profile.png",
-        },
-        {
-          name: "Lisa Anderson",
-          date: "Feb 8, 2024",
-          rating: 5,
-          text: "Great location and comfortable stay. Would visit again.",
-          property: "Downtown Loft",
-          img: "../profile.png",
-        },
-        {
-          name: "David Wilson",
-          date: "Feb 7, 2024",
-          rating: 5,
-          text: "Perfect getaway spot. Everything was exactly as described.",
-          property: "Mountain View Cabin",
-          img: "../profile.png",
-        },
-        {
-          name: "Emma Brown",
-          date: "Feb 5, 2024",
-          rating: 4,
-          text: "Nice place, good host. A bit noisy at night.",
-          property: "City Apartment",
-          img: "../profile.png",
-        },
-      ].slice(0, 3), // show only latest 3
-    }));
   }, []);
+  
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -198,7 +186,7 @@ const RoomOwnerDashboard = () => {
                     <small className="text-gray-500">{review.date}</small>
                   </div>
                 </div>
-                <p>{'⭐'.repeat(review.rating)}</p>
+                <p>{"⭐".repeat(review.rating)}</p>
                 <p className="text-gray-700 mt-2">{review.text}</p>
                 <p className="text-sm text-gray-500">{review.property}</p>
               </div>

@@ -20,6 +20,11 @@ export default function PropertyDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const totalReviews = reviews.length;
+  const averageRating = totalReviews > 0
+    ? (reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews).toFixed(1)
+    : 0;
+
   const fetchPropertyData = async () => {
     try {
       setLoading(true);
@@ -57,7 +62,7 @@ export default function PropertyDetails() {
       
       // Fetch reviews using getPropertyReviews
       try {
-        const reviewsRes = await axios.get(`http://localhost:5000/api/properties/${id}/reviews`, {
+        const reviewsRes = await axios.get(`http://localhost:5000/api/properties/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         
@@ -80,7 +85,7 @@ export default function PropertyDetails() {
       
       // Fetch inquiries with improved error handling
       try {
-        const inquiriesRes = await axios.get(`http://localhost:5000/api/properties/${id}/inquiries`, {
+        const inquiriesRes = await axios.get(`http://localhost:5000/api/properties/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         
@@ -183,12 +188,12 @@ export default function PropertyDetails() {
 
             <div className="flex items-center gap-6 text-gray-700">
               <div className="flex items-center gap-2">
-                <span className="text-xl font-bold text-black">4.8</span>
-                <span className="text-yellow-500 flex">
+              <span className="text-xl font-bold text-black">{averageRating}</span>
+              <span className="text-yellow-500 flex">
                   {[...Array(5)].map((_, i) => <StarFilled key={i} />)}
                 </span>
-                <span className="text-gray-500 text-sm">({reviews.length} reviews)</span>
-              </div>
+                <span className="text-gray-500 text-sm">({totalReviews} reviews)</span>
+                </div>
 
               <div className="flex items-center gap-8">
                 <button className="!text-red-500 hover:!text-red-700 text-sm flex items-center gap-1 cursor-pointer">
