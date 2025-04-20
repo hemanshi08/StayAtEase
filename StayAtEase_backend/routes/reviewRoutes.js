@@ -3,6 +3,7 @@ const router = express.Router();
 const { createOrUpdateReview,addOrUpdateReview, getReviewsByProperty, deleteReview,getAllReviewsForOwner } = require("../controllers/reviewController");
 const { verifyToken } = require("../middleware/authMiddleware");
 const { requireRole } = require("../middleware/roleMiddleware");
+const { getAllReviews } = require('../controllers/reviewController');
 
 // Add or update a review (protected route - only tenants)
 router.post(
@@ -20,5 +21,7 @@ router.get('/property/:id', verifyToken, requireRole('Property_Owner'), getRevie
 // router.get('/property/:p_id', reviewController.getReviewsByPropertyId);
 
 router.get("/owner-reviews", verifyToken,requireRole("Property_Owner"), getAllReviewsForOwner);
+router.get('/all-reviews', verifyToken, requireRole("Admin", "Super_Admin"), getAllReviews);
+
 
 module.exports = router;

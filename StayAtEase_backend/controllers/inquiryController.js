@@ -115,7 +115,7 @@ exports.getAllInquiries = async (req, res) => {
       ],
     });
 
-    res.status(200).json(inquiries);
+    res.status(200).json({ reviews: inquiries }); // <-- updated to match frontend
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch all inquiries' });

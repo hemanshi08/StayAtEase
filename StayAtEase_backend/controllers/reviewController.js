@@ -212,3 +212,28 @@ exports.deleteReview = async (req, res) => {
   }
 };
 
+// Get all reviews (Admin/Super Admin view)
+exports.getAllReviews = async (req, res) => {
+  try {
+    const reviews = await Review.findAll({
+      include: [
+        {
+          model: Property,
+          attributes: ['p_id', 'title', 'address'],
+          required: true
+        },
+        {
+          model: User,
+          attributes: ['u_id', 'fullName', 'profile_pic'],
+          required: true
+        }
+      ],
+      order: [['date', 'DESC']]
+    });
+
+    res.status(200).json({ message: 'All reviews fetched successfully.', reviews });
+  } catch (error) {
+    console.error('Error fetching all reviews:', error);
+    res.status(500).json({ message: 'Server error while fetching all reviews.', error: error.message });
+  }
+};
