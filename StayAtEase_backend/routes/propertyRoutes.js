@@ -10,6 +10,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 router.get("/", propertyController.getAllProperties);
 router.get("/property/:id", propertyController.getPropertyById);
 
+router.get('/properties', verifyToken, propertyController.getAllPropertiesForAdmin);
 
 
 // Property Owner routes
