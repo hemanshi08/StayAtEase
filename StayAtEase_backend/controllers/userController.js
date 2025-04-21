@@ -241,20 +241,17 @@ exports.changePassword = async (req, res) => {
   }
 };
 
+// controllers/userController.js
+
 exports.getAllTenants = async (req, res) => {
   try {
-    // Verify admin role (assuming you store role in req.user)
     if (req.user.userType !== 'admin') {
       return res.status(403).json({ error: 'Unauthorized access' });
     }
 
     const tenants = await User.findAll({
-      where: {
-        userType: 'tenant'
-      },
-      attributes: { 
-        exclude: ['password'] // Don't return passwords
-      }
+      where: { userType: 'tenant' },
+      attributes: { exclude: ['password'] }
     });
 
     res.status(200).json(tenants);
@@ -263,40 +260,25 @@ exports.getAllTenants = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch tenants' });
   }
 };
-const { User, Property } = require('../models');
-const { Sequelize } = require('sequelize');
 
-exports.getAllOwners = async (req, res) => {
+exports.getAllRoomOwners = async (req, res) => {
   try {
     if (req.user.userType !== 'admin') {
       return res.status(403).json({ error: 'Unauthorized access' });
     }
 
-    const owners = await User.findAll({
-      where: {
-        userType: 'Property_Owner',
-      },
-      attributes: [
-        'u_id',
-        ['fullName', 'name'],
-        ['profile_pic', 'profileImage'],
-        'email',
-        ['phone', 'mobile'],
-        'status',
-        [Sequelize.fn('COUNT', Sequelize.col('Properties.p_id')), 'totalProperties']
-      ],
-      include: [
-        {
-          model: Property,
-          attributes: [],
-        },
-      ],
-      group: ['User.u_id'],
+    const roomOwners = await User.findAll({
+      where: { userType: 'Property_Owner' },
+      attributes: { exclude: ['password'] }
     });
 
-    res.status(200).json(owners);
+    res.status(200).json(roomOwners);
   } catch (err) {
-    console.error('Error fetching Owners:', err);
-    res.status(500).json({ error: 'Failed to fetch Owners' });
+    console.error('Error fetching room owners:', err);
+    res.status(500).json({ error: 'Failed to fetch room owners' });
   }
 };
+
+
+
+

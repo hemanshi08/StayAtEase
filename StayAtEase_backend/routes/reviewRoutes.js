@@ -3,7 +3,7 @@ const router = express.Router();
 const { createOrUpdateReview,addOrUpdateReview, getReviewsByProperty, deleteReview,getAllReviewsForOwner ,getAllReviews } = require("../controllers/reviewController");
 const { verifyToken } = require("../middleware/authMiddleware");
 const { requireRole } = require("../middleware/roleMiddleware");
-const { getAllReviews } = require('../controllers/reviewController');
+
 
 // Add or update a review (protected route - only tenants)
 router.post(

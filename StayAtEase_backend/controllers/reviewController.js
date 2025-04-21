@@ -212,3 +212,44 @@ exports.deleteReview = async (req, res) => {
   }
 };
 
+exports.getAllReviews = async (req, res) => {
+  try {
+    // 1. Verify admin role
+    if (!req.user || req.user.userType?.toLowerCase() !== 'admin') {
+      return res.status(403).json({ error: 'Unauthorized access' });
+    }
+
+    // 2. Fetch all reviews with associated user and property data
+    const reviews = await Review.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ['u_id', 'fullName', 'email', 'profile_pic'],
+          as: 'User' // This should match your association alias
+        },
+        {
+          model: Property,
+          attributes: ['p_id', 'title', 'address'],
+          as: 'Property'
+        }
+      ],
+      order: [['date', 'DESC']] // Newest reviews first
+    });
+    
+    res.status(200).json({message: 'Reviews fetched successfully.', reviews});
+
+  } catch (err) {
+    console.error('Error fetching reviews:', {
+      message: err.message,
+      stack: err.stack,
+      original: err.original
+    });
+    
+    res.status(500).json({ 
+      error: 'Failed to fetch reviews',
+      ...(process.env.NODE_ENV === 'development' && {
+        details: err.message
+      })
+    });
+  }
+};

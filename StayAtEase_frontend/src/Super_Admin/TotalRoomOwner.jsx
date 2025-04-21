@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DeleteOutlined, SearchOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
 import SuperAdminNavbar from "./Superadmin_navbar";
 import Footer from "../Components/Footer";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import axios from "axios";
 
 function TotalRoomOwner() {
   const [owners, setOwners] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const ownersPerPage = 5;
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function TotalRoomOwner() {
 
   const fetchOwners = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/users/admin/owners", {
+      const res = await axios.get("http://localhost:5000/api/users/room-owners", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -28,10 +29,19 @@ function TotalRoomOwner() {
     }
   };
 
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredOwners = owners.filter(
+    (owner) =>
+      owner.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const indexOfLastOwner = currentPage * ownersPerPage;
   const indexOfFirstOwner = indexOfLastOwner - ownersPerPage;
-  const currentOwners = owners.slice(indexOfFirstOwner, indexOfLastOwner);
-  const totalPages = Math.ceil(owners.length / ownersPerPage);
+  const currentOwners = filteredOwners.slice(indexOfFirstOwner, indexOfLastOwner);
+  const totalPages = Math.ceil(filteredOwners.length / ownersPerPage);
 
   return (
     <div>
@@ -43,6 +53,8 @@ function TotalRoomOwner() {
             <input
               type="text"
               placeholder="Search users..."
+              value={searchQuery}
+              onChange={handleSearch}
               className="w-full h-9 p-2 pl-10 border rounded-lg text-gray-600"
             />
             <SearchOutlined className="absolute left-3 top-2.5 text-gray-500" />
@@ -62,41 +74,44 @@ function TotalRoomOwner() {
               </tr>
             </thead>
             <tbody>
-              {currentOwners.map((user) => (
-                <tr key={user.id} className="border-b">
-                  <td className="p-4 flex items-center space-x-3">
-                    <img
-                      src={user.profileImage || "/default_profile.jpg"}
-                      alt="Profile"
-                      className="h-10 w-10 rounded-full border"
-                    />
-                    <span className="font-semibold">{user.name}</span>
-                  </td>
-                  <td className="p-4">{user.mobile}</td>
-                  <td className="p-4">{user.email}</td>
-                  <td className="p-4">{user.totalProperties || 0}</td>
-                  <td
-                    className={`p-4 font-semibold ${
-                      user.status === "Active" ? "text-green-600" : "text-red-600"
-                    }`}
-                  >
-                    {user.status}
-                  </td>
-                  <td className="p-4 text-center">
-                    <div className="flex justify-center gap-x-4">
-                      <button
-                        className="text-blue-600 hover:text-blue-800"
-                        onClick={() => navigate("/edit-user", { state: { user } })}
-                      >
-                        <EditOutlined style={{ fontSize: "18px" }} />
-                      </button>
-                      <button className="text-red-600 hover:text-red-800">
-                        <DeleteOutlined style={{ fontSize: "18px" }} />
-                      </button>
-                    </div>
+              {/* If no filtered owners, show 'Not Found' */}
+              {filteredOwners.length === 0 ? (
+                <tr>
+                  <td colSpan="6" className="p-4 text-center text-gray-600">
+                    No owners found
                   </td>
                 </tr>
-              ))}
+              ) : (
+                currentOwners.map((user) => (
+                  <tr key={user.id} className="border-b">
+                    <td className="p-4 flex items-center space-x-3">
+                      <img
+                        src={user.profileImage || "/default_profile.jpg"}
+                        alt="Profile"
+                        className="h-10 w-10 rounded-full border"
+                      />
+                      <span className="font-semibold">{user.name}</span>
+                    </td>
+                    <td className="p-4">{user.mobile}</td>
+                    <td className="p-4">{user.email}</td>
+                    <td className="p-4">{user.totalProperties || 0}</td>
+                    <td
+                      className={`p-4 font-semibold ${
+                        user.status === "Active" ? "text-green-600" : "text-red-600"
+                      }`}
+                    >
+                      {user.status}
+                    </td>
+                    <td className="p-4 text-center">
+                      <div className="flex justify-center gap-x-4">
+                        <button className="text-red-600 hover:text-red-800">
+                          <DeleteOutlined style={{ fontSize: "18px" }} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -104,8 +119,8 @@ function TotalRoomOwner() {
         {/* Pagination */}
         <div className="flex flex-wrap justify-between items-center mt-6 text-gray-600">
           <p>
-            Showing {indexOfFirstOwner + 1} to {Math.min(indexOfLastOwner, owners.length)} of{" "}
-            {owners.length} owners
+            Showing {indexOfFirstOwner + 1} to {Math.min(indexOfLastOwner, filteredOwners.length)} of{" "}
+            {filteredOwners.length} owners
           </p>
           <div className="flex space-x-4 mt-3 sm:mt-0">
             <button

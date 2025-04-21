@@ -102,22 +102,44 @@ exports.getAllInquiriesForOwner =  async (req, res) => {
 
 exports.getAllInquiries = async (req, res) => {
   try {
+    // 1. Verify admin role
+    if (!req.user || req.user.userType?.toLowerCase() !== 'admin') {
+      return res.status(403).json({ error: 'Unauthorized access' });
+    }
+
+    // 2. Fetch all inquiries with associated user and property data
     const inquiries = await Inquiry.findAll({
       include: [
         {
-          model: Property,
-          attributes: ['p_id', 'title', 'location'],
+          model: User,
+          attributes: ['u_id', 'fullName', 'email', 'phone'],
+          as: 'User'
         },
         {
-          model: User,
-          attributes: ['name', 'email', 'phone'],
-        },
+          model: Property,
+          attributes: ['p_id', 'title', 'address', 'price'],
+          as: 'Property'
+        }
       ],
+      order: [['i_id', 'DESC']] // Newest inquiries first
     });
 
-    res.status(200).json({ reviews: inquiries }); // <-- updated to match frontend
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to fetch all inquiries' });
+    
+
+    res.status(200).json({message: 'Inquiry fetched successfully.', inquiries: inquiries});
+
+  } catch (err) {
+    console.error('Error fetching inquiries:', {
+      message: err.message,
+      stack: err.stack,
+      original: err.original
+    });
+    
+    res.status(500).json({ 
+      error: 'Failed to fetch inquiries',
+      ...(process.env.NODE_ENV === 'development' && {
+        details: err.message
+      })
+    });
   }
 };

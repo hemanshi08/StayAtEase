@@ -11,6 +11,7 @@ router.post('/', verifyToken, requireRole('tenant'),inquiryController.createInqu
 router.get("/owner-inquiries", verifyToken,requireRole("Property_Owner"),inquiryController.getAllInquiriesForOwner);
 
 // Admin: Get all inquiries
-router.get('/admin', verifyToken, requireRole('admin'), inquiryController.getAllInquiries);
+
+router.get('/admin-inquiries', verifyToken, inquiryController.getAllInquiries);
 
 module.exports = router;

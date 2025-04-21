@@ -36,7 +36,7 @@ const ProfileDetails = () => {
       setLoading(true);
       console.log('Fetching user profile...');
       
-      const response = await axiosInstance.get('/users/profile', {
+      const response = await axiosInstance.get('/api/admin/profile', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -83,7 +83,7 @@ const ProfileDetails = () => {
   const handleUpdate = async (values) => {
     try {
       setLoading(true);
-      const response = await axiosInstance.put('/api/users/profile', values);
+      const response = await axiosInstance.put('/api/admin/profile', values);
       
       message.success({
         content: 'Profile updated successfully!',

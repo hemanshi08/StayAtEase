@@ -5,40 +5,52 @@ import SuperAdminNavbar from "./Superadmin_navbar";
 import Footer from "../Components/Footer";
 
 function TotalInquiry() {
-  const [messages, setmessages] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const messagesPerPage = 5;
 
   useEffect(() => {
-    const fetchmessages = async () => {
+    const fetchMessages = async () => {
       try {
         const token = localStorage.getItem("token");
-  
+
         if (!token) {
           console.error("No token found!");
           return;
         }
-  
-        const response = await axios.get("http://localhost:5000/api/inquiries/admin", {
+
+        const response = await axios.get("http://localhost:5000/api/inquiries/admin-inquiries", {
           headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
         });
-  
-        setmessages(response.data.messages);
+
+        setMessages(response.data.inquiries);
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
     };
-  
-    fetchmessages();
+
+    fetchMessages();
   }, []);
-  
-  
-  const indexOfLastmessage = currentPage * messagesPerPage;
-  const indexOfFirstmessage = indexOfLastmessage - messagesPerPage;
-  const currentmessages = messages.slice(indexOfFirstmessage, indexOfLastmessage);
-  const totalPages = Math.ceil(messages.length / messagesPerPage);
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  // Filter messages based on search query
+  const filteredMessages = messages.filter(
+    (message) =>
+      message.User?.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      message.Property?.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Pagination logic
+  const indexOfLastMessage = currentPage * messagesPerPage;
+  const indexOfFirstMessage = indexOfLastMessage - messagesPerPage;
+  const currentMessages = filteredMessages.slice(indexOfFirstMessage, indexOfLastMessage);
+  const totalPages = Math.ceil(filteredMessages.length / messagesPerPage);
 
   return (
     <div>
@@ -52,6 +64,8 @@ function TotalInquiry() {
             <input
               type="text"
               placeholder="Search messages..."
+              value={searchQuery}
+              onChange={handleSearch}
               className="w-full h-9 p-2 pl-10 border rounded-lg text-gray-600"
             />
             <SearchOutlined className="absolute left-3 top-2.5 text-gray-500" />
@@ -64,38 +78,43 @@ function TotalInquiry() {
               <tr className="bg-gray-100">
                 <th className="p-4 text-left">Inquirier Name</th>
                 <th className="p-4 text-left">Property Name</th>
-           
                 <th className="p-4 text-left">Date</th>
                 <th className="p-4 text-left">Messages</th>
-         
                 <th className="p-4 text-center">Action</th>
               </tr>
             </thead>
             <tbody>
-  {currentmessages.map((message) => (
-    <tr key={message.i_id} className="border-b">
-      <td className="p-4">{message.User?.name}</td>
-      <td className="p-4">{message.Property?.title}</td>
-     
-      <td className="p-4">{new Date(message.createdAt).toLocaleDateString()}</td>
-      <td className="p-4">{message.message}</td>
-      <td className="p-4 text-center">
-        <button className="text-red-600 hover:text-red-800">
-          <DeleteOutlined />
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+              {/* If no filtered messages, show 'Not Found' */}
+              {filteredMessages.length === 0 ? (
+                <tr>
+                  <td colSpan="5" className="p-4 text-center text-gray-600">
+                    No results found
+                  </td>
+                </tr>
+              ) : (
+                currentMessages.map((message) => (
+                  <tr key={message.i_id} className="border-b">
+                    <td className="p-4">{message.User?.fullName}</td>
+                    <td className="p-4">{message.Property?.title}</td>
+                    <td className="p-4">{new Date(message.createdAt).toLocaleDateString()}</td>
+                    <td className="p-4">{message.message}</td>
+                    <td className="p-4 text-center">
+                      <button className="text-red-600 hover:text-red-800">
+                        <DeleteOutlined />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
           </table>
         </div>
 
         {/* Pagination */}
         <div className="flex flex-wrap justify-between items-center mt-6 text-gray-600">
           <p>
-            Showing {indexOfFirstmessage + 1} to{" "}
-            {Math.min(indexOfLastmessage, messages.length)} of {messages.length} messages
+            Showing {indexOfFirstMessage + 1} to {Math.min(indexOfLastMessage, filteredMessages.length)} of{" "}
+            {filteredMessages.length} messages
           </p>
           <div className="flex space-x-4 mt-3 sm:mt-0">
             <button
@@ -109,9 +128,7 @@ function TotalInquiry() {
             >
               Previous
             </button>
-            <span className="px-5 py-2 border rounded-lg bg-blue-500 text-white font-bold">
-              {currentPage}
-            </span>
+            <span className="px-5 py-2 border rounded-lg bg-blue-500 text-white font-bold">{currentPage}</span>
             <button
               onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages}
@@ -133,4 +150,3 @@ function TotalInquiry() {
 }
 
 export default TotalInquiry;
-

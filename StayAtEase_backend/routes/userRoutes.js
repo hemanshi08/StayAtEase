@@ -15,7 +15,8 @@ router.post(
 // Owner, Tenant, Admin can fetch reviews for a property
 router.get('/property/:id', verifyToken, requireRole('Property_Owner'), getReviewsByProperty);
 
-
+router.get("/tenants", authenticate, userController.getAllTenants);
+router.get("/room-owners", authenticate, userController.getAllRoomOwners);
 
 // router.get('/property/:p_id', reviewController.getReviewsByPropertyId);
 

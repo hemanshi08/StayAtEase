@@ -13,28 +13,27 @@ function TotalReviews() {
     const fetchReviews = async () => {
       try {
         const token = localStorage.getItem("token");
-  
+
         if (!token) {
           console.error("No token found!");
           return;
         }
-  
+
         const response = await axios.get("http://localhost:5000/api/reviews/admin-reviews", {
           headers: {
             Authorization: `Bearer ${token}`
           },
         });
-  
+
         setReviews(response.data.reviews);
       } catch (error) {
         console.error("Error fetching reviews:", error);
       }
     };
-  
+
     fetchReviews();
   }, []);
-  
-  
+
   const indexOfLastReview = currentPage * reviewsPerPage;
   const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
   const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
@@ -72,30 +71,38 @@ function TotalReviews() {
               </tr>
             </thead>
             <tbody>
-              {currentReviews.map((review) => (
-                <tr key={review.r_id} className="border-b">
-                  <td className="p-4 flex items-center space-x-3">
-                    <img
-                      src={review.User?.profile_pic || "/default-user.png"}
-                      alt="Profile"
-                      className="h-10 w-10 rounded-full border"
-                    />
-                    <span className="font-semibold">{review.User?.fullName}</span>
-                  </td>
-                  <td className="p-4">{review.Property?.title}</td>
-                  <td className="p-4">{review.Property?.address}</td>
-                  <td className="p-4">{review.date}</td>
-                  <td className="p-4 flex space-x-1 text-yellow-500">
-                    {"★".repeat(review.rating).padEnd(5, "☆")}
-                  </td>
-                  <td className="p-4">{review.review}</td>
-                  <td className="p-4 text-center">
-                    <button className="!text-red-600 cursor-pointer hover:text-red-800 transition">
-                      <DeleteOutlined style={{ fontSize: "18px" }} />
-                    </button>
+              {currentReviews.length === 0 ? (
+                <tr>
+                  <td colSpan="7" className="p-4 text-center text-gray-500">
+                    No reviews found.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                currentReviews.map((review) => (
+                  <tr key={review.r_id} className="border-b">
+                    <td className="p-4 flex items-center space-x-3">
+                      <img
+                        src={review.User?.profile_pic || "/default-user.png"}
+                        alt="Profile"
+                        className="h-10 w-10 rounded-full border"
+                      />
+                      <span className="font-semibold">{review.User?.fullName}</span>
+                    </td>
+                    <td className="p-4">{review.Property?.title}</td>
+                    <td className="p-4">{review.Property?.address}</td>
+                    <td className="p-4">{review.date}</td>
+                    <td className="p-4 flex space-x-1 text-yellow-500">
+                      {"★".repeat(review.rating).padEnd(5, "☆")}
+                    </td>
+                    <td className="p-4">{review.review}</td>
+                    <td className="p-4 text-center">
+                      <button className="!text-red-600 cursor-pointer hover:text-red-800 transition">
+                        <DeleteOutlined style={{ fontSize: "18px" }} />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

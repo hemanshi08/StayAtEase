@@ -35,7 +35,7 @@ export default function Header() {
   <Link to="/RoomOwnerDashboard" className={`hover:text-blue-500 font-medium ${isActive("/RoomOwnerDashboard")}`}>
               Dashboard
             </Link>
-            <Link to="/PropertyForm" className={`hover:text-blue-500 font-medium ${isActive("/PropertyForm")}`}>
+            <Link to="/AddProperty" className={`hover:text-blue-500 font-medium ${isActive("/AddProperty")}`}>
             Add Properties
             </Link>
             <Link to="/PropertyListings" className={`hover:text-blue-500 font-medium ${isActive("/PropertyListings")}`}>
