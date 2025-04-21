@@ -1,29 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 function DashboardUserTable() {
-    const users = [
-        { id: 1, name: "Robert", email: "robert@example.com", phone: "+1 347-479-8275", img: "../public/profile_image/team-3.jpg" },
-        { id: 2, name: "Sharonda", email: "sharonda@example.com", phone: "+1 570-621-248", img: "../public/profile_image/testimonial-1.jpg" },
-        { id: 3, name: "John Smith", email: "johnsmith@example.com", phone: "+1 646-957-2004", img: "../public/profile_image/testimonial-2.jpg" },
-        { id: 4, name: "Pricilla", email: "pricilla@example.com", phone: "+1 614-915-8101", img: "../public/profile_image/testimonial-5.jpg" },
-        { id: 5, name: "James", email: "james@example.com", phone: "+1 918-543-3702", img: "../public/profile_image/testimonial-4.jpg" },
-    ];
+    const [tenants, setTenants] = useState([]);
+    const [owners, setOwners] = useState([]);
 
-    const admins = [
-        { id: 1, name: "Robert", email: "robert@example.com", phone: "+1 347-479-8275", img: "../public/profile_image/testimonial-3.jpg" },
-        { id: 2, name: "Sharonda", email: "sharonda@example.com", phone: "+1 570-621-248", img: "../public/profile_image/team-4.jpg" },
-        { id: 3, name: "John Smith", email: "johnsmith@example.com", phone: "+1 646-957-2004", img: "../public/profile_image/team-2.jpg" },
-        { id: 4, name: "Pricilla", email: "pricilla@example.com", phone: "+1 614-915-8101", img: "../public/profile_image/testimonial-5.jpg" },
-        { id: 5, name: "James", email: "james@example.com", phone: "+1 918-543-3702", img: "../public/profile_image/testimonial-1.jpg" },
-    ];
+    useEffect(() => {
+        fetchUsers();
+    }, []);
+
+    const fetchUsers = async () => {
+        try {
+            const [tenantRes, ownerRes] = await Promise.all([
+                axios.get("http://localhost:5000/api/users/tenants"),  // Update URL as per your route
+                axios.get("http://localhost:5000/api/users/room-owners")
+            ]);
+
+            setTenants(tenantRes.data);
+            setOwners(ownerRes.data);
+        } catch (error) {
+            console.error("Error fetching users:", error);
+        }
+    };
 
     const renderTable = (title, data, type) => (
         <div className="bg-white shadow-md rounded-lg p-5 w-full mb-6">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg !font-bold">{title}</h2>
-                <a href="#" className="text-blue-500 text-sm font-semibold hover:underline">
-                    View All →
-                </a>
+                <h2 className="text-lg font-bold">{title}</h2>
+                <a href="#" className="text-blue-500 text-sm font-semibold hover:underline">View All →</a>
             </div>
             <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
@@ -36,15 +40,19 @@ function DashboardUserTable() {
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map((item) => (
-                            <tr key={item.id} className="border-b hover:bg-gray-50 transition">
-                                <td className="p-3 text-sm text-gray-600">{item.id}</td>
+                        {data.map((user) => (
+                            <tr key={user.u_id} className="border-b hover:bg-gray-50 transition">
+                                <td className="p-3 text-sm text-gray-600">{user.u_id}</td>
                                 <td className="p-3 flex items-center space-x-2 text-sm text-gray-600">
-                                    <img src={item.img} alt={item.name} className="w-8 h-8 rounded-full" />
-                                    <span>{item.name}</span>
+                                    <img
+                                        src={user.profile_pic}
+                                        alt={user.fullName}
+                                        className="w-8 h-8 rounded-full"
+                                    />
+                                    <span>{user.fullName}</span>
                                 </td>
-                                <td className="p-3 text-sm text-gray-600">{item.email}</td>
-                                <td className="p-3 text-sm text-gray-600">{item.phone}</td>
+                                <td className="p-3 text-sm text-gray-600">{user.email}</td>
+                                <td className="p-3 text-sm text-gray-600">{user.phone}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -55,10 +63,9 @@ function DashboardUserTable() {
 
     return (
         <div className="pt-10 pb-4">
-
             <div className="flex flex-col space-y-6 lg:space-y-0 lg:space-x-6 lg:flex-row">
-                {renderTable("Top Providers", users, "Provider")}
-                {renderTable("Room Owners", admins, "Admin")}
+                {renderTable("Top Providers", tenants, "Provider")}
+                {renderTable("Room Owners", owners, "Admin")}
             </div>
         </div>
     );
