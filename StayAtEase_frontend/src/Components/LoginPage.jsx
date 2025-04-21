@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import ForgotPasswordModal from "./forgetpassword";
 import { useAuth } from "../context/AuthContext";
 
-export default function LoginModal({ isModalOpen, handleCancel }) {
+export default function LoginModal({ isModalOpen, handleCancel, onLoginSuccess }) {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -55,6 +55,11 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
       const userData = await login(email, password);
       message.success("Login successful!");
       handleCancel();
+      
+      // Call the success callback if provided
+      if (onLoginSuccess) {
+        onLoginSuccess();
+      }
 
       // Navigate based on user type
       if (userData.userType === "admin") {
@@ -65,7 +70,6 @@ export default function LoginModal({ isModalOpen, handleCancel }) {
         navigate("/");
       }
     } catch (error) {
-      // Show error message from the server or a default message
       const errorMessage = error.message || "Login failed. Please try again.";
       message.error(errorMessage);
     } finally {

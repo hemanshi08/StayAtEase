@@ -9,7 +9,10 @@ export default function Header() {
   const isActive = (path) => location.pathname === path ? "text-blue-500 font-bold" : "text-gray-700";
 
   const handleLogout = () => {
-    // Add logout logic here (e.g., clearing authentication data from local storage or calling an API)
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
+    LogOut(); // Ensure this also clears context if needed
     navigate("/"); // Redirect to home page
   };
   return (

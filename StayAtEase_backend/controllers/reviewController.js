@@ -1,26 +1,64 @@
 const { Review, Property ,User } = require("../models");
+const updatePropertyRating = require('../utils/updatePropertyRating');
+// Add or update a review (only for tenants)
+// Add or update a review (only for tenants)
 
-// Tenant creates or updates review
-exports.createOrUpdateReview = async (req, res) => {
+
+exports.addOrUpdateReview = async (req, res) => {
   try {
-    const { u_id } = req.user; // From token
-    const { p_id, rating, review } = req.body;
-
-    const existing = await Review.findOne({ where: { u_id, p_id } });
-
-    if (existing) {
-      existing.rating = rating;
-      existing.review = review;
-      await existing.save();
-      return res.status(200).json({ message: "Review updated", review: existing });
+    console.log("User:", req.user); 
+    if (req.user.userType !== 'tenant') {
+      return res.status(403).json({ error: 'Only tenants can submit reviews' });
     }
 
-    const newReview = await Review.create({ u_id, p_id, rating, review });
-    res.status(201).json({ message: "Review created", review: newReview });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+    const { p_id, rating, review: comment } = req.body;
+    console.log("Body:", req.body); 
+    if (!p_id || !rating || rating < 1 || rating > 5 || !comment) {
+      return res.status(400).json({ error: 'Invalid input data' });
+    }
+
+    const property = await Property.findByPk(p_id);
+    if (!property) {
+      return res.status(404).json({ error: 'Property not found' });
+    }
+
+    let review = await Review.findOne({
+      where: {
+        p_id,
+        u_id: req.user.id
+      }
+    });
+
+    let isNew = false;
+
+    if (review) {
+      review.rating = rating;
+      review.review = comment;
+      review.date = new Date();
+    } else {
+      review = await Review.create({
+        p_id,
+        u_id: req.user.id,
+        rating,
+        review: comment
+      });
+      isNew = true;
+    }
+
+    await review.save();
+    await updatePropertyRating(p_id);
+
+    res.status(201).json({
+      message: isNew ? 'Review added successfully' : 'Review updated successfully',
+      review
+    });
+
+  } catch (error) {
+    console.error('Error adding/updating review:', error); 
+    res.status(500).json({ error: 'Server error' });
   }
 };
+
 
 // Get reviews for a property (Tenant, Owner, Admin)
 // exports.getReviewsByProperty = async (req, res) => {
@@ -96,22 +134,22 @@ exports.getReviewsByProperty = async (req, res) => {
 };
 
 
-const getReviewsByPropertyId = async (req, res) => {
-  const { p_id } = req.params;
+// const getReviewsByPropertyId = async (req, res) => {
+//   const { p_id } = req.params;
 
-  try {
-    const reviews = await Review.findAll({
-      where: { p_id },
-      include: [{ model: User, attributes: ['id', 'name', 'email'] }], // Optional: include user who posted the review
-      order: [['date', 'DESC']]
-    });
+//   try {
+//     const reviews = await Review.findAll({
+//       where: { p_id },
+//       include: [{ model: User, attributes: ['id', 'name', 'email'] }], // Optional: include user who posted the review
+//       order: [['date', 'DESC']]
+//     });
 
-    res.status(200).json(reviews);
-  } catch (error) {
-    console.error("Error fetching reviews:", error);
-    res.status(500).json({ message: "Failed to fetch reviews" });
-  }
-};
+//     res.status(200).json(reviews);
+//   } catch (error) {
+//     console.error("Error fetching reviews:", error);
+//     res.status(500).json({ message: "Failed to fetch reviews" });
+//   }
+// };
 
 
 
@@ -174,3 +212,44 @@ exports.deleteReview = async (req, res) => {
   }
 };
 
+exports.getAllReviews = async (req, res) => {
+  try {
+    // 1. Verify admin role
+    if (!req.user || req.user.userType?.toLowerCase() !== 'admin') {
+      return res.status(403).json({ error: 'Unauthorized access' });
+    }
+
+    // 2. Fetch all reviews with associated user and property data
+    const reviews = await Review.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ['u_id', 'fullName', 'email', 'profile_pic'],
+          as: 'User' // This should match your association alias
+        },
+        {
+          model: Property,
+          attributes: ['p_id', 'title', 'address'],
+          as: 'Property'
+        }
+      ],
+      order: [['date', 'DESC']] // Newest reviews first
+    });
+    
+    res.status(200).json({message: 'Reviews fetched successfully.', reviews});
+
+  } catch (err) {
+    console.error('Error fetching reviews:', {
+      message: err.message,
+      stack: err.stack,
+      original: err.original
+    });
+    
+    res.status(500).json({ 
+      error: 'Failed to fetch reviews',
+      ...(process.env.NODE_ENV === 'development' && {
+        details: err.message
+      })
+    });
+  }
+};

@@ -16,10 +16,13 @@ import {
 
 export default function HomePage() {
   const [properties, setProperties] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState("Location");
-  const [selectedType, setSelectedType] = useState("Property Type");
-  const [selectedBudget, setSelectedBudget] = useState("Budget");
+  const [filteredProperties, setFilteredProperties] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState("All");
+  const [selectedType, setSelectedType] = useState("All");
+  const [selectedBudget, setSelectedBudget] = useState("All");
+  const [wishlist, setWishlist] = useState([]);
 
+  const userId = localStorage.getItem("user_id");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +30,7 @@ export default function HomePage() {
       try {
         const response = await axios.get("http://localhost:5000/api/properties");
         setProperties(response.data);
+        setFilteredProperties(response.data);
       } catch (error) {
         console.error("Error fetching properties:", error);
       }
@@ -35,12 +39,51 @@ export default function HomePage() {
     fetchProperties();
   }, []);
 
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/wishlist/${userId}`);
+        setWishlist(res.data);
+      } catch (err) {
+        console.error("Failed to fetch wishlist:", err);
+      }
+    };
+
+    if (userId) fetchWishlist();
+  }, [userId]);
+
   const handleExploreClick = () => {
     navigate("/properties");
   };
 
+  const handleFilterSearch = () => {
+    const filtered = properties.filter((property) => {
+      const matchesLocation =
+        selectedLocation === "All" || property.address.includes(selectedLocation);
+      const matchesType =
+        selectedType === "All" || property.property_type === selectedType;
+      const matchesBudget = (() => {
+        const price = property.price;
+        if (selectedBudget === "₹2,500 - ₹5,500") return price >= 2500 && price <= 5500;
+        if (selectedBudget === "₹5,500 - ₹7,500") return price > 5500 && price <= 7500;
+        if (selectedBudget === "₹7,500+") return price > 7500;
+        return true;
+      })();
+
+      return matchesLocation && matchesType && matchesBudget;
+    });
+
+    setFilteredProperties(filtered);
+  };
+
+  // Check if property is in wishlist
+  const isPropertyInWishlist = (propertyId) => {
+    return wishlist.some(item => item.property_id === propertyId);
+  };
+
   const locationsMenu = {
     items: [
+      { key: "All", label: "All Locations" },
       { key: "Rajkot", label: "Rajkot" },
       { key: "Ahemdabad", label: "Ahemdabad" },
       { key: "Surat", label: "Surat" },
@@ -50,15 +93,17 @@ export default function HomePage() {
 
   const propertyTypeMenu = {
     items: [
+      { key: "All", label: "All Types" },
       { key: "Apartment", label: "Apartment" },
-      { key: "House", label: "House" },
-      { key: "Studio", label: "Studio" },
+      { key: "Villa", label: "Villa" },
+      { key: "Condo", label: "Condo" },
     ],
     onClick: ({ key }) => setSelectedType(key),
   };
 
   const budgetMenu = {
     items: [
+      { key: "All", label: "All Budgets" },
       { key: "₹2,500 - ₹5,500", label: "₹2,500 - ₹5,500" },
       { key: "₹5,500 - ₹7,500", label: "₹5,500 - ₹7,500" },
       { key: "₹7,500+", label: "₹7,500+" },
@@ -110,28 +155,31 @@ export default function HomePage() {
           Find Your Perfect Home
         </div>
 
-        {/* Dropdown Search Filters */}
+        {/* Dropdown Filters */}
         <div className="flex bg-center items-center justify-center">
           <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-4 sm:mt-6 w-full max-w-2xl px-2">
             <Dropdown menu={locationsMenu}>
               <Button className="w-full sm:w-40 flex justify-between items-center">
-                {selectedLocation} <DownOutlined />
+                {selectedLocation === "All" ? "Location" : selectedLocation} <DownOutlined />
               </Button>
             </Dropdown>
 
             <Dropdown menu={propertyTypeMenu}>
               <Button className="w-full sm:w-40 flex justify-between items-center">
-                {selectedType} <DownOutlined />
+                {selectedType === "All" ? "Property Type" : selectedType} <DownOutlined />
               </Button>
             </Dropdown>
 
             <Dropdown menu={budgetMenu}>
               <Button className="w-full sm:w-40 flex justify-between items-center">
-                {selectedBudget} <DownOutlined />
+                {selectedBudget === "All" ? "Budget" : selectedBudget} <DownOutlined />
               </Button>
             </Dropdown>
 
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md">
+            <button
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md"
+              onClick={handleFilterSearch}
+            >
               Search
             </button>
           </div>
@@ -143,26 +191,37 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto mt-10 mb-10">
           <h2 className="text-3xl font-semibold ml-5">Featured Properties</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 mr-5 ml-5">
-            {properties.length > 0 ? (
-              properties.map((property) => (
+            {filteredProperties.length > 0 ? (
+              filteredProperties.slice(0, 6).map((property) => (
                 <PropertyCard
                   key={property.p_id}
                   id={property.p_id}
                   title={property.title}
                   location={property.address}
                   price={property.price}
-                  rating={0}
+                  rating={property.avgRating}
                   image={property.property_images[0] || "/default.jpg"}
                   beds={property.no_of_beds}
                   baths={property.no_of_bathrooms}
                   sqft={property.sq_ft}
                   showDetailsButton={true}
+                  defaultLiked={userId ? isPropertyInWishlist(property.p_id) : false}
                 />
               ))
             ) : (
-              <div className="col-span-3 text-center">Loading...</div>
+              <div className="col-span-3 text-center">No properties found.</div>
             )}
           </div>
+          {filteredProperties.length > 6 && (
+            <div className="text-center mt-6">
+              <button
+                onClick={handleExploreClick}
+                className="px-6 py-2 bg-blue-600 !text-white rounded-lg shadow-md hover:bg-blue-700 transition"
+              >
+                View More Properties
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -192,7 +251,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Why Choose Us Section */}
+      {/* Why Choose Us */}
       <div className="bg-gray-100 py-10 mt-13">
         <div className="max-w-6xl mx-auto text-center px-6">
           <h2 className="text-3xl font-bold text-gray-800">

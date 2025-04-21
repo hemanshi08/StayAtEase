@@ -9,7 +9,7 @@ const generateTokens = (id, userType) => {
     }
 
     const token = jwt.sign({ id, userType }, process.env.JWT_SECRET, {
-      expiresIn: '15m', // Access token expires in 15 minutes
+      expiresIn: '25m', // Access token expires in 25 minutes
     });
 
     // Use JWT_SECRET for refresh token if JWT_REFRESH_SECRET is not available
