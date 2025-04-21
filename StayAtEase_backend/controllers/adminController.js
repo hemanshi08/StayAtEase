@@ -75,3 +75,35 @@ exports.changePassword = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getAdminProfile = async (req, res) => {
+  try {
+    const adminId = req.user.id; // Get admin ID from auth middleware
+    console.log('Fetching profile for admin:', adminId);
+
+    const admin = await Admin.findOne({
+      where: { admin_id: adminId }, // Match admin using admin_id
+      attributes: { exclude: ['password'] } // Exclude password from response
+    });
+
+    if (!admin) {
+      console.log('Admin not found for ID:', adminId);
+      return res.status(404).json({ error: 'Admin not found' });
+    }
+
+    console.log('Admin found, sending profile data');
+    res.json({
+      success: true,
+      admin: {
+        id: admin.admin_id,       // admin_id mapped here
+        fullName: admin.fullName,  // fullName mapped here
+        email: admin.email,        // email mapped here
+        phone: admin.phone,        // phone mapped here
+        profile_pic: admin.profile_pic, // profile_pic mapped here
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching admin profile:', error);
+    res.status(500).json({ error: 'Failed to fetch admin profile' });
+  }
+};
