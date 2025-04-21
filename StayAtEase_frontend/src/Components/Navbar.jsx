@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { Menu, X, LogOut } from "lucide-react";
+import { Menu, X, LogOut, Heart } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import LoginModal from "./LoginPage";
 import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, logout, isAuthenticated } = useAuth();
 
   const isActive = (path) => location.pathname === path ? "text-blue-500 font-bold" : "text-gray-700";
 
@@ -21,10 +21,22 @@ export default function Navbar() {
     navigate("/");
   };
 
+  const handleWishlistClick = (e) => {
+    if (!isAuthenticated) {
+      e.preventDefault();
+      setIsLoginModalOpen(true);
+    }
+    // If authenticated, normal navigation will occur
+  };
+
+  const handleLoginSuccess = () => {
+    setIsLoginModalOpen(false);
+    navigate("/wishlist"); // Redirect to wishlist after successful login
+  };
+
   return (
     <>
-    <nav className="fixed top-0 left-0 w-full bg-white shadow-md p-4 z-50">
-      {/* <nav className="w-full bg-white shadow-md p-4"> */}
+      <nav className="fixed top-0 left-0 w-full bg-white shadow-md p-4 z-50">
         <div className="container mx-auto flex justify-between items-center">
           {/* Logo */}
           <a href="#" className="flex items-center space-x-2">
@@ -35,27 +47,33 @@ export default function Navbar() {
           {/* Desktop Menu */}
           <div className="flex items-center space-x-6">
             <div className="hidden md:flex space-x-6">
-            <Link to="/" className={`hover:text-blue-500 font-medium ${isActive("/")}`}>
-              Home
-            </Link>
-            <Link to="/properties" className={`hover:text-blue-500 font-medium ${isActive("/properties")}`}>
-              Properties
-            </Link>
-            <Link to="/wishlist" className={`hover:text-blue-500 font-medium ${isActive("/wishlist")}`}>
-              Wishlist
-            </Link>
+              <Link to="/" className={`hover:text-blue-500 font-medium ${isActive("/")}`}>
+                Home
+              </Link>
+              <Link to="/properties" className={`hover:text-blue-500 font-medium ${isActive("/properties")}`}>
+                Properties
+              </Link>
+              <Link 
+                to="/wishlist" 
+                className={`hover:text-blue-500 font-medium ${isActive("/wishlist")} flex items-center gap-1`}
+                onClick={handleWishlistClick}
+              >
+                <Heart size={18} />
+                Wishlist
+              </Link>
             </div>
 
             {/* Auth Button */}
             {user && user.userType === "tenant" ? (
               <div className="flex items-center -space-x-2">
-                      <Link to="/profilepage">
-  <img 
-    src="/profile.png" 
-    className="w-10 h-10 rounded-full border border-gray-300 hover:border-gray-400 transition duration-200" 
-    alt="User" 
-  />
-</Link> 
+                <img 
+                  src={user.profile_pic} 
+                  alt="Profile" 
+                  className="w-8 h-8 rounded-full object-cover"
+                  onError={(e) => {
+                    e.target.src = 'https://via.placeholder.com/32'; // Fallback image
+                  }}
+                />
                 <span className="text-white">{user.name}</span>
                 <button
                   onClick={handleLogout}
@@ -67,8 +85,8 @@ export default function Navbar() {
               </div>
             ) : (
               <button 
-                onClick={() => setIsModalOpen(true)} 
-                className="hidden md:block px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 !text-white  rounded-lg shadow-md"
+                onClick={() => setIsLoginModalOpen(true)} 
+                className="hidden md:block px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 !text-white rounded-lg shadow-md"
               >
                 Login
               </button>
@@ -86,7 +104,14 @@ export default function Navbar() {
           <div className="md:hidden flex flex-col items-center space-y-4 mt-4">
             <Link to="/" className={`hover:text-blue-500 font-medium ${isActive("/")}`}>Home</Link>
             <Link to="/properties" className={`hover:text-blue-500 font-medium ${isActive("/properties")}`}>Properties</Link>
-            <Link to="/wishlist" className={`hover:text-blue-500 font-medium ${isActive("/wishlist")}`}>Wishlist</Link>
+            <Link 
+              to="/wishlist" 
+              className={`hover:text-blue-500 font-medium ${isActive("/wishlist")} flex items-center gap-1`}
+              onClick={handleWishlistClick}
+            >
+              <Heart size={18} />
+              Wishlist
+            </Link>
             
             {user ? (
               <div className="flex flex-col items-center space-y-4 w-full">
@@ -107,7 +132,7 @@ export default function Navbar() {
               </div>
             ) : (
               <button 
-                onClick={() => setIsModalOpen(true)} 
+                onClick={() => setIsLoginModalOpen(true)} 
                 className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 !text-white rounded-lg shadow-md"
               >
                 Login
@@ -117,8 +142,12 @@ export default function Navbar() {
         )}
       </nav>
 
-      {/* ✅ Include LoginModal and pass modal state */}
-      <LoginModal isModalOpen={isModalOpen} handleCancel={() => setIsModalOpen(false)} />
+      {/* Login Modal */}
+      <LoginModal 
+        isModalOpen={isLoginModalOpen} 
+        handleCancel={() => setIsLoginModalOpen(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
     </>
   );
 }

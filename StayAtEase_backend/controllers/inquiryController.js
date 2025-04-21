@@ -100,6 +100,29 @@ exports.getAllInquiriesForOwner =  async (req, res) => {
 //   }
 // };
 
+// exports.getAllInquiries = async (req, res) => {
+//   try {
+//     const inquiries = await Inquiry.findAll({
+//       include: [
+//         {
+//           model: Property,
+//           attributes: ['p_id', 'title', 'location'],
+//         },
+//         {
+//           model: User,
+//           attributes: ['name', 'email', 'phone'],
+//         },
+//       ],
+//     });
+
+//     res.status(200).json(inquiries);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Failed to fetch all inquiries' });
+//   }
+// };
+
+
 exports.getAllInquiries = async (req, res) => {
   try {
     // 1. Verify admin role

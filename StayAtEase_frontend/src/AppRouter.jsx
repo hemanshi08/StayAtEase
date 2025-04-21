@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 
+
 import HomePage from "./rental/home";
 import About from "./rental/PropertyPage";
 import PropertyPage from "./rental/PropertyPage";
@@ -18,8 +19,7 @@ import TotalReviews from "./Super_Admin/TotalReviews";
 import ProfileDetails from "./Super_Admin/superadmin_profiledetails";
 import ShowProperty from "./Super_Admin/ShowProperty";
 import EditUser from "./Super_Admin/EditUsers";
-import UserProfileDetails from "./rental/profilepage";
-import TotalInquiry from "./Super_Admin/TotalInquiry";
+
 
 import Header from "./Admin/component/header";
 import RoomOwnerDashboard from "./Admin/dashboard";
@@ -30,7 +30,6 @@ import RommOwnerProfileDetails from "./Admin/ProfileDetails";
 import AdminPropertyDetails from "./Admin/admin-propertydetails";
 import PropertyMessages from "./Admin/PropertyMessages";
 import TenantLayout from "./Layouts/TenantLayout";
-import AddProperty from "./Admin/AddProperty";
 function AppRouter(){
   return (
    
@@ -39,9 +38,10 @@ function AppRouter(){
         <Route path='/' element={<TenantLayout/>}>
           <Route index element={<HomePage />} />
           <Route path="properties" element={<PropertyPage />} />
-          <Route path="wishlist" element={<WishlistPage />} />
+          <Route path="wishlist" element={<ProtectedRoute>
+            <WishlistPage />
+          </ProtectedRoute>} />
           <Route path="property/:id" element={<PropertyDetails />} />
-          <Route path="profilepage" element={<UserProfileDetails />} />
         </Route>
 
         {/* Router for superAdmin */}
@@ -53,7 +53,7 @@ function AppRouter(){
         <Route path="/superadmin_profiledetails" element={<ProfileDetails />} />
         <Route path="/ShowProperty" element={<ShowProperty />} />
         <Route path="/edit-user" element={<EditUser />} />
-        <Route path="/TotalInquiry" element={<TotalInquiry />} />
+
         {/* Owner routes */}
         <Route path="/RoomOwnerDashboard" element={<RoomOwnerDashboard />} />
         <Route path="/PropertyReviews" element={<PropertyReviews />} />
