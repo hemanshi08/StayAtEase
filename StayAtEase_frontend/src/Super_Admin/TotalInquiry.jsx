@@ -4,13 +4,14 @@ import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
 import SuperAdminNavbar from "./Superadmin_navbar";
 import Footer from "../Components/Footer";
 
-function TotalReviews() {
-  const [reviews, setReviews] = useState([]);
+function TotalInquiry() {
+  const [messages, setMessages] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const reviewsPerPage = 5;
+  const messagesPerPage = 5;
 
   useEffect(() => {
-    const fetchReviews = async () => {
+    const fetchMessages = async () => {
       try {
         const token = localStorage.getItem("token");
 
@@ -19,25 +20,37 @@ function TotalReviews() {
           return;
         }
 
-        const response = await axios.get("http://localhost:5000/api/reviews/admin-reviews", {
+        const response = await axios.get("http://localhost:5000/api/inquiries/admin-inquiries", {
           headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
         });
 
-        setReviews(response.data.reviews);
+        setMessages(response.data.inquiries);
       } catch (error) {
-        console.error("Error fetching reviews:", error);
+        console.error("Error fetching messages:", error);
       }
     };
 
-    fetchReviews();
+    fetchMessages();
   }, []);
 
-  const indexOfLastReview = currentPage * reviewsPerPage;
-  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
-  const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
-  const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  // Filter messages based on search query
+  const filteredMessages = messages.filter(
+    (message) =>
+      message.User?.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      message.Property?.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Pagination logic
+  const indexOfLastMessage = currentPage * messagesPerPage;
+  const indexOfFirstMessage = indexOfLastMessage - messagesPerPage;
+  const currentMessages = filteredMessages.slice(indexOfFirstMessage, indexOfLastMessage);
+  const totalPages = Math.ceil(filteredMessages.length / messagesPerPage);
 
   return (
     <div>
@@ -45,12 +58,14 @@ function TotalReviews() {
 
       <div className="max-w-6xl mx-auto p-8 bg-white rounded-lg mt-16 mb-10">
         <div className="flex flex-wrap justify-between items-center mb-6">
-          <h2 className="text-3xl !font-bold">Property Reviews</h2>
+          <h2 className="text-3xl !font-bold">Property messages</h2>
 
           <div className="relative w-full sm:w-1/3 mt-3 sm:mt-0">
             <input
               type="text"
-              placeholder="Search reviews..."
+              placeholder="Search messages..."
+              value={searchQuery}
+              onChange={handleSearch}
               className="w-full h-9 p-2 pl-10 border rounded-lg text-gray-600"
             />
             <SearchOutlined className="absolute left-3 top-2.5 text-gray-500" />
@@ -61,43 +76,31 @@ function TotalReviews() {
           <table className="w-full border border-gray-300 text-gray-600">
             <thead>
               <tr className="bg-gray-100">
-                <th className="p-4 text-left">Reviewer</th>
+                <th className="p-4 text-left">Inquirier Name</th>
                 <th className="p-4 text-left">Property Name</th>
-                <th className="p-4 text-left">Property Owner</th>
                 <th className="p-4 text-left">Date</th>
-                <th className="p-4 text-left">Rating</th>
-                <th className="p-4 text-left">Review</th>
+                <th className="p-4 text-left">Messages</th>
                 <th className="p-4 text-center">Action</th>
               </tr>
             </thead>
             <tbody>
-              {currentReviews.length === 0 ? (
+              {/* If no filtered messages, show 'Not Found' */}
+              {filteredMessages.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="p-4 text-center text-gray-500">
-                    No reviews found.
+                  <td colSpan="5" className="p-4 text-center text-gray-600">
+                    No results found
                   </td>
                 </tr>
               ) : (
-                currentReviews.map((review) => (
-                  <tr key={review.r_id} className="border-b">
-                    <td className="p-4 flex items-center space-x-3">
-                      <img
-                        src={review.User?.profile_pic || "/default-user.png"}
-                        alt="Profile"
-                        className="h-10 w-10 rounded-full border"
-                      />
-                      <span className="font-semibold">{review.User?.fullName}</span>
-                    </td>
-                    <td className="p-4">{review.Property?.title}</td>
-                    <td className="p-4">{review.Property?.address}</td>
-                    <td className="p-4">{review.date}</td>
-                    <td className="p-4 flex space-x-1 text-yellow-500">
-                      {"★".repeat(review.rating).padEnd(5, "☆")}
-                    </td>
-                    <td className="p-4">{review.review}</td>
+                currentMessages.map((message) => (
+                  <tr key={message.i_id} className="border-b">
+                    <td className="p-4">{message.User?.fullName}</td>
+                    <td className="p-4">{message.Property?.title}</td>
+                    <td className="p-4">{new Date(message.createdAt).toLocaleDateString()}</td>
+                    <td className="p-4">{message.message}</td>
                     <td className="p-4 text-center">
-                      <button className="!text-red-600 cursor-pointer hover:text-red-800 transition">
-                        <DeleteOutlined style={{ fontSize: "18px" }} />
+                      <button className="text-red-600 hover:text-red-800">
+                        <DeleteOutlined />
                       </button>
                     </td>
                   </tr>
@@ -110,8 +113,8 @@ function TotalReviews() {
         {/* Pagination */}
         <div className="flex flex-wrap justify-between items-center mt-6 text-gray-600">
           <p>
-            Showing {indexOfFirstReview + 1} to{" "}
-            {Math.min(indexOfLastReview, reviews.length)} of {reviews.length} reviews
+            Showing {indexOfFirstMessage + 1} to {Math.min(indexOfLastMessage, filteredMessages.length)} of{" "}
+            {filteredMessages.length} messages
           </p>
           <div className="flex space-x-4 mt-3 sm:mt-0">
             <button
@@ -125,9 +128,7 @@ function TotalReviews() {
             >
               Previous
             </button>
-            <span className="px-5 py-2 border rounded-lg bg-blue-500 text-white font-bold">
-              {currentPage}
-            </span>
+            <span className="px-5 py-2 border rounded-lg bg-blue-500 text-white font-bold">{currentPage}</span>
             <button
               onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages}
@@ -148,4 +149,4 @@ function TotalReviews() {
   );
 }
 
-export default TotalReviews;
+export default TotalInquiry;

@@ -35,16 +35,19 @@ export default function SuperAdminNavbar() {
                 Dashboard
               </Link>
               <Link to="/TotalUser" className={`hover:text-blue-500 font-medium ${isActive("/TotalUser")}`}>
-                Users
+                Tenant
               </Link>
               <Link to="/TotalProperties" className={`hover:text-blue-500 font-medium ${isActive("/TotalProperties")}`}>
                 Properties
               </Link>
               <Link to="/TotalRoomOwner" className={`hover:text-blue-500 font-medium ${isActive("/TotalRoomOwner")}`}>
-                RoomOwners
+                Property_Owners
               </Link>
               <Link to="/TotalReviews" className={`hover:text-blue-500 font-medium ${isActive("/TotalReviews")}`}>
                 Reviews
+              </Link>
+              <Link to="/TotalInquiry" className={`hover:text-blue-500 font-medium ${isActive("/TotalInquiry")}`}>
+                Messages
               </Link>
             </div>
 

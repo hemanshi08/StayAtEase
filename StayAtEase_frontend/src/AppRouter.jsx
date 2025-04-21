@@ -13,6 +13,7 @@ import PropertyDetails from "./rental/PropertyDetailsPage";
 import Dashboard from "./Super_Admin/Dashboard";
 import TotalProperties from "./Super_Admin/TotalProperties";
 import TotalUser from "./Super_Admin/TotalUser";
+import TotalInquiry from "./Super_Admin/TotalInquiry";
 import TotalRoomOwner from "./Super_Admin/TotalRoomOwner";
 import TotalReviews from "./Super_Admin/TotalReviews";
 import ProfileDetails from "./Super_Admin/superadmin_profiledetails";
@@ -31,6 +32,7 @@ import PropertyMessages from "./Admin/PropertyMessages";
 import TenantLayout from "./Layouts/TenantLayout";
 import ProtectedRoute from './Layouts/ProtectedRoute';
 import UserProfile from "./Components/UserProfile";
+
 function AppRouter(){
   return (
    
@@ -56,6 +58,9 @@ function AppRouter(){
         <Route path="/ShowProperty" element={<ShowProperty />} />
         <Route path="/edit-user" element={<EditUser />} />
         <Route path="/AdminPropertydetails/:id" element={<SuperAdminPropertyDetails />} />
+        <Route path="/TotalInquiry" element={<TotalInquiry />} />
+        
+
 
 
         {/* Owner routes */}

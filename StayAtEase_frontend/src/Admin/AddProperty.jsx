@@ -316,23 +316,19 @@ const AddProperty = () => {
         <div className="container mx-auto pt-4 p-28 mt-5 mb-0">
           <h2 className="text-2xl !font-bold">Add New Property</h2>
           <div className="bg-white shadow-md rounded-lg p-6 mt-4">
-            <Form
-              form={form}
-              layout="vertical"
-              onFinish={handleSubmit}
-              initialValues={formData}
-            >
-              <Form.Item
-                name="title"
-                label="Property Title"
-                rules={[{ required: true, message: 'Please enter property title' }]}
-              >
-                <Input 
-                  placeholder="Enter property title" 
-                  onChange={handleChange}
+            <form onSubmit={handleSubmit}>
+              <div className="mb-6">
+                <label className="block font-medium mb-2">Property Title</label>
+                <input
+                  type="text"
                   name="title"
+                  className="w-full p-4 bg-gray-100 rounded-lg"
+                  placeholder="Enter property title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  required
                 />
-              </Form.Item>
+              </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -511,17 +507,16 @@ const AddProperty = () => {
                 </div>
               </div>
 
-              <Form.Item>
-                <Button 
-                  type="primary" 
-                  htmlType="submit" 
-                  loading={loading}
-                  className="w-full"
+              <div className="mt-6 text-center">
+                <button 
+                  type="submit"
+                  className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+                  disabled={loading}
                 >
-                  Add Property
-                </Button>
-              </Form.Item>
-            </Form>
+                  {loading ? 'Submitting...' : 'Submit Property'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
