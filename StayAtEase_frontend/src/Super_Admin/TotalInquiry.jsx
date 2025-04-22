@@ -99,7 +99,7 @@ function TotalInquiry() {
                     <td className="p-4">{new Date(message.createdAt).toLocaleDateString()}</td>
                     <td className="p-4">{message.message}</td>
                     <td className="p-4 text-center">
-                      <button className="text-red-600 hover:text-red-800">
+                      <button className="!text-red-600 hover:text-red-800">
                         <DeleteOutlined />
                       </button>
                     </td>

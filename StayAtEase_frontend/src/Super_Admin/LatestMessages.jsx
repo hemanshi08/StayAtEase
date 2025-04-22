@@ -47,7 +47,7 @@ function LatestMessages() {
             <tr className="bg-gray-100">
               <th className="p-4 text-left">Guest Name</th>
               <th className="p-4 text-left">Property Title</th>
-              <th className="p-4 text-left">Owner Name</th>
+              {/* <th className="p-4 text-left">Owner Name</th> */}
               <th className="p-4 text-left">Email Address</th>
               <th className="p-4 text-left">Contact No</th>
               <th className="p-4 text-left">Message</th>
@@ -59,7 +59,7 @@ function LatestMessages() {
               <tr key={msg.i_id} className="border-b">
                 <td className="p-4 font-semibold">{msg.User?.fullName}</td>
                 <td className="p-4">{msg.Property?.title}</td>
-                <td className="p-4">--</td>
+                {/* <td className="p-4">--</td> */}
                 <td className="p-4">{msg.User?.email}</td>
                 <td className="p-4">{msg.User?.phone}</td>
                 <td className="p-4">{msg.message}</td>
