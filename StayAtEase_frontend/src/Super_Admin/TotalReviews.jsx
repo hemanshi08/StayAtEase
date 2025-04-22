@@ -21,7 +21,7 @@ function TotalReviews() {
 
         const response = await axios.get("http://localhost:5000/api/reviews/admin-reviews", {
           headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
         });
 
@@ -33,6 +33,28 @@ function TotalReviews() {
 
     fetchReviews();
   }, []);
+
+  const handleDeleteReview = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this review?");
+    if (!confirmDelete) return;
+
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.delete(`http://localhost:5000/api/reviews/admin-delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        setReviews((prev) => prev.filter((review) => review.r_id !== id));
+      }
+    } catch (error) {
+      console.error("Failed to delete review:", error);
+      alert("Failed to delete review. Please try again.");
+    }
+  };
 
   const indexOfLastReview = currentPage * reviewsPerPage;
   const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
@@ -96,7 +118,10 @@ function TotalReviews() {
                     </td>
                     <td className="p-4">{review.review}</td>
                     <td className="p-4 text-center">
-                      <button className="!text-red-600 cursor-pointer hover:text-red-800 transition">
+                      <button
+                        onClick={() => handleDeleteReview(review.r_id)}
+                        className="!text-red-600 cursor-pointer hover:text-red-800 transition"
+                      >
                         <DeleteOutlined style={{ fontSize: "18px" }} />
                       </button>
                     </td>

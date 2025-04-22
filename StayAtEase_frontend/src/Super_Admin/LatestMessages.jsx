@@ -51,7 +51,7 @@ function LatestMessages() {
               <th className="p-4 text-left">Email Address</th>
               <th className="p-4 text-left">Contact No</th>
               <th className="p-4 text-left">Message</th>
-              <th className="p-4 text-center">Action</th>
+              {/* <th className="p-4 text-center">Action</th> */}
             </tr>
           </thead>
           <tbody>
@@ -63,11 +63,11 @@ function LatestMessages() {
                 <td className="p-4">{msg.User?.email}</td>
                 <td className="p-4">{msg.User?.phone}</td>
                 <td className="p-4">{msg.message}</td>
-                <td className="p-4 text-center">
+                {/* <td className="p-4 text-center">
                   <button className="!text-red-600 cursor-pointer hover:text-red-800 transition">
                     <DeleteOutlined style={{ fontSize: "18px" }} />
                   </button>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>

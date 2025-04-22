@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
+import { DeleteOutlined, SearchOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+import { Modal, message as AntMessage } from "antd";
 import SuperAdminNavbar from "./Superadmin_navbar";
 import Footer from "../Components/Footer";
+
+const { confirm } = Modal;
 
 function TotalInquiry() {
   const [messages, setMessages] = useState([]);
@@ -11,32 +14,58 @@ function TotalInquiry() {
   const messagesPerPage = 5;
 
   useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-          console.error("No token found!");
-          return;
-        }
-
-        const response = await axios.get("http://localhost:5000/api/inquiries/admin-inquiries", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setMessages(response.data.inquiries);
-      } catch (error) {
-        console.error("Error fetching messages:", error);
-      }
-    };
-
     fetchMessages();
   }, []);
 
+  const fetchMessages = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.error("No token found!");
+        return;
+      }
+
+      const response = await axios.get("http://localhost:5000/api/inquiries/admin-inquiries", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setMessages(response.data.inquiries);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  const handleDelete = (id) => {
+    confirm({
+      title: "Are you sure you want to delete this inquiry?",
+      icon: <ExclamationCircleOutlined />,
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      async onOk() {
+        try {
+          const token = localStorage.getItem("token");
+          await axios.delete(`http://localhost:5000/api/inquiries/admin-delete/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          AntMessage.success("Inquiry deleted successfully");
+          fetchMessages(); // Refresh the list
+        } catch (error) {
+          console.error("Error deleting inquiry:", error);
+          AntMessage.error("Failed to delete inquiry");
+        }
+      },
+    });
   };
 
   // Filter messages based on search query
@@ -84,7 +113,6 @@ function TotalInquiry() {
               </tr>
             </thead>
             <tbody>
-              {/* If no filtered messages, show 'Not Found' */}
               {filteredMessages.length === 0 ? (
                 <tr>
                   <td colSpan="5" className="p-4 text-center text-gray-600">
@@ -99,7 +127,10 @@ function TotalInquiry() {
                     <td className="p-4">{new Date(message.createdAt).toLocaleDateString()}</td>
                     <td className="p-4">{message.message}</td>
                     <td className="p-4 text-center">
-                      <button className="!text-red-600 hover:text-red-800">
+                      <button
+                        className="!text-red-600 hover:text-red-800"
+                        onClick={() => handleDelete(message.i_id)}
+                      >
                         <DeleteOutlined />
                       </button>
                     </td>

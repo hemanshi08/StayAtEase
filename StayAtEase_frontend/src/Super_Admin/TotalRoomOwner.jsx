@@ -28,6 +28,22 @@ function TotalRoomOwner() {
       console.error("Error fetching owners:", err);
     }
   };
+const handleDelete = async (id) => {
+  if (window.confirm("Are you sure you want to delete this owner?")) {
+    try {
+      await axios.delete(`http://localhost:5000/api/users/user/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      // Refresh the list after deletion
+      fetchOwners();
+    } catch (err) {
+      console.error("Error deleting user:", err);
+      alert("Failed to delete the user.");
+    }
+  }
+};
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -47,7 +63,7 @@ function TotalRoomOwner() {
   return (
     <div>
       <SuperAdminNavbar />
-      <div className="max-w-6xl mx-auto p-8 bg-white rounded-lg mt-16 mb-10">
+      <div className="max-w-6xl mx-auto p-8 bg-white rounded-lg mt-16 ">
         <div className="flex flex-wrap justify-between items-center mb-6">
           <h2 className="text-3xl font-bold">Room Owners Details</h2>
           <div className="relative w-full sm:w-1/3 mt-3 sm:mt-0">
@@ -106,9 +122,13 @@ function TotalRoomOwner() {
                     </td>
                     <td className="p-4 text-center">
                       <div className="flex justify-center gap-x-4">
-                        <button className="!text-red-600 hover:text-red-800">
-                          <DeleteOutlined style={{ fontSize: "18px" }} />
-                        </button>
+                      <button
+  className="text-red-600 hover:text-red-800"
+  onClick={() => handleDelete(user.u_id)}
+>
+  <DeleteOutlined style={{ fontSize: "18px" }} />
+</button>
+
                       </div>
                     </td>
                   </tr>

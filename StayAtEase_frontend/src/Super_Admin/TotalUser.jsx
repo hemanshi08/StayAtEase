@@ -44,6 +44,27 @@ function TotalUser() {
     setCurrentPage(1);
   };
 
+  const handleDelete = async (userId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+    if (!confirmDelete) return;
+  
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:5000/api/users/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      // Remove the deleted user from state
+      setUsers((prevUsers) => prevUsers.filter((user) => user.u_id !== userId));
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      alert("Failed to delete user. Please try again.");
+    }
+  };
+  
+
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
@@ -100,9 +121,12 @@ function TotalUser() {
         </td>
         <td className="p-4 text-center">
           <div className="flex justify-center gap-x-4">
-            <button className="!text-red-600 hover:text-red-800 transition">
-              <DeleteOutlined style={{ fontSize: "18px" }} />
-            </button>
+          <button
+  onClick={() => handleDelete(user.u_id)}
+  className="!text-red-600 hover:text-red-800 transition"
+>
+  <DeleteOutlined style={{ fontSize: "18px" }} />
+</button>
           </div>
         </td>
       </tr>
@@ -153,7 +177,7 @@ function TotalUser() {
           </div>
         </div>
       </div>
-      <Footer />
+      <Footer/>
     </div>
   );
 }
