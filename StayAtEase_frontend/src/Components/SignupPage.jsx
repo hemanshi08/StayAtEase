@@ -14,26 +14,28 @@ export default function SignupModal({ isOpen, handleClose }) {
   const [isChecked, setIsChecked] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // Reset form fields & validation errors when modal closes
   useEffect(() => {
     if (!isOpen) {
-      setPhone("");
-      setEmail("");
-      setVerificationCode(["", "", "", "", "", ""]);
-      setFullName("");
-      setPassword("");
-      setConfirmPassword("");
-      setUserType("tenant");
-      setIsChecked(false);
-      setErrors({});
+      resetForm();
     }
   }, [isOpen]);
+
+  const resetForm = () => {
+    setPhone("");
+    setEmail("");
+    setVerificationCode(["", "", "", "", "", ""]);
+    setFullName("");
+    setPassword("");
+    setConfirmPassword("");
+    setUserType("tenant");
+    setIsChecked(false);
+    setErrors({});
+  };
 
   const validateForm = () => {
     let valid = true;
     let newErrors = {};
 
-    // Validate phone number
     if (!phone.trim()) {
       newErrors.phone = "Phone number is required";
       valid = false;
@@ -42,7 +44,6 @@ export default function SignupModal({ isOpen, handleClose }) {
       valid = false;
     }
 
-    // Validate email
     if (!email.trim()) {
       newErrors.email = "Email is required";
       valid = false;
@@ -51,13 +52,11 @@ export default function SignupModal({ isOpen, handleClose }) {
       valid = false;
     }
 
-    // Validate full name
     if (!fullName.trim()) {
       newErrors.fullName = "Full name is required";
       valid = false;
     }
 
-    // Validate password
     if (!password.trim()) {
       newErrors.password = "Password is required";
       valid = false;
@@ -66,7 +65,6 @@ export default function SignupModal({ isOpen, handleClose }) {
       valid = false;
     }
 
-    // Validate confirm password
     if (!confirmPassword.trim()) {
       newErrors.confirmPassword = "Confirm password is required";
       valid = false;
@@ -75,13 +73,11 @@ export default function SignupModal({ isOpen, handleClose }) {
       valid = false;
     }
 
-    // Validate user type
     if (!userType) {
       newErrors.userType = "Please select a user type";
       valid = false;
     }
 
-    // Validate checkbox
     if (!isChecked) {
       newErrors.isChecked = "You must agree to the Terms and Conditions";
       valid = false;
@@ -92,7 +88,7 @@ export default function SignupModal({ isOpen, handleClose }) {
   };
 
   const handleSignup = async () => {
-    //if (!validateForm()) return;
+    if (!validateForm()) return;
 
     try {
       const userData = {
@@ -101,28 +97,16 @@ export default function SignupModal({ isOpen, handleClose }) {
         phone,
         password,
         userType,
-        
       };
 
-      console.log(userData);
       const resp = await axiosInstance.post("/users/register", userData);
-      console.log(resp)
 
       message.success("Account created successfully!");
+      alert("Account created successfully! You can now log in.");
       handleClose();
-
-      // Reset form after successful signup
-      setPhone("");
-      setEmail("");
-      setVerificationCode(["", "", "", "", "", ""]);
-      setFullName("");
-      setPassword("");
-      setConfirmPassword("");
-      setUserType("tenant");
-      setIsChecked(false);
-      setErrors({});
+      resetForm();
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.error) {
+      if (error.response?.data?.error) {
         message.error(`Signup failed: ${error.response.data.error}`);
       } else {
         message.error("Signup failed: An unexpected error occurred.");
@@ -151,7 +135,7 @@ export default function SignupModal({ isOpen, handleClose }) {
 
         {/* Email Address */}
         <div>
-          <label className="block text-gray-700 font-medium mb-2">Email Address</label>
+          <label className="block text-gray-700 font-medium mb-2">Email Address *</label>
           <Input
             size="large"
             placeholder="your@email.com"
@@ -161,27 +145,6 @@ export default function SignupModal({ isOpen, handleClose }) {
           />
           {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
         </div>
-
-        {/* Verification Code */}
-        {/* <div>
-          <label className="block text-gray-700 font-medium mb-2">Enter Verification Code</label>
-          <div className="flex justify-center gap-2">
-            {verificationCode.map((digit, i) => (
-              <Input
-                key={i}
-                maxLength={1}
-                className="w-10 text-center"
-                value={digit}
-                onChange={(e) => {
-                  const newCode = [...verificationCode];
-                  newCode[i] = e.target.value.replace(/[^0-9]/g, "");
-                  setVerificationCode(newCode);
-                }}
-              />
-            ))}
-          </div>
-          {errors.verificationCode && <p className="text-red-500 text-sm mt-1 text-center">{errors.verificationCode}</p>}
-        </div> */}
 
         {/* Full Name */}
         <div>
@@ -225,22 +188,29 @@ export default function SignupModal({ isOpen, handleClose }) {
         {/* User Type Selection */}
         <div className="col-span-1 md:col-span-2">
           <label className="block text-gray-700 font-medium mb-1">I am a... *</label>
-          <Radio.Group value={userType} onChange={(e) => setUserType(e.target.value)} className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-            <Radio value="tenant"> Tenant</Radio>
-            <Radio value="Property_Owner"> Property Owner</Radio>
+          <Radio.Group
+            value={userType}
+            onChange={(e) => setUserType(e.target.value)}
+            className="flex flex-col sm:flex-row gap-2 sm:gap-4"
+          >
+            <Radio value="tenant">Tenant</Radio>
+            <Radio value="Property_Owner">Property Owner</Radio>
           </Radio.Group>
+          {errors.userType && <p className="text-red-500 text-sm mt-1">{errors.userType}</p>}
         </div>
 
         {/* Terms and Conditions */}
         <div className="flex items-start gap-2">
           <Checkbox checked={isChecked} onChange={(e) => setIsChecked(e.target.checked)} />
           <span className="text-sm text-gray-600 mb-4">
-            I agree to the <span className="text-blue-600 cursor-pointer">Terms of Service</span> and <span className="text-blue-600 cursor-pointer">Privacy Policy</span>
+            I agree to the{" "}
+            <span className="text-blue-600 cursor-pointer">Terms of Service</span> and{" "}
+            <span className="text-blue-600 cursor-pointer">Privacy Policy</span>
           </span>
         </div>
+        {errors.isChecked && <p className="text-red-500 text-sm mt-1">{errors.isChecked}</p>}
       </div>
 
-      {/* Signup Button */}
       <Button type="primary" className="bg-blue-600 w-full mt-6" onClick={handleSignup}>
         Create Account
       </Button>

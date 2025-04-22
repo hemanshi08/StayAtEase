@@ -91,10 +91,11 @@ function TotalUser() {
           <table className="w-full border border-gray-300 text-gray-600">
             <thead>
               <tr className="bg-gray-100">
+              <th className="p-4 text-left">ID</th>
                 <th className="p-4 text-left">User</th>
                 <th className="p-4 text-left">Mobile No.</th>
                 <th className="p-4 text-left">Email</th>
-                <th className="p-4 text-left">Status</th>
+                {/* <th className="p-4 text-left">Status</th> */}
                 <th className="p-4 text-center">Action</th>
               </tr>
             </thead>
@@ -102,6 +103,8 @@ function TotalUser() {
   {currentUsers.length > 0 ? (
     currentUsers.map((user) => (
       <tr key={user.u_id} className="border-b">
+                <td className="p-4">{user.u_id}</td>
+
         <td className="p-4 flex items-center space-x-3">
           <img
             src={user.profile_pic}
@@ -112,13 +115,13 @@ function TotalUser() {
         </td>
         <td className="p-4">{user.phone}</td>
         <td className="p-4">{user.email}</td>
-        <td
+        {/* <td
           className={`p-4 font-semibold ${
             user.status === "active" ? "text-green-600" : "text-red-600"
           }`}
         >
           {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
-        </td>
+        </td> */}
         <td className="p-4 text-center">
           <div className="flex justify-center gap-x-4">
           <button

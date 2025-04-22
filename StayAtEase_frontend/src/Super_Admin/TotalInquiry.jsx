@@ -42,40 +42,35 @@ function TotalInquiry() {
     setSearchQuery(e.target.value);
   };
 
-  const handleDelete = (id) => {
-    confirm({
-      title: "Are you sure you want to delete this inquiry?",
-      icon: <ExclamationCircleOutlined />,
-      okText: "Yes",
-      okType: "danger",
-      cancelText: "No",
-      async onOk() {
-        try {
-          const token = localStorage.getItem("token");
-          await axios.delete(`http://localhost:5000/api/inquiries/admin-delete/${id}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-
-          AntMessage.success("Inquiry deleted successfully");
-          fetchMessages(); // Refresh the list
-        } catch (error) {
-          console.error("Error deleting inquiry:", error);
-          AntMessage.error("Failed to delete inquiry");
-        }
-      },
-    });
+  const handleDelete = async (id) => {
+    console.log("Attempting to delete inquiry with ID:", id);
+  
+    const confirmed = window.confirm("Are you sure you want to delete this inquiry?");
+    if (confirmed) {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.delete(`http://localhost:5000/api/inquiries/admin-delete/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        console.log("Delete response:", response.data);
+        AntMessage.success("Inquiry deleted successfully");
+        fetchMessages();
+      } catch (error) {
+        console.error("Error deleting inquiry:", error.response?.data || error.message);
+        AntMessage.error("Failed to delete inquiry");
+      }
+    }
   };
-
-  // Filter messages based on search query
+  
   const filteredMessages = messages.filter(
     (message) =>
       message.User?.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       message.Property?.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Pagination logic
   const indexOfLastMessage = currentPage * messagesPerPage;
   const indexOfFirstMessage = indexOfLastMessage - messagesPerPage;
   const currentMessages = filteredMessages.slice(indexOfFirstMessage, indexOfLastMessage);
@@ -87,7 +82,7 @@ function TotalInquiry() {
 
       <div className="max-w-6xl mx-auto p-8 bg-white rounded-lg mt-16 mb-10">
         <div className="flex flex-wrap justify-between items-center mb-6">
-          <h2 className="text-3xl !font-bold">Property messages</h2>
+          <h2 className="text-3xl font-bold">Property messages</h2>
 
           <div className="relative w-full sm:w-1/3 mt-3 sm:mt-0">
             <input
@@ -120,22 +115,25 @@ function TotalInquiry() {
                   </td>
                 </tr>
               ) : (
-                currentMessages.map((message) => (
-                  <tr key={message.i_id} className="border-b">
-                    <td className="p-4">{message.User?.fullName}</td>
-                    <td className="p-4">{message.Property?.title}</td>
-                    <td className="p-4">{new Date(message.createdAt).toLocaleDateString()}</td>
-                    <td className="p-4">{message.message}</td>
-                    <td className="p-4 text-center">
-                      <button
-                        className="!text-red-600 hover:text-red-800"
-                        onClick={() => handleDelete(message.i_id)}
-                      >
-                        <DeleteOutlined />
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                currentMessages.map((message) => {
+                  console.log("Message object:", message); // Debug
+                  return (
+                    <tr key={message.i_id} className="border-b">
+                      <td className="p-4">{message.User?.fullName}</td>
+                      <td className="p-4">{message.Property?.title}</td>
+                      <td className="p-4">{new Date(message.createdAt).toLocaleDateString()}</td>
+                      <td className="p-4">{message.message}</td>
+                      <td className="p-4 text-center">
+                        <button
+                          className="!text-red-600 hover:text-red-800"
+                          onClick={() => handleDelete(message.i_id)}
+                        >
+                          <DeleteOutlined />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>

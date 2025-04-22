@@ -13,6 +13,7 @@ export default function LoginModal({ isModalOpen, handleCancel, onLoginSuccess }
   const [errors, setErrors] = useState({ email: "", password: "" });
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loginSuccessMsg, setLoginSuccessMsg] = useState("");
   const navigate = useNavigate();
   const { login, error: authError } = useAuth();
 
@@ -21,6 +22,7 @@ export default function LoginModal({ isModalOpen, handleCancel, onLoginSuccess }
       setEmail("");
       setPassword("");
       setErrors({ email: "", password: "" });
+      setLoginSuccessMsg("");
     }
   }, [isModalOpen]);
 
@@ -54,21 +56,26 @@ export default function LoginModal({ isModalOpen, handleCancel, onLoginSuccess }
     try {
       const userData = await login(email, password);
       message.success("Login successful!");
-      handleCancel();
-      
-      // Call the success callback if provided
-      if (onLoginSuccess) {
-        onLoginSuccess();
-      }
+      setLoginSuccessMsg("Login successful! Redirecting...");
 
-      // Navigate based on user type
-      if (userData.userType === "admin") {
-        navigate("/Dashboard");
-      } else if (userData.userType === "Property_Owner") {
-        navigate("/RoomOwnerDashboard");
-      } else if (userData.userType === "tenant") {
-        navigate("/");
-      }
+      // Delay navigation for better UX
+      setTimeout(() => {
+        handleCancel();
+
+        if (onLoginSuccess) {
+          onLoginSuccess();
+        }
+
+        if (userData.userType === "admin") {
+          navigate("/Dashboard");
+        } else if (userData.userType === "Property_Owner") {
+          navigate("/RoomOwnerDashboard");
+        } else if (userData.userType === "tenant") {
+          navigate("/");
+        }
+
+        setLoginSuccessMsg("");
+      }, 1500);
     } catch (error) {
       const errorMessage = error.message || "Login failed. Please try again.";
       message.error(errorMessage);
@@ -99,6 +106,12 @@ export default function LoginModal({ isModalOpen, handleCancel, onLoginSuccess }
           </div>
         )}
 
+        {loginSuccessMsg && (
+          <div className="mt-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded text-center">
+            {loginSuccessMsg}
+          </div>
+        )}
+
         <div className="mt-4">
           <label className="block font-semibold">Email</label>
           <Input
@@ -113,7 +126,7 @@ export default function LoginModal({ isModalOpen, handleCancel, onLoginSuccess }
           {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
         </div>
 
-        <div className="mt-4">
+        <div className="mt-4 mb-7">
           <label className="block font-semibold">Password</label>
           <Input.Password
             size="large"
@@ -127,11 +140,11 @@ export default function LoginModal({ isModalOpen, handleCancel, onLoginSuccess }
           {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
         </div>
 
-        <div className="mt-4 text-right">
+        {/* <div className="mt-4 text-right">
           <Button type="link" onClick={() => setIsForgotPasswordOpen(true)} disabled={isLoading}>
             Forgot Password?
           </Button>
-        </div>
+        </div> */}
 
         <Button
           type="primary"

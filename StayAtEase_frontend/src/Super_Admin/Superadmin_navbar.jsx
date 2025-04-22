@@ -37,11 +37,12 @@ export default function SuperAdminNavbar() {
               <Link to="/TotalUser" className={`hover:text-blue-500 font-medium ${isActive("/TotalUser")}`}>
                 Tenant
               </Link>
-              <Link to="/TotalProperties" className={`hover:text-blue-500 font-medium ${isActive("/TotalProperties")}`}>
-                Properties
-              </Link>
+              
               <Link to="/TotalRoomOwner" className={`hover:text-blue-500 font-medium ${isActive("/TotalRoomOwner")}`}>
                 Property_Owners
+              </Link>
+              <Link to="/TotalProperties" className={`hover:text-blue-500 font-medium ${isActive("/TotalProperties")}`}>
+                Properties
               </Link>
               <Link to="/TotalReviews" className={`hover:text-blue-500 font-medium ${isActive("/TotalReviews")}`}>
                 Reviews

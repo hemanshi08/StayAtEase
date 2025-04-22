@@ -212,9 +212,28 @@ export default function SuperAdminPropertydetails() {
                 </div>
 
               <div className="flex items-center gap-8">
-                <button className="!text-red-500 hover:!text-red-700 text-sm flex items-center gap-1 cursor-pointer">
-                  <DeleteOutlined />
-                </button>
+              <button 
+  onClick={async () => {
+    const confirmed = window.confirm('Are you sure you want to delete this property?');
+    if (!confirmed) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`http://localhost:5000/api/properties/admin-delete/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      message.success('Property deleted successfully');
+      navigate('/TotalProperties');
+    } catch (err) {
+      console.error(err);
+      message.error('Failed to delete property');
+    }
+  }}
+  className="!text-red-500 hover:!text-red-700 text-sm flex items-center gap-1 cursor-pointer"
+>
+  <DeleteOutlined />
+  Delete
+</button>
               </div>
             </div>
           </div>
