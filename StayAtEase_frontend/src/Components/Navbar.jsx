@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState ,useEffect,axiosInstance,setUser} from "react";
 import { Menu, X, LogOut, Heart } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import LoginModal from "./LoginPage";
@@ -33,6 +33,28 @@ export default function Navbar() {
     setIsLoginModalOpen(false);
     navigate("/wishlist"); // Redirect to wishlist after successful login
   };
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+  
+      try {
+        const res = await axiosInstance.get('/api/users/profile', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (res.data?.profile_pic) {
+          setUser((prev) => ({ ...prev, profile_pic: res.data.profile_pic }));
+        }
+      } catch (err) {
+        console.error("Failed to fetch profile picture:", err);
+      }
+    };
+  
+    if (!user?.profile_pic) fetchUserProfile();
+  }, []);
 
   return (
     <>
@@ -69,10 +91,10 @@ export default function Navbar() {
     
                <Link to="/Userprofile">
                <img 
-                 src="/profile.png" 
-                 className="w-10 h-10 rounded-full border border-gray-300 hover:border-gray-400 transition duration-200" 
-                 alt="User" 
-               />
+  src={user?.profile_pic || "/profile.png"} 
+  className="w-10 h-10 rounded-full border border-gray-300 hover:border-gray-400 transition duration-200 object-cover" 
+  alt="User" 
+/>
              </Link> 
                 <Link to="/" className="text-red-500 hover:text-red-600" onClick={handleLogout}>
                    <LogOut size={22} />

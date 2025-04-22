@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState ,useEffect,axiosInstance,setUser} from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation(); 
-  const navigate = useNavigate(); // <-- Add this line
+  const navigate = useNavigate(); 
+   const { user } = useAuth();// <-- Add this line
   const isActive = (path) => location.pathname === path ? "text-blue-500 font-bold" : "text-gray-700";
 
   const handleLogout = () => {
@@ -15,6 +18,29 @@ export default function Header() {
     LogOut(); // Ensure this also clears context if needed
     navigate("/"); // Redirect to home page
   };
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+  
+      try {
+        const res = await axiosInstance.get('/api/users/profile', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (res.data?.profile_pic) {
+          setUser((prev) => ({ ...prev, profile_pic: res.data.profile_pic }));
+        }
+      } catch (err) {
+        console.error("Failed to fetch profile picture:", err);
+      }
+    };
+  
+    if (!user?.profile_pic) fetchUserProfile();
+  }, []);
+  
   return (
 <nav className="bg-white shadow-md p-4 fixed top-0 left-0 w-full z-50">
         <div className="container mx-auto flex justify-between items-center px-6">
@@ -58,10 +84,10 @@ export default function Header() {
     
   <Link to="/Myprofile">
   <img 
-    src="/profile.png" 
-    className="w-10 h-10 rounded-full border border-gray-300 hover:border-gray-400 transition duration-200" 
-    alt="User" 
-  />
+  src={user?.profile_pic || "/profile.png"} 
+  className="w-10 h-10 rounded-full border border-gray-300 hover:border-gray-400 transition duration-200 object-cover" 
+  alt="User" 
+/>
 </Link> 
    <Link to="/" className="text-red-500 hover:text-red-600" onClick={handleLogout}>
       <LogOut size={22} />

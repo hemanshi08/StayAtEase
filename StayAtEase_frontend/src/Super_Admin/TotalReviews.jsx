@@ -85,7 +85,7 @@ function TotalReviews() {
               <tr className="bg-gray-100">
                 <th className="p-4 text-left">Reviewer</th>
                 <th className="p-4 text-left">Property Name</th>
-                <th className="p-4 text-left">Property Owner</th>
+                {/* <th className="p-4 text-left">Property Owner</th> */}
                 <th className="p-4 text-left">Date</th>
                 <th className="p-4 text-left">Rating</th>
                 <th className="p-4 text-left">Review</th>
@@ -111,7 +111,7 @@ function TotalReviews() {
                       <span className="font-semibold">{review.User?.fullName}</span>
                     </td>
                     <td className="p-4">{review.Property?.title}</td>
-                    <td className="p-4">{review.Property?.address}</td>
+                    {/* <td className="p-4">{review.Property?.address}</td> */}
                     <td className="p-4">{review.date}</td>
                     <td className="p-4 flex space-x-1 text-yellow-500">
                       {"★".repeat(review.rating).padEnd(5, "☆")}

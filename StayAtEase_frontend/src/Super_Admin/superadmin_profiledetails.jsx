@@ -4,6 +4,7 @@ import SuperAdminNavbar from "./Superadmin_navbar";
 import Footer from "../Components/Footer";
 import { useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const ProfileDetails = () => {
   const navigate = useNavigate();
@@ -61,11 +62,13 @@ const ProfileDetails = () => {
     fetchAdminData();
   }, [navigate]);
 
+  const { logout } = useAuth();
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
-    LogOut();
+    logout();
         navigate("/login"); // Redirect to login page
   };
 
