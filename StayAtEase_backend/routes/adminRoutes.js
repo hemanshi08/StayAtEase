@@ -4,7 +4,7 @@ const adminController = require("../controllers/adminController");
 const { verifyToken } = require("../middleware/authMiddleware");
 
 router.post("/login", adminController.loginAdmin);
-router.put("/profile", verifyToken, adminController.updateProfile);
-router.put("/change-password", verifyToken, adminController.changePassword);
-
+router.patch('/admin-update',verifyToken ,adminController.updateAdminDetails);
+router.patch('/admin-change-password', verifyToken ,adminController.changeAdminPassword);
+router.get('/getdata', verifyToken, adminController.getCurrentAdmin);
 module.exports = router;
