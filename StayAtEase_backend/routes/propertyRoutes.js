@@ -12,17 +12,19 @@ router.get("/property/:id", propertyController.getPropertyById);
 
 router.get('/admin/all', verifyToken, propertyController.getAllPropertiesForAdmin);
 
+router.delete('/admin-delete/:id', verifyToken ,propertyController.deleteProperty);
 
 // Property Owner routes
 router.post("/create", verifyToken, requireRole("Property_Owner"), propertyController.createProperty);
 router.get("/my", verifyToken, requireRole("Property_Owner"), propertyController.getMyProperties);
-router.put("/update/:p_id", verifyToken, requireRole("Property_Owner"), propertyController.updateProperty);
-router.put("/unavailable/:p_id", verifyToken, requireRole("Property_Owner"), propertyController.markPropertyUnavailable);
-router.patch("/available/:p_id", verifyToken, requireRole("Property_Owner"), propertyController.markPropertyAvailable);
+
+// router.put("/update/:p_id", verifyToken, requireRole("Property_Owner"), propertyController.updateProperty);
+// router.put("/unavailable/:p_id", verifyToken, requireRole("Property_Owner"), propertyController.markPropertyUnavailable);
+// router.patch("/available/:p_id", verifyToken, requireRole("Property_Owner"), propertyController.markPropertyAvailable);
 
 // Admin routes
-router.get("/admin", verifyToken, requireRole("admin"), propertyController.getAllPropertiesAdmin);
-router.delete("/delete/:p_id", verifyToken, requireRole("admin"), propertyController.deletePropertyByAdmin);
+// router.get("/admin", verifyToken, requireRole("admin"), propertyController.getAllPropertiesAdmin);
+// router.delete("/delete/:p_id", verifyToken, requireRole("admin"), propertyController.deletePropertyByAdmin);
 
 // Image upload route
 router.post("/upload-images", verifyToken, upload.array('images', 8), propertyController.uploadImages);

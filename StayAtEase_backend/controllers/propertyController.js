@@ -520,17 +520,44 @@ exports.markPropertyAvailable = async (req, res) => {
 };
 
 
-// Admin permanently deletes property
-exports.deletePropertyByAdmin = async (req, res) => {
+
+
+// exports.deleteProperty = async (req, res) => {
+//   const propertyId = req.params.id;
+
+//   try {
+//     const property = await Property.findByPk(propertyId);
+
+//     if (!property || property.is_deleted) {
+//       return res.status(404).json({ error: 'Property not found or already deleted' });
+//     }
+
+//     // Soft delete: set is_deleted = true
+//     await property.update({ is_deleted: true });
+
+//     res.status(200).json({ message: 'Property deleted successfully (soft delete)' });
+//   } catch (error) {
+//     console.error('Error deleting property:', error);
+//     res.status(500).json({ error: 'Failed to delete property' });
+//   }
+// };
+
+
+exports.deleteProperty = async (req, res) => {
+  const propertyId = req.params.id;
+
   try {
-    const { p_id } = req.params;
+    const property = await Property.findByPk(propertyId);
 
-    const property = await Property.findByPk(p_id);
-    if (!property) return res.status(404).json({ error: "Property not found" });
+    if (!property) {
+      return res.status(404).json({ error: 'Property not found' });
+    }
 
-    await property.destroy();
-    res.status(200).json({ message: "Property deleted permanently" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    await property.destroy(); // Hard delete from the database
+
+    res.status(200).json({ message: 'Property deleted permanently from the database' });
+  } catch (error) {
+    console.error('Error deleting property:', error);
+    res.status(500).json({ error: 'Failed to delete property' });
   }
 };

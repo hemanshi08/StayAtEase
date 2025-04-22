@@ -166,3 +166,29 @@ exports.getAllInquiries = async (req, res) => {
     });
   }
 };
+
+exports.deleteInquiryByAdmin = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Check if user is admin
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ error: "Unauthorized: Only admin can delete inquiries." });
+    }
+
+    // Find the inquiry
+    const inquiry = await Inquiry.findByPk(id);
+
+    if (!inquiry) {
+      return res.status(404).json({ error: "Inquiry not found." });
+    }
+
+    // Delete the inquiry
+    await inquiry.destroy();
+
+    res.status(200).json({ message: "Inquiry deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting inquiry:", error);
+    res.status(500).json({ error: "Server error while deleting inquiry." });
+  }
+};

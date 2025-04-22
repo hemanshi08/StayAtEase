@@ -15,4 +15,7 @@ router.get("/owner-inquiries", verifyToken,requireRole("Property_Owner"),inquiry
 
 router.get('/admin-inquiries', verifyToken, inquiryController.getAllInquiries);
 
+router.delete("/admin-delete/:id", verifyToken, inquiryController.deleteInquiryByAdmin);
+
+
 module.exports = router;

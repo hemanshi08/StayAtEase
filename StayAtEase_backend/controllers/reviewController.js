@@ -153,22 +153,10 @@ exports.getReviewsByProperty = async (req, res) => {
 
 
 
-// Admin deletes review
 
 
-exports.deleteReview = async (req, res) => {
-  try {
-    const { r_id } = req.params;
 
-    const review = await Review.findByPk(r_id);
-    if (!review) return res.status(404).json({ error: "Review not found" });
 
-    await review.destroy();
-    res.status(200).json({ message: "Review deleted" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
 
 
  exports.getAllReviewsForOwner =  async (req, res) => {
@@ -253,3 +241,30 @@ exports.getAllReviews = async (req, res) => {
     });
   }
 };
+
+
+
+exports.deleteReviewByAdmin = async (req, res) => {
+  const reviewId = req.params.id;
+
+  // Only admins can delete
+  if (req.user.userType !== "admin") {
+    return res.status(403).json({ error: "Access denied. Admins only." });
+  }
+
+  try {
+    const review = await Review.findByPk(reviewId);
+
+    if (!review) {
+      return res.status(404).json({ error: "Review not found" });
+    }
+
+    await review.destroy();
+
+    res.status(200).json({ message: "Review deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting review:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
